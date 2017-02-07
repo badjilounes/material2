@@ -1,10 +1,10 @@
-import {Component, ViewEncapsulation} from '@angular/core';
+import {Component, ViewEncapsulation, ElementRef} from '@angular/core';
 
 
 @Component({
   selector: 'home',
   template: `
-    <p>Welcome to the development demos for Angular Material 2!</p>
+    <p>Welcome to the development demos for Angular Material!</p>
     <p>Open the sidenav to select a demo. </p>
   `
 })
@@ -39,7 +39,7 @@ export class DemoApp {
     {name: 'Portal', route: 'portal'},
     {name: 'Projection', route: 'projection'},
     {name: 'Progress Bar', route: 'progress-bar'},
-    {name: 'Progress Circle', route: 'progress-circle'},
+    {name: 'Progress Spinner', route: 'progress-spinner'},
     {name: 'Radio', route: 'radio'},
     {name: 'Ripple', route: 'ripple'},
     {name: 'Select', route: 'select'},
@@ -50,6 +50,24 @@ export class DemoApp {
     {name: 'Tabs', route: 'tabs'},
     {name: 'Toolbar', route: 'toolbar'},
     {name: 'Tooltip', route: 'tooltip'},
-    {name: 'Platform', route: 'platform'}
+    {name: 'Platform', route: 'platform'},
+    {name: 'Style', route: 'style'}
   ];
+
+  constructor(private _element: ElementRef) {
+
+  }
+
+  toggleFullscreen() {
+    let elem = this._element.nativeElement.querySelector('.demo-content');
+    if (elem.requestFullscreen) {
+      elem.requestFullscreen();
+    } else if (elem.webkitRequestFullScreen) {
+      elem.webkitRequestFullScreen();
+    } else if (elem.mozRequestFullScreen) {
+      elem.mozRequestFullScreen();
+    } else if (elem.msRequestFullScreen) {
+      elem.msRequestFullScreen();
+    }
+  }
 }

@@ -14,6 +14,8 @@ import {
   AnimationTransitionEvent,
   NgZone,
   Optional,
+  OnDestroy,
+  ChangeDetectorRef
 } from '@angular/core';
 import {
   Overlay,
@@ -23,13 +25,13 @@ import {
   ComponentPortal,
   OverlayConnectionPosition,
   OriginConnectionPosition,
-  OVERLAY_PROVIDERS,
-  DefaultStyleCompatibilityModeModule,
+  CompatibilityModule,
 } from '../core';
 import {MdTooltipInvalidPositionError} from './tooltip-errors';
 import {Observable} from 'rxjs/Observable';
 import {Subject} from 'rxjs/Subject';
 import {Dir} from '../core/rtl/dir';
+import 'rxjs/add/operator/first';
 
 export type TooltipPosition = 'left' | 'right' | 'above' | 'below' | 'before' | 'after';
 
@@ -43,7 +45,7 @@ export const TOUCHEND_HIDE_DELAY  = 1500;
  * https://material.google.com/components/tooltips.html
  */
 @Directive({
-  selector: '[md-tooltip], [mat-tooltip]',
+  selector: '[md-tooltip], [mdTooltip], [mat-tooltip], [matTooltip]',
   host: {
     '(longpress)': 'show()',
     '(touchend)': 'hide(' + TOUCHEND_HIDE_DELAY + ')',
@@ -52,16 +54,15 @@ export const TOUCHEND_HIDE_DELAY  = 1500;
   },
   exportAs: 'mdTooltip',
 })
-export class MdTooltip {
+export class MdTooltip implements OnDestroy {
   _overlayRef: OverlayRef;
   _tooltipInstance: TooltipComponent;
 
-  /** Allows the user to define the position of the tooltip relative to the parent element */
   private _position: TooltipPosition = 'below';
-  @Input('tooltip-position') get position(): TooltipPosition {
-    return this._position;
-  }
 
+  /** Allows the user to define the position of the tooltip relative to the parent element */
+  @Input('mdTooltipPosition')
+  get position(): TooltipPosition { return this._position; }
   set position(value: TooltipPosition) {
     if (value !== this._position) {
       this._position = value;
@@ -74,17 +75,21 @@ export class MdTooltip {
     }
   }
 
+  /** @deprecated */
+  @Input('tooltip-position')
+  get _positionDeprecated(): TooltipPosition { return this._position; }
+  set _positionDeprecated(value: TooltipPosition) { this._position = value; }
+
   /** The default delay in ms before showing the tooltip after show is called */
-  @Input('tooltipShowDelay') showDelay = 0;
+  @Input('mdTooltipShowDelay') showDelay = 0;
 
   /** The default delay in ms before hiding the tooltip after hide is called */
-  @Input('tooltipHideDelay') hideDelay = 0;
+  @Input('mdTooltipHideDelay') hideDelay = 0;
+
+  private _message: string;
 
   /** The message to be displayed in the tooltip */
-  private _message: string;
-  @Input('md-tooltip') get message() {
-    return this._message;
-  }
+  @Input('mdTooltip') get message() { return this._message; }
   set message(value: string) {
     this._message = value;
     if (this._tooltipInstance) {
@@ -92,11 +97,40 @@ export class MdTooltip {
     }
   }
 
-  constructor(private _overlay: Overlay, private _elementRef: ElementRef,
-              private _viewContainerRef: ViewContainerRef, private _ngZone: NgZone,
-              @Optional() private _dir: Dir) {}
+  /** @deprecated */
+  @Input('md-tooltip')
+  get _deprecatedMessage(): string { return this.message; }
+  set _deprecatedMessage(v: string) { this.message = v; }
 
-  /** Dispose the tooltip when destroyed */
+  // Properties with `mat-` prefix for noconflict mode.
+  @Input('matTooltip')
+  get _matMessage() { return this.message; }
+  set _matMessage(v) { this.message = v; }
+
+  // Properties with `mat-` prefix for noconflict mode.
+  @Input('matTooltipPosition')
+  get _matPosition() { return this.position; }
+  set _matPosition(v) { this.position = v; }
+
+  // Properties with `mat-` prefix for noconflict mode.
+  @Input('matTooltipHideDelay')
+  get _matHideDelay() { return this.hideDelay; }
+  set _matHideDelay(v) { this.hideDelay = v; }
+
+  // Properties with `mat-` prefix for noconflict mode.
+  @Input('matTooltipShowDelay')
+  get _matShowDelay() { return this.showDelay; }
+  set _matShowDelay(v) { this.showDelay = v; }
+
+  constructor(private _overlay: Overlay,
+              private _elementRef: ElementRef,
+              private _viewContainerRef: ViewContainerRef,
+              private _ngZone: NgZone,
+              @Optional() private _dir: Dir) { }
+
+  /**
+   * Dispose the tooltip when destroyed.
+   */
   ngOnDestroy() {
     if (this._tooltipInstance) {
       this._disposeTooltip();
@@ -228,6 +262,10 @@ export class MdTooltip {
 
 export type TooltipVisibility = 'initial' | 'visible' | 'hidden';
 
+/**
+ * Internal component that wraps the tooltip's content.
+ * @docs-private
+ */
 @Component({
   moduleId: module.id,
   selector: 'md-tooltip-component, mat-tooltip-component',
@@ -269,9 +307,13 @@ export class TooltipComponent {
   /** Subject for notifying that the tooltip has been hidden from the view */
   private _onHide: Subject<any> = new Subject();
 
-  constructor(@Optional() private _dir: Dir) {}
+  constructor(@Optional() private _dir: Dir, private _changeDetectorRef: ChangeDetectorRef) {}
 
-  /** Shows the tooltip with an animation originating from the provided origin */
+  /**
+   * Shows the tooltip with an animation originating from the provided origin
+   * @param position Position of the tooltip.
+   * @param delay Amount of milliseconds to the delay showing the tooltip.
+   */
   show(position: TooltipPosition, delay: number): void {
     // Cancel the delayed hide if it is scheduled
     if (this._hideTimeoutId) {
@@ -288,11 +330,18 @@ export class TooltipComponent {
       // If this was set to true immediately, then a body click that triggers show() would
       // trigger interaction and close the tooltip right after it was displayed.
       this._closeOnInteraction = false;
+
+      // Mark for check so if any parent component has set the 
+      // ChangeDetectionStrategy to OnPush it will be checked anyways
+      this._changeDetectorRef.markForCheck();
       setTimeout(() => { this._closeOnInteraction = true; }, 0);
     }, delay);
   }
 
-  /** Begins the animation to hide the tooltip after the provided delay in ms */
+  /**
+   * Begins the animation to hide the tooltip after the provided delay in ms.
+   * @param delay Amount of milliseconds to delay showing the tooltip.
+   */
   hide(delay: number): void {
     // Cancel the delayed show if it is scheduled
     if (this._showTimeoutId) {
@@ -302,15 +351,23 @@ export class TooltipComponent {
     this._hideTimeoutId = setTimeout(() => {
       this._visibility = 'hidden';
       this._closeOnInteraction = false;
+
+      // Mark for check so if any parent component has set the 
+      // ChangeDetectionStrategy to OnPush it will be checked anyways
+      this._changeDetectorRef.markForCheck();
     }, delay);
   }
 
-  /** Returns an observable that notifies when the tooltip has been hidden from view */
+  /**
+   * Returns an observable that notifies when the tooltip has been hidden from view
+   */
   afterHidden(): Observable<void> {
     return this._onHide.asObservable();
   }
 
-  /** Whether the tooltip is being displayed */
+  /**
+   * Whether the tooltip is being displayed
+   */
   isVisible(): boolean {
     return this._visibility === 'visible';
   }
@@ -349,16 +406,17 @@ export class TooltipComponent {
 
 
 @NgModule({
-  imports: [OverlayModule, DefaultStyleCompatibilityModeModule],
-  exports: [MdTooltip, TooltipComponent, DefaultStyleCompatibilityModeModule],
+  imports: [OverlayModule, CompatibilityModule],
+  exports: [MdTooltip, TooltipComponent, CompatibilityModule],
   declarations: [MdTooltip, TooltipComponent],
   entryComponents: [TooltipComponent],
 })
 export class MdTooltipModule {
+  /** @deprecated */
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: MdTooltipModule,
-      providers: OVERLAY_PROVIDERS,
+      providers: []
     };
   }
 }

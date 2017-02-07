@@ -18,8 +18,9 @@ import {FormsModule, ControlValueAccessor, NG_VALUE_ACCESSOR} from '@angular/for
 import {
   applyCssTransform,
   coerceBooleanProperty,
-  MdGestureConfig,
-  DefaultStyleCompatibilityModeModule,
+  GestureConfig,
+  HammerInput,
+  CompatibilityModule,
 } from '../core';
 import {Observable} from 'rxjs/Observable';
 
@@ -39,6 +40,9 @@ export class MdSlideToggleChange {
 // Increasing integer for generating unique ids for slide-toggle components.
 let nextId = 0;
 
+/**
+ * Two-state control, which can be also called `switch`.
+ */
 @Component({
   moduleId: module.id,
   selector: 'md-slide-toggle, mat-slide-toggle',
@@ -47,6 +51,7 @@ let nextId = 0;
     '[class.md-disabled]': 'disabled',
     // This md-slide-toggle prefix will change, once the temporary ripple is removed.
     '[class.md-slide-toggle-focused]': '_hasFocus',
+    '[class.md-slide-toggle-label-before]': 'labelPosition == "before"',
     '(mousedown)': '_setMousedown()'
   },
   templateUrl: 'slide-toggle.html',
@@ -72,25 +77,40 @@ export class MdSlideToggle implements AfterContentInit, ControlValueAccessor {
   // Needs to be public to support AOT compilation (as host binding).
   _hasFocus: boolean = false;
 
+  /** Name value will be applied to the input element if present */
   @Input() name: string = null;
-  @Input() id: string = this._uniqueId;
-  @Input() tabIndex: number = 0;
-  @Input() ariaLabel: string = null;
-  @Input() ariaLabelledby: string = null;
 
+  /** A unique id for the slide-toggle input. If none is supplied, it will be auto-generated. */
+  @Input() id: string = this._uniqueId;
+
+  /** Used to specify the tabIndex value for the underlying input element. */
+  @Input() tabIndex: number = 0;
+
+  /** Whether the label should appear after or before the slide-toggle. Defaults to 'after' */
+  @Input() labelPosition: 'before' | 'after' = 'after';
+
+  /** Used to set the aria-label attribute on the underlying input element. */
+  @Input('aria-label') ariaLabel: string = null;
+
+  /** Used to set the aria-labelledby attribute on the underlying input element. */
+  @Input('aria-labelledby') ariaLabelledby: string = null;
+
+  /** Whether the slide-toggle is disabled. */
   @Input()
   get disabled(): boolean { return this._disabled; }
   set disabled(value) { this._disabled = coerceBooleanProperty(value); }
 
+  /** Whether the slide-toggle is required. */
   @Input()
   get required(): boolean { return this._required; }
   set required(value) { this._required = coerceBooleanProperty(value); }
 
   private _change: EventEmitter<MdSlideToggleChange> = new EventEmitter<MdSlideToggleChange>();
+  /** An event will be dispatched each time the slide-toggle changes its value. */
   @Output() change: Observable<MdSlideToggleChange> = this._change.asObservable();
 
-  // Returns the unique id for the visual hidden input.
-  getInputId = () => `${this.id || this._uniqueId}-input`;
+  /** Returns the unique id for the visual hidden input. */
+  get inputId(): string { return `${this.id || this._uniqueId}-input`; }
 
   @ViewChild('input') _inputElement: ElementRef;
 
@@ -177,16 +197,15 @@ export class MdSlideToggle implements AfterContentInit, ControlValueAccessor {
     this.disabled = isDisabled;
   }
 
+  /** Focuses the slide-toggle. */
   focus() {
     this._renderer.invokeElementMethod(this._inputElement.nativeElement, 'focus');
     this._onInputFocus();
   }
 
+  /** Whether the slide-toggle is checked. */
   @Input()
-  get checked() {
-    return !!this._checked;
-  }
-
+  get checked() { return !!this._checked; }
   set checked(value) {
     if (this.checked !== !!value) {
       this._checked = value;
@@ -194,15 +213,14 @@ export class MdSlideToggle implements AfterContentInit, ControlValueAccessor {
     }
   }
 
+  /** The color of the slide-toggle. Can be primary, accent, or warn. */
   @Input()
-  get color(): string {
-    return this._color;
-  }
-
+  get color(): string { return this._color; }
   set color(value: string) {
     this._updateColor(value);
   }
 
+  /** Toggles the checked state of the slide-toggle. */
   toggle() {
     this.checked = !this.checked;
   }
@@ -320,15 +338,17 @@ class SlideToggleRenderer {
 
 
 @NgModule({
-  imports: [FormsModule, DefaultStyleCompatibilityModeModule],
-  exports: [MdSlideToggle, DefaultStyleCompatibilityModeModule],
+  imports: [FormsModule, CompatibilityModule],
+  exports: [MdSlideToggle, CompatibilityModule],
   declarations: [MdSlideToggle],
+  providers: [{provide: HAMMER_GESTURE_CONFIG, useClass: GestureConfig}],
 })
 export class MdSlideToggleModule {
+  /** @deprecated */
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: MdSlideToggleModule,
-      providers: [{provide: HAMMER_GESTURE_CONFIG, useClass: MdGestureConfig}]
+      providers: []
     };
   }
 }

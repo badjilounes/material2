@@ -3,12 +3,12 @@
 
   <p class="centered">
     <button #tooltip="mdTooltip"
-        md-raised-button
-        color="primary"
-        [md-tooltip]="message"
-        [tooltip-position]="position"
-        [tooltipShowDelay]="showDelay"
-        [tooltipHideDelay]="hideDelay">
+            md-raised-button
+            color="primary"
+            [mdTooltip]="message"
+            [mdTooltipPosition]="position"
+            [mdTooltipShowDelay]="showDelay"
+            [mdTooltipHideDelay]="hideDelay">
       Mouse over to see the tooltip
     </button>
   </p>
@@ -26,17 +26,21 @@
 
   <p>
     <strong>Message: </strong>
-    <md-input-container><input md-input type="text" [(ngModel)]="message"></md-input-container>
+    <md-input-container><input mdInput type="text" [(ngModel)]="message"></md-input-container>
   </p>
 
   <p>
     <strong>Show Delay (ms): </strong>
-    <md-input type="number" [(ngModel)]="showDelay"></md-input>
+    <md-input-container>
+      <input mdInput type="number" [(ngModel)]="showDelay">
+    </md-input-container>
   </p>
 
   <p>
     <strong>Hide Delay (ms): </strong>
-    <md-input type="number" [(ngModel)]="hideDelay"></md-input>
+    <md-input-container>
+      <input mdInput type="number" [(ngModel)]="hideDelay">
+    </md-input-container>
   </p>
 
   <strong>Mouse over to</strong>

@@ -1,11 +1,10 @@
-describe('radio', function () {
+import {browser, by, element} from 'protractor';
 
-  describe('disabling behavior', function () {
-    beforeEach(function() {
-      browser.get('/radio');
-    });
+describe('radio', () => {
+  describe('disabling behavior', () => {
+    beforeEach(() => browser.get('/radio'));
 
-    it('should be checked when clicked', function () {
+    it('should be checked when clicked', () => {
       element(by.id('water')).click();
       element(by.id('water')).getAttribute('class').then((value: string) => {
         expect(value).toContain('md-radio-checked');
@@ -29,7 +28,7 @@ describe('radio', function () {
       });
     });
 
-    it('should be disabled when disable the radio group', function () {
+    it('should be disabled when disable the radio group', () => {
       element(by.id('toggle-disable')).click();
       element(by.id('water')).click();
       element(by.id('water')).getAttribute('class').then((value: string) => {

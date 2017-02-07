@@ -1,16 +1,22 @@
 import {
-    async,
-    ComponentFixture,
-    TestBed,
-    tick,
-    fakeAsync,
-    flushMicrotasks
+  async,
+  ComponentFixture,
+  TestBed,
+  tick,
+  fakeAsync,
+  flushMicrotasks
 } from '@angular/core/testing';
-import {Component, DebugElement, AnimationTransitionEvent} from '@angular/core';
+import {
+  Component,
+  DebugElement,
+  AnimationTransitionEvent,
+  ChangeDetectionStrategy
+} from '@angular/core';
 import {By} from '@angular/platform-browser';
 import {TooltipPosition, MdTooltip, MdTooltipModule} from './tooltip';
 import {OverlayContainer} from '../core';
 import {Dir, LayoutDirection} from '../core/rtl/dir';
+import {OverlayModule} from '../core/overlay/overlay-directives';
 
 const initialTooltipMessage = 'initial tooltip message';
 
@@ -20,8 +26,8 @@ describe('MdTooltip', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      imports: [MdTooltipModule.forRoot()],
-      declarations: [BasicTooltipDemo],
+      imports: [MdTooltipModule.forRoot(), OverlayModule],
+      declarations: [BasicTooltipDemo, OnPushTooltipDemo],
       providers: [
         {provide: OverlayContainer, useFactory: () => {
           overlayContainerElement = document.createElement('div');
@@ -58,6 +64,15 @@ describe('MdTooltip', () => {
       expect(tooltipDirective._isTooltipVisible()).toBe(true);
 
       fixture.detectChanges();
+
+      // wait till animation has finished
+      tick(500);
+
+      // Make sure tooltip is shown to the user and animation has finished
+      const tooltipElement = overlayContainerElement.querySelector('.md-tooltip') as HTMLElement;
+      expect(tooltipElement instanceof HTMLElement).toBe(true);
+      expect(tooltipElement.style.transform).toBe('scale(1)');
+
       expect(overlayContainerElement.textContent).toContain(initialTooltipMessage);
 
       // After hide called, a timeout delay is created that will to hide the tooltip.
@@ -296,14 +311,61 @@ describe('MdTooltip', () => {
       }).toThrowError('Tooltip position "everywhere" is invalid.');
     });
   });
+
+  describe('with OnPush', () => {
+    let fixture: ComponentFixture<OnPushTooltipDemo>;
+    let buttonDebugElement: DebugElement;
+    let buttonElement: HTMLButtonElement;
+    let tooltipDirective: MdTooltip;
+
+    beforeEach(() => {
+      fixture = TestBed.createComponent(OnPushTooltipDemo);
+      fixture.detectChanges();
+      buttonDebugElement = fixture.debugElement.query(By.css('button'));
+      buttonElement = <HTMLButtonElement> buttonDebugElement.nativeElement;
+      tooltipDirective = buttonDebugElement.injector.get(MdTooltip);
+    });
+
+    it('should show and hide the tooltip', fakeAsync(() => {
+      expect(tooltipDirective._tooltipInstance).toBeUndefined();
+
+      tooltipDirective.show();
+      tick(0); // Tick for the show delay (default is 0)
+      expect(tooltipDirective._isTooltipVisible()).toBe(true);
+
+      fixture.detectChanges();
+
+      // wait till animation has finished
+      tick(500);
+
+      // Make sure tooltip is shown to the user and animation has finished
+      const tooltipElement = overlayContainerElement.querySelector('.md-tooltip') as HTMLElement;
+      expect(tooltipElement instanceof HTMLElement).toBe(true);
+      expect(tooltipElement.style.transform).toBe('scale(1)');
+
+      // After hide called, a timeout delay is created that will to hide the tooltip.
+      const tooltipDelay = 1000;
+      tooltipDirective.hide(tooltipDelay);
+      expect(tooltipDirective._isTooltipVisible()).toBe(true);
+
+      // After the tooltip delay elapses, expect that the tooltip is not visible.
+      tick(tooltipDelay);
+      fixture.detectChanges();
+      expect(tooltipDirective._isTooltipVisible()).toBe(false);
+
+      // On animation complete, should expect that the tooltip has been detached.
+      flushMicrotasks();
+      expect(tooltipDirective._tooltipInstance).toBeNull();
+    }));
+  });
 });
 
 @Component({
   selector: 'app',
   template: `
     <button *ngIf="showButton"
-            [md-tooltip]="message"
-            [tooltip-position]="position">
+            [mdTooltip]="message"
+            [mdTooltipPosition]="position">
       Button
     </button>`
 })
@@ -312,3 +374,17 @@ class BasicTooltipDemo {
   message: string = initialTooltipMessage;
   showButton: boolean = true;
 }
+@Component({
+  selector: 'app',
+  template: `
+    <button [mdTooltip]="message"
+            [mdTooltipPosition]="position">
+      Button
+    </button>`,
+  changeDetection: ChangeDetectionStrategy.OnPush
+})
+class OnPushTooltipDemo {
+  position: string = 'below';
+  message: string = initialTooltipMessage;
+}
+

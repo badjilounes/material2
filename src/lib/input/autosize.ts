@@ -5,7 +5,9 @@ import {Directive, ElementRef, Input, OnInit} from '@angular/core';
  * Directive to automatically resize a textarea to fit its content.
  */
 @Directive({
-  selector: 'textarea[md-autosize], textarea[mat-autosize]',
+  selector: 'textarea[md-autosize], textarea[mdTextareaAutosize],' +
+            'textarea[mat-autosize], textarea[matTextareaAutosize]',
+  exportAs: 'mdTextareaAutosize',
   host: {
     '(input)': 'resizeToFitContent()',
     '[style.min-height]': '_minHeight',
@@ -16,8 +18,24 @@ export class MdTextareaAutosize implements OnInit {
   /** Minimum number of rows for this textarea. */
   @Input() minRows: number;
 
+  get mdAutosizeMinRows(): number {
+    return this.minRows;
+  }
+
+  @Input() set mdAutosizeMinRows(value: number) {
+    this.minRows = value;
+  }
+
   /** Maximum number of rows for this textarea. */
   @Input() maxRows: number;
+
+  get mdAutosizeMaxRows(): number {
+    return this.maxRows;
+  }
+
+  @Input() set mdAutosizeMaxRows(value: number) {
+    this.maxRows = value;
+  }
 
   /** Cached height of a textarea with a single row. */
   private _cachedLineHeight: number;
@@ -40,7 +58,7 @@ export class MdTextareaAutosize implements OnInit {
   }
 
   /**
-   * Cache the hight of a single-row textarea.
+   * Cache the height of a single-row textarea.
    *
    * We need to know how large a single "row" of a textarea is in order to apply minRows and
    * maxRows. For the initial version, we will assume that the height of a single line in the

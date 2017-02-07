@@ -27,6 +27,9 @@ const config = {
       rules: [
         // Exclude md-menu elements because those are empty if not active.
         { id: 'aria-required-children', selector: '*:not(md-menu)' },
+
+        // Disable color constrast checks since the final colors will vary based on the theme.
+        { id: 'color-contrast', enabled: false },
       ]
     }
   ]
@@ -38,9 +41,19 @@ if (process.env['TRAVIS']) {
   config.sauceKey = key;
   config.capabilities = {
     'browserName': 'chrome',
-    'tunnel-identifier': process.env['TRAVIS_JOB_NUMBER'],
-    'build': process.env['TRAVIS_JOB_NUMBER'],
-    'name': 'Material 2 E2E Tests'
+    'version': 'latest',
+    "chromedriverVersion": "2.26",
+    'tunnel-identifier': process.env['TRAVIS_JOB_ID'],
+    'build': process.env['TRAVIS_JOB_ID'],
+    'name': 'Material E2E Tests',
+
+    // Enables concurrent testing in the Webdriver. Currently runs five e2e files in parallel.
+    maxInstances: 5,
+    shardTestFiles: true,
+
+    // By default Saucelabs tries to record the whole e2e run. This can slow down the builds.
+    'recordVideo': false,
+    'recordScreenshots': false
   };
 }
 

@@ -10,6 +10,8 @@ import {
   AnimationTransitionEvent,
   NgZone,
   OnDestroy,
+  Renderer,
+  ElementRef,
 } from '@angular/core';
 import {
   BasePortalHost,
@@ -33,6 +35,7 @@ export const HIDE_ANIMATION = '195ms cubic-bezier(0.0,0.0,0.2,1)';
 
 /**
  * Internal component that wraps user-provided snack bar content.
+ * @docs-private
  */
 @Component({
   moduleId: module.id,
@@ -70,7 +73,10 @@ export class MdSnackBarContainer extends BasePortalHost implements OnDestroy {
   /** The snack bar configuration. */
   snackBarConfig: MdSnackBarConfig;
 
-  constructor(private _ngZone: NgZone) {
+  constructor(
+    private _ngZone: NgZone,
+    private _renderer: Renderer,
+    private _elementRef: ElementRef) {
     super();
   }
 
@@ -78,6 +84,14 @@ export class MdSnackBarContainer extends BasePortalHost implements OnDestroy {
   attachComponentPortal<T>(portal: ComponentPortal<T>): ComponentRef<T> {
     if (this._portalHost.hasAttached()) {
       throw new MdSnackBarContentAlreadyAttached();
+    }
+
+    if (this.snackBarConfig.extraClasses) {
+      // Not the most efficient way of adding classes, but the renderer doesn't allow us
+      // to pass in an array or a space-separated list.
+      for (let cssClass of this.snackBarConfig.extraClasses) {
+        this._renderer.setElementClass(this._elementRef.nativeElement, cssClass, true);
+      }
     }
 
     return this._portalHost.attachComponentPortal(portal);
@@ -91,11 +105,9 @@ export class MdSnackBarContainer extends BasePortalHost implements OnDestroy {
   /** Handle end of animations, updating the state of the snackbar. */
   onAnimationEnd(event: AnimationTransitionEvent) {
     if (event.toState === 'void' || event.toState === 'complete') {
-      this._ngZone.run(() => {
-        this.onExit.next();
-        this.onExit.complete();
-      });
+      this._completeExit();
     }
+
     if (event.toState === 'visible') {
       this._ngZone.run(() => {
         this.onEnter.next();
@@ -126,10 +138,18 @@ export class MdSnackBarContainer extends BasePortalHost implements OnDestroy {
     return this.onExit.asObservable();
   }
 
-  /** Makes sure the exit callbacks have been invoked when the element is destroyed. */
+  /**
+   * Makes sure the exit callbacks have been invoked when the element is destroyed.
+   */
   ngOnDestroy() {
-    // Wait for the zone to settle before removing the element. Helps prevent
-    // errors where we end up removing an element which is in the middle of an animation.
+    this._completeExit();
+  }
+
+  /**
+   * Waits for the zone to settle before removing the element. Helps prevent
+   * errors where we end up removing an element which is in the middle of an animation.
+   */
+  private _completeExit() {
     this._ngZone.onMicrotaskEmpty.first().subscribe(() => {
       this.onExit.next();
       this.onExit.complete();

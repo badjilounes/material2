@@ -1,8 +1,12 @@
-import {Component} from '@angular/core';
-import {MdInput} from '@angular/material';
+import {Component, ElementRef} from '@angular/core';
 
 export interface Person {
   name: string;
+}
+
+export interface DemoColor {
+  name: string;
+  color: string;
 }
 
 @Component({
@@ -24,14 +28,21 @@ export class ChipsDemo {
     { name: 'Paul' }
   ];
 
+  availableColors: DemoColor[] = [
+    { name: 'none', color: '' },
+    { name: 'Primary', color: 'primary' },
+    { name: 'Accent', color: 'accent' },
+    { name: 'Warn', color: 'warn' }
+  ];
+
   alert(message: string): void {
     alert(message);
   }
 
-  add(input: MdInput): void {
-    if (input.value && input.value.trim() != '') {
-      this.people.push({ name: input.value.trim() });
-      input.value = '';
+  add(input: ElementRef): void {
+    if (input.nativeElement.value && input.nativeElement.value.trim() != '') {
+      this.people.push({ name: input.nativeElement.value.trim() });
+      input.nativeElement.value = '';
     }
   }
 

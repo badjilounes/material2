@@ -9,7 +9,7 @@ import {
   ElementRef,
   Renderer
 } from '@angular/core';
-import {DefaultStyleCompatibilityModeModule} from '../core';
+import {CompatibilityModule} from '../core';
 
 
 @Directive({
@@ -22,6 +22,9 @@ export class MdToolbarRow {}
   selector: 'md-toolbar, mat-toolbar',
   templateUrl: 'toolbar.html',
   styleUrls: ['toolbar.css'],
+  host: {
+    role: 'toolbar'
+  },
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
 })
@@ -31,6 +34,7 @@ export class MdToolbar {
 
   constructor(private elementRef: ElementRef, private renderer: Renderer) { }
 
+  /** The color of the toolbar. Can be primary, accent, or warn. */
   @Input()
   get color(): string {
     return this._color;
@@ -56,11 +60,12 @@ export class MdToolbar {
 
 
 @NgModule({
-  imports: [DefaultStyleCompatibilityModeModule],
-  exports: [MdToolbar, MdToolbarRow, DefaultStyleCompatibilityModeModule],
+  imports: [CompatibilityModule],
+  exports: [MdToolbar, MdToolbarRow, CompatibilityModule],
   declarations: [MdToolbar, MdToolbarRow],
 })
 export class MdToolbarModule {
+  /** @deprecated */
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: MdToolbarModule,

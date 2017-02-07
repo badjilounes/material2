@@ -9,7 +9,7 @@ import {MdTabLabel} from './tab-label';
 
 @Component({
   moduleId: module.id,
-  selector: 'md-tab',
+  selector: 'md-tab, mat-tab',
   templateUrl: 'tab.html',
 })
 export class MdTab implements OnInit {
@@ -39,7 +39,10 @@ export class MdTab implements OnInit {
   origin: number = null;
 
   private _disabled = false;
-  @Input() set disabled(value: boolean) { this._disabled = coerceBooleanProperty(value); }
+
+  /** Whether the tab is disabled */
+  @Input()
+  set disabled(value: boolean) { this._disabled = coerceBooleanProperty(value); }
   get disabled(): boolean { return this._disabled; }
 
   constructor(private _viewContainerRef: ViewContainerRef) { }

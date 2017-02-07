@@ -17,16 +17,8 @@
     // section.
     visibility: hidden;
   }
-  &.md-sidenav-closing {
-    transform: translate3d($close, 0, 0);
-  }
-  &.md-sidenav-opening {
-    @include md-elevation(16);
-    visibility: visible;
-    transform: translate3d($open, 0, 0);
-  }
-  &.md-sidenav-opened {
-    @include md-elevation(16);
+
+  &.md-sidenav-opening, &.md-sidenav-opened {
     transform: translate3d($open, 0, 0);
   }
 }
@@ -85,7 +77,7 @@
     visibility: visible;
   }
 
-  @include md-high-contrast {
+  @include cdk-high-contrast {
     opacity: 0.5;
   }
 }
@@ -131,6 +123,14 @@ md-sidenav {
       @include md-sidenav-transition(0, -100%);
     }
   }
+
+  &.md-sidenav-opening, &.md-sidenav-opened {
+    &:not(.md-sidenav-side) {
+      // The elevation of z-16 is noted in the design specifications.
+      // See https://material.io/guidelines/patterns/navigation-drawer.html#
+      @include md-elevation(16);
+    }
+  }
 }
 
 .md-sidenav-focus-trap {
@@ -140,6 +140,9 @@ md-sidenav {
     box-sizing: border-box;
     height: 100%;
     overflow-y: auto; // TODO(kara): revisit scrolling behavior for sidenavs
+
+    // Prevents unnecessary repaints while scrolling.
+    transform: translateZ(0);
   }
 }
 

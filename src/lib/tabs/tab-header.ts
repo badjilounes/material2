@@ -5,7 +5,13 @@ import {
   NgZone,
   QueryList,
   ElementRef,
-  ViewEncapsulation, ContentChildren, Output, EventEmitter, Optional
+  ViewEncapsulation,
+  ContentChildren,
+  Output,
+  EventEmitter,
+  Optional,
+  AfterContentChecked,
+  AfterContentInit,
 } from '@angular/core';
 import {RIGHT_ARROW, LEFT_ARROW, ENTER, Dir, LayoutDirection} from '../core';
 import {MdTabLabelWrapper} from './tab-label-wrapper';
@@ -44,7 +50,7 @@ const EXAGGERATED_OVERSCROLL = 60;
     '[class.md-tab-header-rtl]': "_getLayoutDirection() == 'rtl'",
   }
 })
-export class MdTabHeader {
+export class MdTabHeader implements AfterContentChecked, AfterContentInit {
   @ContentChildren(MdTabLabelWrapper) _labelWrappers: QueryList<MdTabLabelWrapper>;
 
   @ViewChild(MdInkBar) _inkBar: MdInkBar;
@@ -78,8 +84,9 @@ export class MdTabHeader {
   /** Whether the scroll distance has changed and should be applied after the view is checked. */
   private _scrollDistanceChanged: boolean;
 
-  /** The index of the active tab. */
   private _selectedIndex: number = 0;
+
+  /** The index of the active tab. */
   @Input() set selectedIndex(value: number) {
     this._selectedIndexChanged = this._selectedIndex != value;
 
@@ -101,18 +108,16 @@ export class MdTabHeader {
   ngAfterContentChecked(): void {
     // If the number of tab labels have changed, check if scrolling should be enabled
     if (this._tabLabelCount != this._labelWrappers.length) {
-      this._checkPaginationEnabled();
-      this._checkScrollingControls();
-      this._updateTabScrollPosition();
+      this._updatePagination();
       this._tabLabelCount = this._labelWrappers.length;
     }
-
 
     // If the selected index has changed, scroll to the label and check if the scrolling controls
     // should be disabled.
     if (this._selectedIndexChanged) {
       this._scrollToLabel(this._selectedIndex);
       this._checkScrollingControls();
+      this._alignInkBarToSelectedTab();
       this._selectedIndexChanged = false;
     }
 
@@ -122,18 +127,6 @@ export class MdTabHeader {
       this._updateTabScrollPosition();
       this._scrollDistanceChanged = false;
     }
-  }
-
-  /**
-   * Waits one frame for the view to update, then updates the ink bar and scroll.
-   * Note: This must be run outside of the zone or it will create an infinite change detection loop
-   */
-  ngAfterViewChecked(): void {
-    this._zone.runOutsideAngular(() => {
-      window.requestAnimationFrame(() => {
-        this._alignInkBarToSelectedTab();
-      });
-    });
   }
 
   _handleKeydown(event: KeyboardEvent) {
@@ -148,6 +141,30 @@ export class MdTabHeader {
         this.selectFocusedIndex.emit(this.focusIndex);
         break;
     }
+  }
+
+  /**
+   * Aligns the ink bar to the selected tab on load.
+   */
+  ngAfterContentInit() {
+    this._alignInkBarToSelectedTab();
+  }
+
+  /**
+   * Callback for when the MutationObserver detects that the content has changed.
+   */
+  _onContentChanges() {
+    this._updatePagination();
+    this._alignInkBarToSelectedTab();
+  }
+
+  /**
+   * Updating the view whether pagination should be enabled or not
+   */
+  _updatePagination() {
+    this._checkPaginationEnabled();
+    this._checkScrollingControls();
+    this._updateTabScrollPosition();
   }
 
   /** When the focus index is set, we must manually send focus to the correct label */
@@ -170,7 +187,7 @@ export class MdTabHeader {
   _isValidIndex(index: number): boolean {
     if (!this._labelWrappers) { return true; }
 
-    const tab = this._labelWrappers.toArray()[index];
+    const tab = this._labelWrappers ? this._labelWrappers.toArray()[index] : null;
     return tab && !tab.disabled;
   }
 
@@ -274,7 +291,10 @@ export class MdTabHeader {
    * should be called sparingly.
    */
   _scrollToLabel(labelIndex: number) {
-    const selectedLabel = this._labelWrappers.toArray()[labelIndex];
+    const selectedLabel = this._labelWrappers
+        ? this._labelWrappers.toArray()[labelIndex]
+        :  null;
+
     if (!selectedLabel) { return; }
 
     // The view length is the visible width of the tab labels.
@@ -351,6 +371,11 @@ export class MdTabHeader {
     const selectedLabelWrapper = this._labelWrappers && this._labelWrappers.length
         ? this._labelWrappers.toArray()[this.selectedIndex].elementRef.nativeElement
         : null;
-    this._inkBar.alignToElement(selectedLabelWrapper);
+
+    this._zone.runOutsideAngular(() => {
+      requestAnimationFrame(() => {
+        this._inkBar.alignToElement(selectedLabelWrapper);
+      });
+    });
   }
 }

@@ -1,29 +1,17 @@
-import {NgModule, ModuleWithProviders, Injector, ComponentRef, Injectable} from '@angular/core';
-import {
-  Overlay,
-  OverlayModule,
-  PortalModule,
-  OverlayRef,
-  OverlayState,
-  ComponentPortal,
-  OVERLAY_PROVIDERS,
-  ComponentType,
-  A11yModule,
-  InteractivityChecker,
-  MdPlatform,
-  DefaultStyleCompatibilityModeModule,
-} from '../core';
+import {Injector, ComponentRef, Injectable, Optional, SkipSelf} from '@angular/core';
+import {Observable} from 'rxjs/Observable';
+import {Subject} from 'rxjs/Subject';
+
+import {Overlay, OverlayRef, ComponentType, OverlayState, ComponentPortal} from '../core';
+import {extendObject} from '../core/util/object-extend';
+
+import {DialogInjector} from './dialog-injector';
 import {MdDialogConfig} from './dialog-config';
 import {MdDialogRef} from './dialog-ref';
-import {DialogInjector} from './dialog-injector';
 import {MdDialogContainer} from './dialog-container';
-import {extendObject} from '../core/util/object-extend';
-export {MdDialogConfig} from './dialog-config';
-export {MdDialogRef} from './dialog-ref';
 
 
 // TODO(jelbourn): add support for opening with a TemplateRef
-// TODO(jelbourn): dialog content directives (e.g., md-dialog-header)
 // TODO(jelbourn): animations
 
 
@@ -33,25 +21,52 @@ export {MdDialogRef} from './dialog-ref';
  */
 @Injectable()
 export class MdDialog {
-  /** Keeps track of the currently-open dialogs. */
-  private _openDialogs: MdDialogRef<any>[] = [];
+  private _openDialogsAtThisLevel: MdDialogRef<any>[] = [];
+  private _afterAllClosedAtThisLevel = new Subject<void>();
+  private _afterOpenAtThisLevel = new Subject<MdDialogRef<any>>();
 
-  constructor(private _overlay: Overlay, private _injector: Injector) { }
+  /** Keeps track of the currently-open dialogs. */
+  get _openDialogs(): MdDialogRef<any>[] {
+    return this._parentDialog ? this._parentDialog._openDialogs : this._openDialogsAtThisLevel;
+  }
+
+  /** Subject for notifying the user that all open dialogs have finished closing. */
+  get _afterOpen(): Subject<MdDialogRef<any>> {
+    return this._parentDialog ? this._parentDialog._afterOpen : this._afterOpenAtThisLevel;
+  }
+  /** Subject for notifying the user that a dialog has opened. */
+  get _afterAllClosed(): Subject<void> {
+    return this._parentDialog ?
+      this._parentDialog._afterAllClosed : this._afterAllClosedAtThisLevel;
+  }
+
+  /** Gets an observable that is notified when a dialog has been opened. */
+  afterOpen: Observable<MdDialogRef<any>> = this._afterOpen.asObservable();
+
+  /** Gets an observable that is notified when all open dialog have finished closing. */
+  afterAllClosed: Observable<void> = this._afterAllClosed.asObservable();
+
+  constructor(
+      private _overlay: Overlay,
+      private _injector: Injector,
+      @Optional() @SkipSelf() private _parentDialog: MdDialog) { }
 
   /**
    * Opens a modal dialog containing the given component.
    * @param component Type of the component to load into the load.
-   * @param config
+   * @param config Extra configuration options.
+   * @returns Reference to the newly-opened dialog.
    */
   open<T>(component: ComponentType<T>, config?: MdDialogConfig): MdDialogRef<T> {
     config = _applyConfigDefaults(config);
 
     let overlayRef = this._createOverlay(config);
     let dialogContainer = this._attachDialogContainer(overlayRef, config);
-    let dialogRef = this._attachDialogContent(component, dialogContainer, overlayRef);
+    let dialogRef = this._attachDialogContent(component, dialogContainer, overlayRef, config);
 
     this._openDialogs.push(dialogRef);
     dialogRef.afterClosed().subscribe(() => this._removeOpenDialog(dialogRef));
+    this._afterOpen.next(dialogRef);
 
     return dialogRef;
   }
@@ -102,17 +117,19 @@ export class MdDialog {
    * @param component The type of component being loaded into the dialog.
    * @param dialogContainer Reference to the wrapping MdDialogContainer.
    * @param overlayRef Reference to the overlay in which the dialog resides.
+   * @param config The dialog configuration.
    * @returns A promise resolving to the MdDialogRef that should be returned to the user.
    */
   private _attachDialogContent<T>(
       component: ComponentType<T>,
       dialogContainer: MdDialogContainer,
-      overlayRef: OverlayRef): MdDialogRef<T> {
+      overlayRef: OverlayRef,
+      config?: MdDialogConfig): MdDialogRef<T> {
     // Create a reference to the dialog we're creating in order to give the user a handle
     // to modify and close it.
     let dialogRef = <MdDialogRef<T>> new MdDialogRef(overlayRef);
 
-    if (!dialogContainer.dialogConfig.disableClose) {
+    if (!config.disableClose) {
       // When the dialog backdrop is clicked, we want to close it.
       overlayRef.backdropClick().first().subscribe(() => dialogRef.close());
     }
@@ -123,7 +140,8 @@ export class MdDialog {
     // We create an injector specifically for the component we're instantiating so that it can
     // inject the MdDialogRef. This allows a component loaded inside of a dialog to close itself
     // and, optionally, to return a value.
-    let dialogInjector = new DialogInjector(dialogRef, this._injector);
+    let userInjector = config && config.viewContainerRef && config.viewContainerRef.injector;
+    let dialogInjector = new DialogInjector(userInjector || this._injector, dialogRef, config.data);
 
     let contentPortal = new ComponentPortal(component, null, dialogInjector);
 
@@ -165,12 +183,18 @@ export class MdDialog {
 
   /**
    * Removes a dialog from the array of open dialogs.
+   * @param dialogRef Dialog to be removed.
    */
   private _removeOpenDialog(dialogRef: MdDialogRef<any>) {
     let index = this._openDialogs.indexOf(dialogRef);
 
     if (index > -1) {
       this._openDialogs.splice(index, 1);
+
+      // no open dialogs are left, call next on afterAllClosed Subject
+      if (!this._openDialogs.length) {
+        this._afterAllClosed.next();
+      }
     }
   }
 }
@@ -184,18 +208,3 @@ function _applyConfigDefaults(dialogConfig: MdDialogConfig): MdDialogConfig {
   return extendObject(new MdDialogConfig(), dialogConfig);
 }
 
-
-@NgModule({
-  imports: [OverlayModule, PortalModule, A11yModule, DefaultStyleCompatibilityModeModule],
-  exports: [MdDialogContainer, DefaultStyleCompatibilityModeModule],
-  declarations: [MdDialogContainer],
-  entryComponents: [MdDialogContainer],
-})
-export class MdDialogModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: MdDialogModule,
-      providers: [MdDialog, OVERLAY_PROVIDERS, InteractivityChecker, MdPlatform],
-    };
-  }
-}
