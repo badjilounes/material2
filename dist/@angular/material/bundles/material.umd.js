@@ -106,11 +106,6 @@ var __decorate$1 = (this && this.__decorate) || function (decorators, target, ke
 var __metadata$1 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-/**
- * Shared directive to count lines inside a text area, such as a list item.
- * Line elements can be extracted with a @ContentChildren(MdLine) query, then
- * counted by checking the query list's length.
- */
 var MdLine = (function () {
     function MdLine() {
     }
@@ -177,12 +172,6 @@ var __decorate$3 = (this && this.__decorate) || function (decorators, target, ke
 var __metadata$3 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-/**
- * Directive to listen for changes of direction of part of the DOM.
- *
- * Applications should use this directive instead of the native attribute so that Material
- * components can listen on changes of direction.
- */
 var Dir = (function () {
     function Dir() {
         /** Layout direction of the element. */
@@ -263,10 +252,6 @@ var __decorate$4 = (this && this.__decorate) || function (decorators, target, ke
 var __metadata$4 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-/**
- * Directive that triggers a callback whenever the content of
- * its associated element has changed.
- */
 var ObserveContent = (function () {
     function ObserveContent(_elementRef) {
         this._elementRef = _elementRef;
@@ -528,10 +513,6 @@ var __decorate$8 = (this && this.__decorate) || function (decorators, target, ke
 var __metadata$8 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-/**
- * Service contained all registered Scrollable references and emits an event when any one of the
- * Scrollable references emit a scrolled event.
- */
 var ScrollDispatcher = (function () {
     function ScrollDispatcher() {
         var _this = this;
@@ -627,10 +608,6 @@ var __decorate$7 = (this && this.__decorate) || function (decorators, target, ke
 var __metadata$7 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-/**
- * Simple utility for getting the bounds of the browser viewport.
- * @docs-private
- */
 var ViewportRuler = (function () {
     function ViewportRuler(scrollDispatcher) {
         var _this = this;
@@ -1000,10 +977,6 @@ var __decorate$5 = (this && this.__decorate) || function (decorators, target, ke
 var __metadata$5 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-/**
- * Option IDs need to be unique across components, so this counter exists outside of
- * the component definition.
- */
 var _uniqueIdCounter = 0;
 /** Event object emitted by MdOption when selected. */
 var MdOptionSelectEvent = (function () {
@@ -1206,10 +1179,6 @@ var __extends$2 = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-/**
- * Exception thrown when attempting to attach a null portal to a host.
- * @docs-private
- */
 var NullPortalError = (function (_super) {
     __extends$2(NullPortalError, _super);
     function NullPortalError() {
@@ -1279,10 +1248,6 @@ var __extends$1 = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-/**
- * A `Portal` is something that you want to render somewhere else.
- * It can be attach to / detached from a `PortalHost`.
- */
 var Portal = (function () {
     function Portal() {
     }
@@ -1441,15 +1406,6 @@ var __decorate$9 = (this && this.__decorate) || function (decorators, target, ke
 var __metadata$9 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-/**
- * Directive version of a `TemplatePortal`. Because the directive *is* a TemplatePortal,
- * the directive instance itself can be attached to a host, enabling declarative use of portals.
- *
- * Usage:
- * <template portal #greeting>
- *   <p> Hello {{name}} </p>
- * </template>
- */
 var TemplatePortalDirective = (function (_super) {
     __extends(TemplatePortalDirective, _super);
     function TemplatePortalDirective(templateRef, viewContainerRef) {
@@ -1594,12 +1550,6 @@ var __extends$4 = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-/**
- * A PortalHost for attaching portals to an arbitrary DOM element outside of the Angular
- * application context.
- *
- * This is the only part of the portal core that directly touches the DOM.
- */
 var DomPortalHost = (function (_super) {
     __extends$4(DomPortalHost, _super);
     function DomPortalHost(_hostDomElement, _componentFactoryResolver, _appRef, _defaultInjector) {
@@ -1675,10 +1625,6 @@ var DomPortalHost = (function (_super) {
     return DomPortalHost;
 }(BasePortalHost));
 
-/**
- * Reference to an overlay that has been created with the Overlay service.
- * Used to manipulate or dispose of said overlay.
- */
 var OverlayRef = (function () {
     function OverlayRef(_portalHost, _pane, _state, _ngZone) {
         this._portalHost = _portalHost;
@@ -1851,7 +1797,6 @@ var __metadata$13 = (this && this.__metadata) || function (k, v) {
 var __param$2 = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-/** The points of the origin element and the overlay element to connect. */
 var ConnectionPositionPair = (function () {
     function ConnectionPositionPair(origin, overlay) {
         this.originX = origin.originX;
@@ -1902,13 +1847,6 @@ var ConnectedOverlayPositionChange = (function () {
     return ConnectedOverlayPositionChange;
 }());
 
-/**
- * A strategy for positioning overlays. Using this strategy, an overlay is given an
- * implicit position relative some origin element. The relative position is defined in terms of
- * a point on the origin element that is connected to a point on the overlay element. For example,
- * a basic dropdown is connecting the bottom-left corner of the origin to the top-left corner
- * of the overlay.
- */
 var ConnectedPositionStrategy = (function () {
     function ConnectedPositionStrategy(_connectedTo, _originPos, _overlayPos, _viewportRuler) {
         this._connectedTo = _connectedTo;
@@ -2364,7 +2302,6 @@ var __decorate$12 = (this && this.__decorate) || function (decorators, target, k
 var __metadata$12 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-/** Builder for overlay position strategy. */
 var OverlayPositionBuilder = (function () {
     function OverlayPositionBuilder(_viewportRuler) {
         this._viewportRuler = _viewportRuler;
@@ -2400,10 +2337,6 @@ var __decorate$14 = (this && this.__decorate) || function (decorators, target, k
 var __metadata$14 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-/**
- * The OverlayContainer is the container in which all overlays will load.
- * It should be provided in the root component to ensure it is properly shared.
- */
 var OverlayContainer = (function () {
     function OverlayContainer() {
     }
@@ -2455,7 +2388,6 @@ var __decorate$11 = (this && this.__decorate) || function (decorators, target, k
 var __metadata$11 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-/** Next overlay unique ID. */
 var nextUniqueId = 0;
 /** The default state for newly created overlays. */
 var defaultState = new OverlayState();
@@ -2543,11 +2475,6 @@ var __decorate$15 = (this && this.__decorate) || function (decorators, target, k
 var __metadata$15 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-/**
- * Sends an event when the directive's element is scrolled. Registers itself with the
- * ScrollDispatcher service to include itself as part of its collection of scrolling events that it
- * can be listened to through the service.
- */
 var Scrollable = (function () {
     function Scrollable(_elementRef, _scroll) {
         this._elementRef = _elementRef;
@@ -2589,7 +2516,6 @@ var __metadata$10 = (this && this.__metadata) || function (k, v) {
 var __param$1 = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-/** Default set of positions for the overlay. Follows the behavior of a dropdown. */
 var defaultPositionList = [
     new ConnectionPositionPair({ originX: 'start', originY: 'bottom' }, { overlayX: 'start', overlayY: 'top' }),
     new ConnectionPositionPair({ originX: 'start', originY: 'top' }, { overlayX: 'start', overlayY: 'bottom' }),
@@ -2894,8 +2820,6 @@ var __decorate$19 = (this && this.__decorate) || function (decorators, target, k
 var __metadata$19 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-// Whether the current platform supports the V8 Break Iterator. The V8 check
-// is necessary to detect all Blink based browsers.
 var hasV8BreakIterator = typeof (window) !== 'undefined' ?
     (window.Intl && window.Intl.v8BreakIterator) :
     (typeof (Intl) !== 'undefined' && Intl.v8BreakIterator);
@@ -2940,15 +2864,6 @@ var __decorate$18 = (this && this.__decorate) || function (decorators, target, k
 var __metadata$18 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-/**
- * The InteractivityChecker leans heavily on the ally.js accessibility utilities.
- * Methods like `isTabbable` are only covering specific edge-cases for the browsers which are
- * supported.
- */
-/**
- * Utility for checking the interactivity of an element, such as whether is is focusable or
- * tabbable.
- */
 var InteractivityChecker = (function () {
     function InteractivityChecker(_platform) {
         this._platform = _platform;
@@ -3147,14 +3062,6 @@ var __decorate$17 = (this && this.__decorate) || function (decorators, target, k
 var __metadata$17 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-/**
- * Directive for trapping focus within a region.
- *
- * NOTE: This directive currently uses a very simple (naive) approach to focus trapping.
- * It assumes that the tab order is the same as DOM order, which is not necessarily true.
- * Things like tabIndex > 0, flex `order`, and shadow roots can cause to two to misalign.
- * This will be replaced with a more intelligent solution before the library is considered stable.
- */
 var FocusTrap = (function () {
     function FocusTrap(_checker, _ngZone) {
         this._checker = _checker;
@@ -3445,17 +3352,6 @@ var __decorate$23 = (this && this.__decorate) || function (decorators, target, k
 var __metadata$23 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-/**
- * Component that shows a simplified checkbox without including any kind of "real" checkbox.
- * Meant to be used when the checkbox is purely decorative and a large number of them will be
- * included, such as for the options in a multi-select. Uses no SVGs or complex animations.
- *
- * Note that this component will be completely invisible to screen-reader users. This is *not*
- * interchangeable with <md-checkbox> and should *not* be used if the user would directly interact
- * with the checkbox. The pseudo-checkbox should only be used as an implementation detail of
- * more complex components that appropriately handle selected / checked state.
- * @docs-private
- */
 var MdPseudoCheckbox = (function () {
     function MdPseudoCheckbox(_elementRef, _renderer) {
         this._elementRef = _elementRef;
@@ -3540,8 +3436,6 @@ var __decorate$24 = (this && this.__decorate) || function (decorators, target, k
 var __metadata$24 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-// "Polyfill" for `Node.replaceWith()`.
-// cf. https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/replaceWith
 function _replaceWith(toReplaceEl, otherEl) {
     toReplaceEl.parentElement.replaceChild(otherEl, toReplaceEl);
 }
@@ -3655,15 +3549,6 @@ var __decorate$25 = (this && this.__decorate) || function (decorators, target, k
 var __metadata$25 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-/**
- * The FullscreenOverlayContainer is the alternative to OverlayContainer
- * that supports correct displaying of overlay elements in Fullscreen mode
- * https://developer.mozilla.org/en-US/docs/Web/API/Element/requestFullScreen
- * It should be provided in the root component that way:
- * providers: [
- *   {provide: OverlayContainer, useClass: FullscreenOverlayContainer}
- * ],
- */
 var FullscreenOverlayContainer = (function (_super) {
     __extends$5(FullscreenOverlayContainer, _super);
     function FullscreenOverlayContainer() {
@@ -3729,7 +3614,6 @@ var __decorate$26 = (this && this.__decorate) || function (decorators, target, k
 var __metadata$26 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-/* Adjusts configuration of our gesture library, Hammer. */
 var GestureConfig = (function (_super) {
     __extends$6(GestureConfig, _super);
     function GestureConfig() {
@@ -3797,10 +3681,6 @@ var GestureConfig = (function (_super) {
     return GestureConfig;
 }(_angular_platformBrowser.HammerGestureConfig));
 
-/**
- * Class to be used to power selecting one or more options from a list.
- * @docs-private
- */
 var SelectionModel = (function () {
     function SelectionModel(_isMulti, initiallySelectedValues) {
         var _this = this;
@@ -3937,15 +3817,6 @@ var __decorate$27 = (this && this.__decorate) || function (decorators, target, k
 var __metadata$27 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-/**
- * Class to coordinate unique selection based on name.
- * Intended to be consumed as an Angular service.
- * This service is needed because native radio change events are only fired on the item currently
- * being selected, and we still need to uncheck the previous selection.
- *
- * This service does not *store* any IDs and names because they may change at any time, so it is
- * less error-prone if they are simply passed through when the events occur.
- */
 var UniqueSelectionDispatcher = (function () {
     function UniqueSelectionDispatcher() {
         this._listeners = [];
@@ -3990,7 +3861,6 @@ var __decorate$29 = (this && this.__decorate) || function (decorators, target, k
 var __metadata$29 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-/** Monitors mouse and keyboard events to determine the cause of focus events. */
 var FocusOriginMonitor = (function () {
     function FocusOriginMonitor() {
         var _this = this;
@@ -4192,11 +4062,6 @@ var __metadata$31 = (this && this.__metadata) || function (k, v) {
 var __param$4 = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-/**
- * Provider Expression that allows md-button-toggle-group to register as a ControlValueAccessor.
- * This allows it to support [(ngModel)].
- * @docs-private
- */
 var MD_BUTTON_TOGGLE_GROUP_VALUE_ACCESSOR = {
     provide: _angular_forms.NG_VALUE_ACCESSOR,
     useExisting: _angular_core.forwardRef(function () { return MdButtonToggleGroup; }),
@@ -4700,11 +4565,6 @@ var __decorate$32 = (this && this.__decorate) || function (decorators, target, k
 var __metadata$32 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-// TODO(jelbourn): Make the `isMouseDown` stuff done with one global listener.
-// TODO(kara): Convert attribute selectors to classes when attr maps become available
-/**
- * Material design button.
- */
 var MdButton = (function () {
     function MdButton(_elementRef, _renderer) {
         this._elementRef = _elementRef;
@@ -4896,7 +4756,6 @@ var __decorate$33 = (this && this.__decorate) || function (decorators, target, k
 var __metadata$33 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-/** Monotonically increasing integer used to auto-generate unique ids for checkbox components. */
 var nextId = 0;
 /**
  * Provider Expression that allows md-checkbox to register as a ControlValueAccessor.
@@ -5338,11 +5197,6 @@ var __metadata$34 = (this && this.__metadata) || function (k, v) {
 var __param$5 = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-/**
- * Provider Expression that allows md-radio-group to register as a ControlValueAccessor. This
- * allows it to support [(ngModel)] and ngControl.
- * @docs-private
- */
 var MD_RADIO_GROUP_CONTROL_VALUE_ACCESSOR = {
     provide: _angular_forms.NG_VALUE_ACCESSOR,
     useExisting: _angular_core.forwardRef(function () { return MdRadioGroup; }),
@@ -5873,10 +5727,6 @@ var MdRadioModule = (function () {
     return MdRadioModule;
 }());
 
-/**
- * This class manages keyboard events for selectable lists. If you pass it a query list
- * of items, it will set the active item correctly when arrow events occur.
- */
 var ListKeyManager = (function () {
     function ListKeyManager(_items) {
         this._items = _items;
@@ -6057,17 +5907,6 @@ var FocusKeyManager = (function (_super) {
     return FocusKeyManager;
 }(ListKeyManager));
 
-/**
- * The following are all the animations for the md-select component, with each
- * const containing the metadata for one animation.
- *
- * The values below match the implementation of the AngularJS Material md-select animation.
- */
-/**
- * This animation shrinks the placeholder text to 75% of its normal size and translates
- * it to either the top left corner (ltr) or top right corner (rtl) of the trigger,
- * depending on the text direction of the application.
- */
 var transformPlaceholder = _angular_core.trigger('transformPlaceholder', [
     _angular_core.state('floating-ltr', _angular_core.style({
         top: '-22px',
@@ -6133,12 +5972,6 @@ var __metadata$36 = (this && this.__metadata) || function (k, v) {
 var __param$6 = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-/**
- * The following style constants are necessary to save here in order
- * to properly calculate the alignment of the selected option over
- * the trigger element.
- */
-/** The fixed height of every option element. */
 var SELECT_OPTION_HEIGHT = 48;
 /** The max height of the select's overlay panel */
 var SELECT_PANEL_MAX_HEIGHT = 256;
@@ -7142,10 +6975,6 @@ var __metadata$38 = (this && this.__metadata) || function (k, v) {
 var __param$7 = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-/**
- * Visually, a 30px separation between tick marks looks best. This is very subjective but it is
- * the default separation we chose.
- */
 var MIN_AUTO_TICK_SEPARATION = 30;
 /** The thumb gap size for a disabled slider. */
 var DISABLED_THUMB_GAP = 7;
@@ -7851,7 +7680,6 @@ var __metadata$39 = (this && this.__metadata) || function (k, v) {
 var __param$8 = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-/** Exception thrown when two MdSidenav are matching the same side. */
 var MdDuplicatedSidenavError = (function (_super) {
     __extends$9(MdDuplicatedSidenavError, _super);
     function MdDuplicatedSidenavError(align) {
@@ -8630,10 +8458,6 @@ var __extends$10 = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-/**
- * Exception thrown when cols property is missing from grid-list
- * @docs-private
- */
 var MdGridListColsError = (function (_super) {
     __extends$10(MdGridListColsError, _super);
     function MdGridListColsError() {
@@ -8664,23 +8488,6 @@ var MdGridListBadRatioError = (function (_super) {
     return MdGridListBadRatioError;
 }(MdError));
 
-/**
- * Class for determining, from a list of tiles, the (row, col) position of each of those tiles
- * in the grid. This is necessary (rather than just rendering the tiles in normal document flow)
- * because the tiles can have a rowspan.
- *
- * The positioning algorithm greedily places each tile as soon as it encounters a gap in the grid
- * large enough to accommodate it so that the tiles still render in the same order in which they
- * are given.
- *
- * The basis of the algorithm is the use of an array to track the already placed tiles. Each
- * element of the array corresponds to a column, and the value indicates how many cells in that
- * column are already occupied; zero indicates an empty cell. Moving "down" to the next row
- * decrements each value in the tracking array (indicating that the column is one cell closer to
- * being free).
- *
- * @docs-private
- */
 var TileCoordinator = (function () {
     function TileCoordinator(numColumns, tiles) {
         var _this = this;
@@ -8796,11 +8603,6 @@ var __extends$11 = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-/**
- * Sets the style properties for an individual tile, given the position calculated by the
- * Tile Coordinator.
- * @docs-private
- */
 var TileStyler = (function () {
     function TileStyler() {
         this._rows = 0;
@@ -9012,9 +8814,6 @@ var __metadata$41 = (this && this.__metadata) || function (k, v) {
 var __param$9 = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-// TODO(kara): Conditional (responsive) column count / row size.
-// TODO(kara): Re-layout on window resize / media change (debounced).
-// TODO(kara): gridTileHeader and gridTileFooter.
 var MD_FIT_MODE = 'fit';
 var MdGridList = (function () {
     function MdGridList(_renderer, _element, _dir) {
@@ -9167,9 +8966,6 @@ var __decorate$43 = (this && this.__decorate) || function (decorators, target, k
 var __metadata$43 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-/**
- * Content of a card, needed as it's used as a selector in the API.
- */
 var MdCardContent = (function () {
     function MdCardContent() {
     }
@@ -9339,9 +9135,6 @@ var __decorate$45 = (this && this.__decorate) || function (decorators, target, k
 var __metadata$45 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-/**
- * Material design styled Chip component. Used inside the MdChipList component.
- */
 var MdChip = (function () {
     function MdChip(_renderer, _elementRef) {
         this._renderer = _renderer;
@@ -9513,16 +9306,6 @@ var __decorate$44 = (this && this.__decorate) || function (decorators, target, k
 var __metadata$44 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-/**
- * A material design chips component (named ChipList for it's similarity to the List component).
- *
- * Example:
- *
- *     <md-chip-list>
- *       <md-chip>Chip 1<md-chip>
- *       <md-chip>Chip 2<md-chip>
- *     </md-chip-list>
- */
 var MdChipList = (function () {
     function MdChipList(_elementRef) {
         this._elementRef = _elementRef;
@@ -9723,10 +9506,6 @@ var __decorate$47 = (this && this.__decorate) || function (decorators, target, k
 var __metadata$47 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-/**
- * Exception thrown when attempting to load an icon with a name that cannot be found.
- * @docs-private
- */
 var MdIconNameNotFoundError = (function (_super) {
     __extends$13(MdIconNameNotFoundError, _super);
     function MdIconNameNotFoundError(iconName) {
@@ -10122,7 +9901,6 @@ var __decorate$46 = (this && this.__decorate) || function (decorators, target, k
 var __metadata$46 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-/** Exception thrown when an invalid icon name is passed to an md-icon component. */
 var MdIconInvalidNameError = (function (_super) {
     __extends$12(MdIconInvalidNameError, _super);
     function MdIconInvalidNameError(iconName) {
@@ -10393,8 +10171,6 @@ var __decorate$48 = (this && this.__decorate) || function (decorators, target, k
 var __metadata$48 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-// TODO(josephperrott): Benchpress tests.
-/** A single degree in radians. */
 var DEGREE_IN_RADIANS = Math.PI / 180;
 /** Duration of the indeterminate animation. */
 var DURATION_INDETERMINATE = 667;
@@ -10749,11 +10525,6 @@ var __decorate$49 = (this && this.__decorate) || function (decorators, target, k
 var __metadata$49 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-// TODO(josephperrott): Benchpress tests.
-// TODO(josephperrott): Add ARIA attributes for progressbar "for".
-/**
- * <md-progress-bar> component.
- */
 var MdProgressBar = (function () {
     function MdProgressBar() {
         /** Color of the progress bar. */
@@ -10866,7 +10637,6 @@ var __extends$15 = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-/** @docs-private */
 var MdInputContainerPlaceholderConflictError = (function (_super) {
     __extends$15(MdInputContainerPlaceholderConflictError, _super);
     function MdInputContainerPlaceholderConflictError() {
@@ -10912,7 +10682,6 @@ var __metadata$51 = (this && this.__metadata) || function (k, v) {
 var __param$10 = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-// Invalid input type. Using one of these will throw an MdInputContainerUnsupportedTypeError.
 var MD_INPUT_INVALID_TYPES = [
     'button',
     'checkbox',
@@ -11339,9 +11108,6 @@ var __decorate$52 = (this && this.__decorate) || function (decorators, target, k
 var __metadata$52 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-/**
- * Directive to automatically resize a textarea to fit its content.
- */
 var MdTextareaAutosize = (function () {
     function MdTextareaAutosize(_elementRef) {
         this._elementRef = _elementRef;
@@ -11515,10 +11281,6 @@ var MdSnackBarConfig = (function () {
     return MdSnackBarConfig;
 }());
 
-// TODO(josephperrott): Implement onAction observable.
-/**
- * Reference to a snack bar dispatched from the snack bar service.
- */
 var MdSnackBarRef = (function () {
     function MdSnackBarRef(instance, containerInstance, _overlayRef) {
         var _this = this;
@@ -11588,10 +11350,6 @@ var __extends$17 = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-/**
- * Error that is thrown when attempting to attach a snack bar that is already attached.
- * @docs-private
- */
 var MdSnackBarContentAlreadyAttached = (function (_super) {
     __extends$17(MdSnackBarContentAlreadyAttached, _super);
     function MdSnackBarContentAlreadyAttached() {
@@ -11614,8 +11372,6 @@ var __decorate$54 = (this && this.__decorate) || function (decorators, target, k
 var __metadata$54 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-// TODO(jelbourn): we can't use constants from animation.ts here because you can't use
-// a text interpolation in anything that is analyzed statically with ngc (for AoT compile).
 var SHOW_ANIMATION = '225ms cubic-bezier(0.4,0.0,1,1)';
 var HIDE_ANIMATION = '195ms cubic-bezier(0.0,0.0,0.2,1)';
 /**
@@ -11740,10 +11496,6 @@ var __decorate$55 = (this && this.__decorate) || function (decorators, target, k
 var __metadata$55 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-/**
- * A component used to open as the default snack bar, matching material spec.
- * This should only be used internally by the snack bar service.
- */
 var SimpleSnackBar = (function () {
     function SimpleSnackBar() {
     }
@@ -11807,9 +11559,6 @@ var __metadata$53 = (this && this.__metadata) || function (k, v) {
 var __param$11 = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-/**
- * Service to dispatch Material Design snack bar messages.
- */
 var MdSnackBar = (function () {
     function MdSnackBar(_overlay, _live, _parentSnackBar) {
         this._overlay = _overlay;
@@ -11970,7 +11719,6 @@ var __decorate$57 = (this && this.__decorate) || function (decorators, target, k
 var __metadata$57 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-/** Used to flag tab labels for use with the portal directive */
 var MdTabLabel = (function (_super) {
     __extends$18(MdTabLabel, _super);
     function MdTabLabel(templateRef, viewContainerRef) {
@@ -11994,7 +11742,6 @@ var __decorate$58 = (this && this.__decorate) || function (decorators, target, k
 var __metadata$58 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-/** Used in the `md-tab-group` view to display tab labels */
 var MdTabLabelWrapper = (function () {
     function MdTabLabelWrapper(elementRef, _renderer) {
         this.elementRef = elementRef;
@@ -12044,7 +11791,6 @@ var __decorate$60 = (this && this.__decorate) || function (decorators, target, k
 var __metadata$60 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-/** The ink-bar is used to display and animate the line underneath the current active tab label. */
 var MdInkBar = (function () {
     function MdInkBar(_renderer, _elementRef) {
         this._renderer = _renderer;
@@ -12105,10 +11851,6 @@ var __decorate$59 = (this && this.__decorate) || function (decorators, target, k
 var __metadata$59 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-/**
- * Navigation component matching the styles of the tab group header.
- * Provides anchored navigation with animated ink bar.
- */
 var MdTabNavBar = (function () {
     function MdTabNavBar() {
     }
@@ -12270,9 +12012,6 @@ var __metadata$62 = (this && this.__metadata) || function (k, v) {
 var __param$12 = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-/**
- * Wrapper for the contents of a tab.
- */
 var MdTabBody = (function () {
     function MdTabBody(_dir, _elementRef, _changeDetectorRef) {
         this._dir = _dir;
@@ -12446,10 +12185,6 @@ var __metadata$63 = (this && this.__metadata) || function (k, v) {
 var __param$13 = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-/**
- * The distance in pixels that will be overshot when scrolling a tab label into view. This helps
- * provide a small affordance to the label next to it.
- */
 var EXAGGERATED_OVERSCROLL = 60;
 /**
  * The header of the tab group which displays a list of all the tabs in the tab group. Includes
@@ -13113,10 +12848,6 @@ var __extends$20 = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-/**
- * Exception thrown when a tooltip has an invalid position.
- * @docs-private
- */
 var MdTooltipInvalidPositionError = (function (_super) {
     __extends$20(MdTooltipInvalidPositionError, _super);
     function MdTooltipInvalidPositionError(position) {
@@ -13137,7 +12868,6 @@ var __metadata$65 = (this && this.__metadata) || function (k, v) {
 var __param$14 = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-/** Time in ms to delay before changing the tooltip visibility to hidden */
 var TOUCHEND_HIDE_DELAY = 1500;
 /**
  * Directive that attaches a material design tooltip to the host element. Animates the showing and
@@ -13561,10 +13291,6 @@ var __extends$21 = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-/**
- * Exception thrown when menu trigger doesn't have a valid md-menu instance
- * @docs-private
- */
 var MdMenuMissingError = (function (_super) {
     __extends$21(MdMenuMissingError, _super);
     function MdMenuMissingError() {
@@ -13606,10 +13332,6 @@ var __decorate$68 = (this && this.__decorate) || function (decorators, target, k
 var __metadata$68 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-/**
- * This directive is intended to be used inside an md-menu tag.
- * It exists mostly to set the role attribute.
- */
 var MdMenuItem = (function () {
     function MdMenuItem(_renderer, _elementRef) {
         this._renderer = _renderer;
@@ -13672,19 +13394,6 @@ var MdMenuItem = (function () {
     return MdMenuItem;
 }());
 
-/**
- * Below are all the animations for the md-menu component.
- * Animation duration and timing values are based on AngularJS Material.
- */
-/**
- * This animation controls the menu panel's entry and exit from the page.
- *
- * When the menu panel is added to the DOM, it scales in and fades in its border.
- *
- * When the menu panel is removed from the DOM, it simply fades out after a brief
- * delay to display the ripple.
- */
-// TODO(kara): switch to :enter and :leave once Mobile Safari is sorted out.
 var transformMenu = _angular_core.trigger('transformMenu', [
     _angular_core.state('showing', _angular_core.style({
         opacity: 1,
@@ -13860,10 +13569,6 @@ var __metadata$69 = (this && this.__metadata) || function (k, v) {
 var __param$16 = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-/**
- * This directive is intended to be used in conjunction with an md-menu tag.  It is
- * responsible for toggling the display of the provided menu instance.
- */
 var MdMenuTrigger = (function () {
     function MdMenuTrigger(_overlay, _element, _viewContainerRef, _renderer, _dir) {
         this._overlay = _overlay;
@@ -14129,11 +13834,6 @@ var MdMenuModule = (function () {
     return MdMenuModule;
 }());
 
-// TODO(jelbourn): resizing
-// TODO(jelbourn): afterOpen and beforeClose
-/**
- * Reference to a dialog opened via the MdDialog service.
- */
 var MdDialogRef = (function () {
     function MdDialogRef(_overlayRef) {
         this._overlayRef = _overlayRef;
@@ -14200,10 +13900,6 @@ var __extends$23 = (this && this.__extends) || function (d, b) {
     function __() { this.constructor = d; }
     d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
 };
-/**
- * Exception thrown when a ComponentPortal is attached to a DomPortalHost without an origin.
- * @docs-private
- */
 var MdDialogContentAlreadyAttachedError = (function (_super) {
     __extends$23(MdDialogContentAlreadyAttachedError, _super);
     function MdDialogContentAlreadyAttachedError() {
@@ -14226,10 +13922,6 @@ var __decorate$72 = (this && this.__decorate) || function (decorators, target, k
 var __metadata$72 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-/**
- * Internal component that wraps user-provided dialog content.
- * @docs-private
- */
 var MdDialogContainer = (function (_super) {
     __extends$22(MdDialogContainer, _super);
     function MdDialogContainer(_ngZone, _renderer) {
@@ -14319,11 +14011,6 @@ var __metadata$71 = (this && this.__metadata) || function (k, v) {
 var __param$17 = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-// TODO(jelbourn): add support for opening with a TemplateRef
-// TODO(jelbourn): animations
-/**
- * Service to open Material Design modal dialogs.
- */
 var MdDialog = (function () {
     function MdDialog(_overlay, _injector, _parentDialog) {
         this._overlay = _overlay;
@@ -14508,9 +14195,6 @@ var __decorate$73 = (this && this.__decorate) || function (decorators, target, k
 var __metadata$73 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-/**
- * Button that will close the current dialog.
- */
 var MdDialogClose = (function () {
     function MdDialogClose(dialogRef) {
         this.dialogRef = dialogRef;
@@ -14639,10 +14323,6 @@ var __decorate$75 = (this && this.__decorate) || function (decorators, target, k
 var __metadata$75 = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-/**
- * Autocomplete IDs need to be unique across components, so this counter exists outside of
- * the component definition.
- */
 var _uniqueAutocompleteIdCounter = 0;
 var MdAutocomplete = (function () {
     function MdAutocomplete() {
@@ -14734,12 +14414,6 @@ var __metadata$76 = (this && this.__metadata) || function (k, v) {
 var __param$18 = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-/**
- * The following style constants are necessary to save here in order
- * to properly calculate the scrollTop of the panel. Because we are not
- * actually focusing the active item, scroll must be handled manually.
- */
-/** The height of each autocomplete option. */
 var AUTOCOMPLETE_OPTION_HEIGHT = 48;
 /** The total height of the autocomplete panel. */
 var AUTOCOMPLETE_PANEL_HEIGHT = 256;
