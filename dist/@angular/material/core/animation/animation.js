@@ -1,20 +1,24 @@
-/** @docs-private */
-export var AnimationCurves = (function () {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var AnimationCurves = (function () {
     function AnimationCurves() {
     }
-    AnimationCurves.STANDARD_CURVE = 'cubic-bezier(0.4,0.0,0.2,1)';
-    AnimationCurves.DECELERATION_CURVE = 'cubic-bezier(0.0,0.0,0.2,1)';
-    AnimationCurves.ACCELERATION_CURVE = 'cubic-bezier(0.4,0.0,1,1)';
-    AnimationCurves.SHARP_CURVE = 'cubic-bezier(0.4,0.0,0.6,1)';
     return AnimationCurves;
 }());
-/** @docs-private */
-export var AnimationDurations = (function () {
+AnimationCurves.STANDARD_CURVE = 'cubic-bezier(0.4,0.0,0.2,1)';
+AnimationCurves.DECELERATION_CURVE = 'cubic-bezier(0.0,0.0,0.2,1)';
+AnimationCurves.ACCELERATION_CURVE = 'cubic-bezier(0.4,0.0,1,1)';
+AnimationCurves.SHARP_CURVE = 'cubic-bezier(0.4,0.0,0.6,1)';
+exports.AnimationCurves = AnimationCurves;
+;
+var AnimationDurations = (function () {
     function AnimationDurations() {
     }
-    AnimationDurations.COMPLEX = '375ms';
-    AnimationDurations.ENTERING = '225ms';
-    AnimationDurations.EXITING = '195ms';
     return AnimationDurations;
 }());
-//# sourceMappingURL=animation.js.map
+AnimationDurations.COMPLEX = '375ms';
+AnimationDurations.ENTERING = '225ms';
+AnimationDurations.EXITING = '195ms';
+exports.AnimationDurations = AnimationDurations;
+;
+//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/core/animation/animation.js.map

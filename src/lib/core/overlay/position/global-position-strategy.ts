@@ -21,55 +21,40 @@ export class GlobalPositionStrategy implements PositionStrategy {
   /* A lazily-created wrapper for the overlay element that is used as a flex container.  */
   private _wrapper: HTMLElement;
 
-  /**
-   * Sets the top position of the overlay. Clears any previously set vertical position.
-   * @param value New top offset.
-   */
-  top(value: string): this {
+  /** Sets the top position of the overlay. Clears any previously set vertical position. */
+  top(value: string) {
     this._bottomOffset = '';
     this._topOffset = value;
     this._alignItems = 'flex-start';
     return this;
   }
 
-  /**
-   * Sets the left position of the overlay. Clears any previously set horizontal position.
-   * @param value New left offset.
-   */
-  left(value: string): this {
+  /** Sets the left position of the overlay. Clears any previously set horizontal position. */
+  left(value: string) {
     this._rightOffset = '';
     this._leftOffset = value;
     this._justifyContent = 'flex-start';
     return this;
   }
 
-  /**
-   * Sets the bottom position of the overlay. Clears any previously set vertical position.
-   * @param value New bottom offset.
-   */
-  bottom(value: string): this {
+  /** Sets the bottom position of the overlay. Clears any previously set vertical position. */
+  bottom(value: string) {
     this._topOffset = '';
     this._bottomOffset = value;
     this._alignItems = 'flex-end';
     return this;
   }
 
-  /**
-   * Sets the right position of the overlay. Clears any previously set horizontal position.
-   * @param value New right offset.
-   */
-  right(value: string): this {
+  /** Sets the right position of the overlay. Clears any previously set horizontal position. */
+  right(value: string) {
     this._leftOffset = '';
     this._rightOffset = value;
     this._justifyContent = 'flex-end';
     return this;
   }
 
-  /**
-   * Sets the overlay width and clears any previously set width.
-   * @param value New width for the overlay
-   */
-  width(value: string): this {
+  /** Sets the overlay width and clears any previously set width. */
+  width(value: string) {
     this._width = value;
 
     // When the width is 100%, we should reset the `left` and the offset,
@@ -81,11 +66,8 @@ export class GlobalPositionStrategy implements PositionStrategy {
     return this;
   }
 
-  /**
-   * Sets the overlay height and clears any previously set height.
-   * @param value New height for the overlay
-   */
-  height(value: string): this {
+  /** Sets the overlay height and clears any previously set height. */
+  height(value: string) {
     this._height = value;
 
     // When the height is 100%, we should reset the `top` and the offset,
@@ -100,10 +82,8 @@ export class GlobalPositionStrategy implements PositionStrategy {
   /**
    * Centers the overlay horizontally with an optional offset.
    * Clears any previously set horizontal position.
-   *
-   * @param offset Overlay offset from the horizontal center.
    */
-  centerHorizontally(offset = ''): this {
+  centerHorizontally(offset = '') {
     this.left(offset);
     this._justifyContent = 'center';
     return this;
@@ -112,10 +92,8 @@ export class GlobalPositionStrategy implements PositionStrategy {
   /**
    * Centers the overlay vertically with an optional offset.
    * Clears any previously set vertical position.
-   *
-   * @param offset Overlay offset from the vertical center.
    */
-  centerVertically(offset = ''): this {
+  centerVertically(offset = '') {
     this.top(offset);
     this._alignItems = 'center';
     return this;
@@ -123,15 +101,12 @@ export class GlobalPositionStrategy implements PositionStrategy {
 
   /**
    * Apply the position to the element.
-   * @docs-private
-   *
-   * @param element Element to which to apply the CSS.
-   * @returns Resolved when the styles have been applied.
+   * TODO: internal
    */
   apply(element: HTMLElement): Promise<void> {
     if (!this._wrapper) {
       this._wrapper = document.createElement('div');
-      this._wrapper.classList.add('cdk-global-overlay-wrapper');
+      this._wrapper.classList.add('md-global-overlay-wrapper');
       element.parentNode.insertBefore(this._wrapper, element);
       this._wrapper.appendChild(element);
     }

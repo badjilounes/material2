@@ -1,6 +1,5 @@
-import {ViewportRuler, VIEWPORT_RULER_PROVIDER} from './viewport-ruler';
-import {TestBed, inject} from '@angular/core/testing';
-import {SCROLL_DISPATCHER_PROVIDER} from '../scroll/scroll-dispatcher';
+import {ViewportRuler} from './viewport-ruler';
+
 
 // For all tests, we assume the browser window is 1024x786 (outerWidth x outerHeight).
 // The karma config has been set to this for local tests, and it is the default size
@@ -21,14 +20,10 @@ describe('ViewportRuler', () => {
   veryLargeElement.style.width = '6000px';
   veryLargeElement.style.height = '6000px';
 
-  beforeEach(() => TestBed.configureTestingModule({
-    providers: [VIEWPORT_RULER_PROVIDER, SCROLL_DISPATCHER_PROVIDER]
-  }));
-
-  beforeEach(inject([ViewportRuler], (viewportRuler: ViewportRuler) => {
-    ruler = viewportRuler;
+  beforeEach(() => {
+    ruler = new ViewportRuler();
     scrollTo(0, 0);
-  }));
+  });
 
   it('should get the viewport bounds when the page is not scrolled', () => {
     let bounds = ruler.getViewportRect();
@@ -40,10 +35,7 @@ describe('ViewportRuler', () => {
 
   it('should get the viewport bounds when the page is scrolled', () => {
     document.body.appendChild(veryLargeElement);
-
     scrollTo(1500, 2000);
-    // Force an update of the cached viewport geometries because IE11 emits the scroll event later.
-    ruler._cacheViewportGeometry();
 
     let bounds = ruler.getViewportRect();
 
@@ -71,17 +63,14 @@ describe('ViewportRuler', () => {
   });
 
   it('should get the scroll position when the page is not scrolled', () => {
-    let scrollPos = ruler.getViewportScrollPosition();
+    var scrollPos = ruler.getViewportScrollPosition();
     expect(scrollPos.top).toBe(0);
     expect(scrollPos.left).toBe(0);
   });
 
   it('should get the scroll position when the page is scrolled', () => {
     document.body.appendChild(veryLargeElement);
-
     scrollTo(1500, 2000);
-    // Force an update of the cached viewport geometries because IE11 emits the scroll event later.
-    ruler._cacheViewportGeometry();
 
     // In the iOS simulator (BrowserStack & SauceLabs), adding the content to the
     // body causes karma's iframe for the test to stretch to fit that content once we attempt to
@@ -93,7 +82,7 @@ describe('ViewportRuler', () => {
       return;
     }
 
-    let scrollPos = ruler.getViewportScrollPosition();
+    var scrollPos = ruler.getViewportScrollPosition();
     expect(scrollPos.top).toBe(2000);
     expect(scrollPos.left).toBe(1500);
 

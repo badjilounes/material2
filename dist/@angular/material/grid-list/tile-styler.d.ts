@@ -3,7 +3,7 @@ import { TileCoordinator } from './tile-coordinator';
 /**
  * Sets the style properties for an individual tile, given the position calculated by the
  * Tile Coordinator.
- * @docs-private
+ * TODO: internal
  */
 export declare class TileStyler {
     _gutterSize: string;
@@ -14,13 +14,8 @@ export declare class TileStyler {
     /**
      * Adds grid-list layout info once it is available. Cannot be processed in the constructor
      * because these properties haven't been calculated by that point.
-     *
-     * @param gutterSize Size of the grid's gutter.
-     * @param tracker Instance of the TileCoordinator.
-     * @param cols Amount of columns in the grid.
-     * @param direction Layout direction of the grid.
      */
-    init(gutterSize: string, tracker: TileCoordinator, cols: number, direction: string): void;
+    init(_gutterSize: string, tracker: TileCoordinator, cols: number, direction: string): void;
     /**
      * Computes the amount of space a single 1x1 tile would take up (width or height).
      * Used as a basis for other calculations.
@@ -43,41 +38,29 @@ export declare class TileStyler {
      * @return Size of the tile as a CSS calc() expression.
      */
     getTileSize(baseSize: string, span: number): string;
-    /**
-     * Sets the style properties to be applied to a tile for the given row and column index.
-     * @param tile Tile to which to apply the styling.
-     * @param rowIndex Index of the tile's row.
-     * @param colIndex Index of the tile's column.
-     */
+    /** Gets the style properties to be applied to a tile for the given row and column index. */
     setStyle(tile: MdGridTile, rowIndex: number, colIndex: number): void;
     /** Sets the horizontal placement of the tile in the list. */
     setColStyles(tile: MdGridTile, colIndex: number, percentWidth: number, gutterWidth: number): void;
-    /**
-     * Calculates the total size taken up by gutters across one axis of a list.
-     */
+    /** Calculates the total size taken up by gutters across one axis of a list. */
     getGutterSpan(): string;
-    /**
-     * Calculates the total size taken up by tiles across one axis of a list.
-     * @param tileHeight Height of the tile.
-     */
+    /** Calculates the total size taken up by tiles across one axis of a list. */
     getTileSpan(tileHeight: string): string;
     /**
      * Sets the vertical placement of the tile in the list.
      * This method will be implemented by each type of TileStyler.
-     * @docs-private
      */
     setRowStyles(tile: MdGridTile, rowIndex: number, percentWidth: number, gutterWidth: number): void;
     /**
      * Calculates the computed height and returns the correct style property to set.
      * This method will be implemented by each type of TileStyler.
-     * @docs-private
      */
     getComputedHeight(): [string, string];
 }
 /**
  * This type of styler is instantiated when the user passes in a fixed row height.
  * Example <md-grid-list cols="3" rowHeight="100px">
- * @docs-private
+ * TODO: internal
  */
 export declare class FixedTileStyler extends TileStyler {
     fixedRowHeight: string;
@@ -89,7 +72,7 @@ export declare class FixedTileStyler extends TileStyler {
 /**
  * This type of styler is instantiated when the user passes in a width:height ratio
  * for the row height.  Example <md-grid-list cols="3" rowHeight="3:1">
- * @docs-private
+ * TODO: internal
  */
 export declare class RatioTileStyler extends TileStyler {
     /** Ratio width:height given by user to determine row height.*/
@@ -100,13 +83,6 @@ export declare class RatioTileStyler extends TileStyler {
     getComputedHeight(): [string, string];
     private _parseRatio(value);
 }
-/**
- * This type of styler is instantiated when the user selects a "fit" row height mode.
- * In other words, the row height will reflect the total height of the container divided
- * by the number of rows.  Example <md-grid-list cols="3" rowHeight="fit">
- *
- * @docs-private
- */
 export declare class FitTileStyler extends TileStyler {
     setRowStyles(tile: MdGridTile, rowIndex: number, percentWidth: number, gutterWidth: number): void;
 }

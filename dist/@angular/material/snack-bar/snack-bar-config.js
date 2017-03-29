@@ -1,7 +1,9 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Configuration used when opening a snack-bar.
  */
-export var MdSnackBarConfig = (function () {
+var MdSnackBarConfig = (function () {
     function MdSnackBarConfig() {
         /** The politeness level for the MdAriaLiveAnnouncer announcement. */
         this.politeness = 'assertive';
@@ -14,4 +16,5 @@ export var MdSnackBarConfig = (function () {
     }
     return MdSnackBarConfig;
 }());
-//# sourceMappingURL=snack-bar-config.js.map
+exports.MdSnackBarConfig = MdSnackBarConfig;
+//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/snack-bar/snack-bar-config.js.map

@@ -6,11 +6,7 @@ md-sidenav {
 }
 
 .md-sidenav-content {
-  transition: {
-    duration: $swift-ease-out-duration;
-    timing-function: $swift-ease-out-timing-function;
-    property: transform, margin-left, margin-right;
-  }
+  transition: transform $swift-ease-out-duration $swift-ease-out-timing-function;
 }
 
 .md-sidenav-backdrop.md-sidenav-shown {

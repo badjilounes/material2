@@ -1,7 +1,6 @@
-import {TestBed, ComponentFixture, fakeAsync, tick, inject} from '@angular/core/testing';
+import {TestBed, ComponentFixture, async} from '@angular/core/testing';
 import {Component, ViewChild} from '@angular/core';
 import {MdRipple, MdRippleModule} from './ripple';
-import {ViewportRuler} from '../overlay/position/viewport-ruler';
 
 
 /** Creates a DOM event to indicate that a CSS transition for the given property ended. */
@@ -61,7 +60,6 @@ describe('MdRipple', () => {
   let rippleElement: HTMLElement;
   let rippleBackground: Element;
   let originalBodyMargin: string;
-  let viewportRuler: ViewportRuler;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
@@ -74,13 +72,11 @@ describe('MdRipple', () => {
     });
   });
 
-  beforeEach(inject([ViewportRuler], (ruler: ViewportRuler) => {
-    viewportRuler = ruler;
-
+  beforeEach(() => {
     // Set body margin to 0 during tests so it doesn't mess up position calculations.
     originalBodyMargin = document.body.style.margin;
     document.body.style.margin = '0';
-  }));
+  });
 
   afterEach(() => {
     document.body.style.margin = originalBodyMargin;
@@ -136,13 +132,14 @@ describe('MdRipple', () => {
       expect(rippleElement.querySelectorAll('.md-ripple-foreground').length).toBe(0);
     });
 
-    it('removes foreground ripples after timeout', fakeAsync(() => {
+    it('removes foreground ripples after timeout', async(() => {
       rippleElement.click();
       expect(rippleElement.querySelectorAll('.md-ripple-foreground').length).toBe(1);
 
-      tick(1600);
-
-      expect(rippleElement.querySelectorAll('.md-ripple-foreground').length).toBe(0);
+      // Use a real timeout because the ripple's timeout runs outside of the angular zone.
+      setTimeout(() => {
+        expect(rippleElement.querySelectorAll('.md-ripple-foreground').length).toBe(0);
+      }, 1600);
     }));
 
     it('creates ripples when manually triggered', () => {
@@ -214,8 +211,6 @@ describe('MdRipple', () => {
     });
 
     describe('when page is scrolled', () => {
-      const startingWindowWidth = window.innerWidth;
-      const startingWindowHeight = window.innerHeight;
       var veryLargeElement: HTMLDivElement = document.createElement('div');
       var pageScrollTop = 500;
       var pageScrollLeft = 500;
@@ -232,9 +227,6 @@ describe('MdRipple', () => {
         document.documentElement.scrollTop = pageScrollTop;
         // Mobile safari
         window.scrollTo(pageScrollLeft, pageScrollTop);
-        // Force an update of the cached viewport geometries because IE11 emits the
-        // scroll event later.
-        viewportRuler._cacheViewportGeometry();
       });
 
       afterEach(() => {
@@ -246,9 +238,6 @@ describe('MdRipple', () => {
         document.documentElement.scrollTop = 0;
         // Mobile safari
         window.scrollTo(0, 0);
-        // Force an update of the cached viewport geometries because IE11 emits the
-        // scroll event later.
-        viewportRuler._cacheViewportGeometry();
       });
 
       it('create ripple with correct position', () => {
@@ -257,6 +246,7 @@ describe('MdRipple', () => {
         let left = 50;
         let top = 75;
 
+        rippleElement.style.position = 'absolute';
         rippleElement.style.left = `${elementLeft}px`;
         rippleElement.style.top = `${elementTop}px`;
 
@@ -274,16 +264,6 @@ describe('MdRipple', () => {
         const expectedTop = top - expectedRadius;
 
         const ripple = <HTMLElement>rippleElement.querySelector('.md-ripple-foreground');
-
-        // In the iOS simulator (BrowserStack & SauceLabs), adding the content to the
-        // body causes karma's iframe for the test to stretch to fit that content once we attempt to
-        // scroll the page. Setting width / height / maxWidth / maxHeight on the iframe does not
-        // successfully constrain its size. As such, skip assertions in environments where the
-        // window size has changed since the start of the test.
-        if (window.innerWidth > startingWindowWidth || window.innerHeight > startingWindowHeight) {
-          return;
-        }
-
         expect(pxStringToFloat(ripple.style.left)).toBeCloseTo(expectedLeft, 1);
         expect(pxStringToFloat(ripple.style.top)).toBeCloseTo(expectedTop, 1);
         expect(pxStringToFloat(ripple.style.width)).toBeCloseTo(2 * expectedRadius, 1);
@@ -459,12 +439,12 @@ class BasicRippleContainer {
   template: `
     <div id="container" style="position: relative; width:300px; height:200px;"
       md-ripple
-      [mdRippleTrigger]="trigger"
-      [mdRippleCentered]="centered"
-      [mdRippleMaxRadius]="maxRadius"
-      [mdRippleDisabled]="disabled"
-      [mdRippleColor]="color"
-      [mdRippleBackgroundColor]="backgroundColor">
+      [md-ripple-trigger]="trigger"
+      [md-ripple-centered]="centered"
+      [md-ripple-max-radius]="maxRadius"
+      [md-ripple-disabled]="disabled"
+      [md-ripple-color]="color"
+      [md-ripple-background-color]="backgroundColor">
     </div>
     <div class="alternateTrigger"></div>
   `,

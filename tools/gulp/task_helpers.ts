@@ -1,6 +1,7 @@
 import * as child_process from 'child_process';
 import * as fs from 'fs';
 import * as gulp from 'gulp';
+import * as gulpTs from 'gulp-typescript';
 import * as path from 'path';
 
 import {NPM_VENDOR_FILES, PROJECT_ROOT, DIST_ROOT, SASS_AUTOPREFIXER_OPTIONS} from './constants';
@@ -11,11 +12,10 @@ const gulpClean = require('gulp-clean');
 const gulpMerge = require('merge2');
 const gulpRunSequence = require('run-sequence');
 const gulpSass = require('gulp-sass');
+const gulpServer = require('gulp-server-livereload');
 const gulpSourcemaps = require('gulp-sourcemaps');
 const gulpAutoprefixer = require('gulp-autoprefixer');
-const gulpConnect = require('gulp-connect');
 const resolveBin = require('resolve-bin');
-const firebaseAdmin = require('firebase-admin');
 
 
 /** If the string passed in is a glob, returns it, otherwise append '**\/*' to it. */
@@ -33,18 +33,47 @@ function _globify(maybeGlob: string, suffix = '**/*') {
 }
 
 
-/** Creates a task that runs the TypeScript compiler */
-export function tsBuildTask(tsConfigPath: string) {
-  return execNodeTask('typescript', 'tsc', ['-p', tsConfigPath]);
+/** Create a TS Build Task, based on the options. */
+export function tsBuildTask(tsConfigPath: string, tsConfigName = 'tsconfig.json') {
+  let tsConfigDir = tsConfigPath;
+  if (fs.existsSync(path.join(tsConfigDir, tsConfigName))) {
+    // Append tsconfig.json
+    tsConfigPath = path.join(tsConfigDir, tsConfigName);
+  } else {
+    tsConfigDir = path.dirname(tsConfigDir);
+  }
+
+  return () => {
+    const tsConfig: any = JSON.parse(fs.readFileSync(tsConfigPath, 'utf-8'));
+    const dest: string = path.join(tsConfigDir, tsConfig['compilerOptions']['outDir']);
+
+    const tsProject = gulpTs.createProject(tsConfigPath, {
+      typescript: require('typescript')
+    });
+
+    let pipe = tsProject.src()
+      .pipe(gulpSourcemaps.init())
+      .pipe(gulpTs(tsProject));
+    let dts = pipe.dts.pipe(gulp.dest(dest));
+
+    return gulpMerge([
+      dts,
+      pipe
+        .pipe(gulpSourcemaps.write('.'))
+        .pipe(gulp.dest(dest))
+    ]);
+  };
 }
 
 
 /** Create a SASS Build Task. */
-export function sassBuildTask(dest: string, root: string) {
+export function sassBuildTask(dest: string, root: string, includePaths: string[]) {
+  const sassOptions = { includePaths };
+
   return () => {
     return gulp.src(_globify(root, '**/*.scss'))
       .pipe(gulpSourcemaps.init())
-      .pipe(gulpSass().on('error', gulpSass.logError))
+      .pipe(gulpSass(sassOptions).on('error', gulpSass.logError))
       .pipe(gulpAutoprefixer(SASS_AUTOPREFIXER_OPTIONS))
       .pipe(gulpSourcemaps.write('.'))
       .pipe(gulp.dest(dest));
@@ -140,8 +169,7 @@ export function buildAppTask(appName: string) {
   return (done: () => void) => {
     gulpRunSequence(
       'clean',
-      'build:components',
-      [...buildTasks],
+      ['build:components', ...buildTasks],
       done
     );
   };
@@ -157,21 +185,27 @@ export function vendorTask() {
     }));
 }
 
-/** Create a task that serves the dist folder. */
-export function serverTask(livereload = true) {
-  return () => {
-    gulpConnect.server({
-      root: 'dist/',
-      livereload: livereload,
-      port: 4200,
-      fallback: 'dist/index.html'
-    });
-  };
+export type livereloadOptions = boolean | {
+  enable: boolean;
+  filter: (filename: string, callback: (isAllowed: boolean) => void) => void;
 }
 
-/** Triggers a reload when livereload is enabled and a gulp-connect server is running. */
-export function triggerLivereload() {
-  gulp.src('dist').pipe(gulpConnect.reload());
+/** Create a task that serves the dist folder. */
+export function serverTask(liveReload: livereloadOptions = true,
+                           streamCallback: (stream: NodeJS.ReadWriteStream) => void = null) {
+
+  return () => {
+    const stream = gulp.src('dist').pipe(gulpServer({
+      livereload: liveReload,
+      fallback: 'index.html',
+      port: 4200
+    }));
+
+    if (streamCallback) {
+      streamCallback(stream);
+    }
+    return stream;
+  };
 }
 
 
@@ -183,27 +217,4 @@ export function sequenceTask(...args: any[]) {
       done
     );
   };
-}
-
-/** Opens a connection to the firebase realtime database. */
-export function openFirebaseDatabase() {
-  // Initialize the Firebase application with admin credentials.
-  // Credentials need to be for a Service Account, which can be created in the Firebase console.
-  firebaseAdmin.initializeApp({
-    credential: firebaseAdmin.credential.cert({
-      project_id: 'material2-dashboard',
-      client_email: 'firebase-adminsdk-ch1ob@material2-dashboard.iam.gserviceaccount.com',
-      // In Travis CI the private key will be incorrect because the line-breaks are escaped.
-      // The line-breaks need to persist in the service account private key.
-      private_key: (process.env['MATERIAL2_FIREBASE_PRIVATE_KEY'] || '').replace(/\\n/g, '\n')
-    }),
-    databaseURL: 'https://material2-dashboard.firebaseio.com'
-  });
-
-  return firebaseAdmin.database();
-}
-
-/** Whether gulp currently runs inside of Travis as a push. */
-export function isTravisPushBuild() {
-  return process.env['TRAVIS_PULL_REQUEST'] === 'false';
 }

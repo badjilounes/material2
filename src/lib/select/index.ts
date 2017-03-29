@@ -1,26 +1,26 @@
 import {NgModule, ModuleWithProviders} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {MdSelect} from './select';
-import {MdOptionModule} from '../core/option/option';
+import {MdOption} from './option';
 import {
-  CompatibilityModule,
+  DefaultStyleCompatibilityModeModule,
+  OVERLAY_PROVIDERS,
+  MdRippleModule,
   OverlayModule,
 } from '../core';
 export * from './select';
-export {fadeInContent, transformPanel, transformPlaceholder} from './select-animations';
 
 
 @NgModule({
-  imports: [CommonModule, OverlayModule, MdOptionModule, CompatibilityModule],
-  exports: [MdSelect, MdOptionModule, CompatibilityModule],
-  declarations: [MdSelect],
+  imports: [CommonModule, OverlayModule, MdRippleModule, DefaultStyleCompatibilityModeModule],
+  exports: [MdSelect, MdOption, DefaultStyleCompatibilityModeModule],
+  declarations: [MdSelect, MdOption],
 })
 export class MdSelectModule {
-  /** @deprecated */
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: MdSelectModule,
-      providers: []
+      providers: [OVERLAY_PROVIDERS]
     };
   }
 }

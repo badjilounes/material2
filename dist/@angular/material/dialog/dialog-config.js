@@ -1,8 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 ;
 /**
  * Configuration for opening a modal dialog with the MdDialog service.
  */
-export var MdDialogConfig = (function () {
+var MdDialogConfig = (function () {
     function MdDialogConfig() {
         /** The ARIA role of the dialog element. */
         this.role = 'dialog';
@@ -12,7 +14,9 @@ export var MdDialogConfig = (function () {
         this.width = '';
         /** Height of the dialog. */
         this.height = '';
+        // TODO(jelbourn): add configuration for lifecycle hooks, ARIA labelling.
     }
     return MdDialogConfig;
 }());
-//# sourceMappingURL=dialog-config.js.map
+exports.MdDialogConfig = MdDialogConfig;
+//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/dialog/dialog-config.js.map

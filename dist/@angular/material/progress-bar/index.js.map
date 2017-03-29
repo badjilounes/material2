@@ -1,1 +1,1 @@
-{"version":3,"file":"index.js","sourceRoot":"","sources":["../../../../src/lib/progress-bar/index.ts"],"names":[],"mappings":"AAAA,cAAc,gBAAgB,CAAC","sourcesContent":["export * from './progress-bar';\n"]}
+{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;;;AAAA,oCAA+B","sourcesContent":["export * from './progress-bar';\n\ninterface DecoratorInvocation {\n  type: Function;\n  args?: any[];\n}\n"]}

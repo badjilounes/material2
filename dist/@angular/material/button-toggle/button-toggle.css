@@ -16,8 +16,7 @@ md-button-toggle-group {
   cursor: default; }
 
 md-button-toggle {
-  white-space: nowrap;
-  font-family: Roboto, "Helvetica Neue", sans-serif; }
+  white-space: nowrap; }
 
 .md-button-toggle-label-content {
   display: inline-block;

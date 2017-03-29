@@ -1,10 +1,11 @@
 import {InteractivityChecker} from './interactivity-checker';
-import {Platform} from '../platform/platform';
+import {MdPlatform} from '../platform/platform';
+import {async} from '@angular/core/testing';
 
 describe('InteractivityChecker', () => {
   let testContainerElement: HTMLElement;
   let checker: InteractivityChecker;
-  let platform: Platform = new Platform();
+  let platform: MdPlatform = new MdPlatform();
 
   beforeEach(() => {
     testContainerElement = document.createElement('div');
@@ -54,7 +55,7 @@ describe('InteractivityChecker', () => {
     it('should return false for the child of a `display: none` element', () => {
       testContainerElement.innerHTML =
         `<div style="display: none;">
-           <input>
+           <input> 
          </div>`;
       let input = testContainerElement.querySelector('input') as HTMLElement;
 
@@ -74,7 +75,7 @@ describe('InteractivityChecker', () => {
     it('should return false for the child of a `visibility: hidden` element', () => {
       testContainerElement.innerHTML =
         `<div style="visibility: hidden;">
-           <input>
+           <input> 
          </div>`;
       let input = testContainerElement.querySelector('input') as HTMLElement;
 
@@ -87,7 +88,7 @@ describe('InteractivityChecker', () => {
       testContainerElement.innerHTML =
         `<div style="visibility: hidden;">
            <div style="visibility: visible;">
-             <input>
+             <input> 
            </div>
          </div>`;
       let input = testContainerElement.querySelector('input') as HTMLElement;
@@ -155,7 +156,7 @@ describe('InteractivityChecker', () => {
     it('should return false for the child of a `display: none` element', () => {
       testContainerElement.innerHTML =
         `<div style="display: none;">
-           <input>
+           <input> 
          </div>`;
       let input = testContainerElement.querySelector('input') as HTMLElement;
 
@@ -175,7 +176,7 @@ describe('InteractivityChecker', () => {
     it('should return false for the child of a `visibility: hidden` element', () => {
       testContainerElement.innerHTML =
         `<div style="visibility: hidden;">
-           <input>
+           <input> 
          </div>`;
       let input = testContainerElement.querySelector('input') as HTMLElement;
 
@@ -188,7 +189,7 @@ describe('InteractivityChecker', () => {
       testContainerElement.innerHTML =
         `<div style="visibility: hidden;">
            <div style="visibility: visible;">
-             <input>
+             <input> 
            </div>
          </div>`;
       let input = testContainerElement.querySelector('input') as HTMLElement;
@@ -336,15 +337,22 @@ describe('InteractivityChecker', () => {
         expect(checker.isTabbable(button)).toBe(true);
       });
 
-      it('should mark elements which are contentEditable as tabbable', () => {
+      it('should mark elements which are contentEditable as tabbable', async(() => {
         let editableEl = createFromTemplate('<div contenteditable="true">', true);
 
-        expect(checker.isTabbable(editableEl)).toBe(true);
+        // Wait one tick, because the browser takes some time to update the tabIndex
+        // according to the contentEditable attribute.
+        setTimeout(() => {
 
-        editableEl.tabIndex = -1;
+          expect(checker.isTabbable(editableEl)).toBe(true);
 
-        expect(checker.isTabbable(editableEl)).toBe(false);
-      });
+          editableEl.tabIndex = -1;
+
+          expect(checker.isTabbable(editableEl)).toBe(false);
+
+        }, 0);
+
+      }));
 
       it('should never mark iframe elements as tabbable', () => {
         let iframe = createFromTemplate('<iframe>', true);

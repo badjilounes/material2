@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,10 +8,10 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Injectable } from '@angular/core';
-import { Platform } from '../platform/platform';
-/**
- * The InteractivityChecker leans heavily on the ally.js accessibility utilities.
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = require("@angular/core");
+var platform_1 = require("../platform/platform");
+/* The InteractivityChecker leans heavily on the ally.js accessibility utilities.
  * Methods like `isTabbable` are only covering specific edge-cases for the browsers which are
  * supported.
  */
@@ -18,16 +19,11 @@ import { Platform } from '../platform/platform';
  * Utility for checking the interactivity of an element, such as whether is is focusable or
  * tabbable.
  */
-export var InteractivityChecker = (function () {
+var InteractivityChecker = (function () {
     function InteractivityChecker(_platform) {
         this._platform = _platform;
     }
-    /**
-     * Gets whether an element is disabled.
-     *
-     * @param element Element to be checked.
-     * @returns Whether the element is disabled.
-     */
+    /** Gets whether an element is disabled. */
     InteractivityChecker.prototype.isDisabled = function (element) {
         // This does not capture some cases, such as a non-form control with a disabled attribute or
         // a form control inside of a disabled form, but should capture the most common cases.
@@ -38,8 +34,6 @@ export var InteractivityChecker = (function () {
      *
      * This will capture states like `display: none` and `visibility: hidden`, but not things like
      * being clipped by an `overflow: hidden` parent or being outside the viewport.
-     *
-     * @returns Whether the element is visible.
      */
     InteractivityChecker.prototype.isVisible = function (element) {
         return hasGeometry(element) && getComputedStyle(element).visibility === 'visible';
@@ -47,9 +41,6 @@ export var InteractivityChecker = (function () {
     /**
      * Gets whether an element can be reached via Tab key.
      * Assumes that the element has already been checked with isFocusable.
-     *
-     * @param element Element to be checked.
-     * @returns Whether the element is tabbable.
      */
     InteractivityChecker.prototype.isTabbable = function (element) {
         var frameElement = getWindow(element).frameElement;
@@ -108,23 +99,19 @@ export var InteractivityChecker = (function () {
         }
         return element.tabIndex >= 0;
     };
-    /**
-     * Gets whether an element can be focused by the user.
-     *
-     * @param element Element to be checked.
-     * @returns Whether the element is focusable.
-     */
+    /** Gets whether an element can be focused by the user. */
     InteractivityChecker.prototype.isFocusable = function (element) {
         // Perform checks in order of left to most expensive.
         // Again, naive approach that does not capture many edge cases and browser quirks.
         return isPotentiallyFocusable(element) && !this.isDisabled(element) && this.isVisible(element);
     };
-    InteractivityChecker = __decorate([
-        Injectable(), 
-        __metadata('design:paramtypes', [Platform])
-    ], InteractivityChecker);
     return InteractivityChecker;
 }());
+InteractivityChecker = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [platform_1.MdPlatform])
+], InteractivityChecker);
+exports.InteractivityChecker = InteractivityChecker;
 /** Checks whether the specified element has any geometry / rectangles. */
 function hasGeometry(element) {
     // Use logic from jQuery to check for an invisible element.
@@ -206,4 +193,4 @@ function isPotentiallyFocusable(element) {
 function getWindow(node) {
     return node.ownerDocument.defaultView || window;
 }
-//# sourceMappingURL=interactivity-checker.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/core/a11y/interactivity-checker.js.map

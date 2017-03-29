@@ -3,8 +3,7 @@ import {Component} from '@angular/core';
 import {By} from '@angular/platform-browser';
 import {MdSidenav, MdSidenavModule, MdSidenavToggleResult} from './sidenav';
 import {A11yModule} from '../core/a11y/index';
-import {PlatformModule} from '../core/platform/index';
-import {ESCAPE} from '../core/keyboard/keycodes';
+import {PlatformModule} from '../core/platform/platform';
 
 
 function endSidenavTransition(fixture: ComponentFixture<any>) {
@@ -23,8 +22,8 @@ describe('MdSidenav', () => {
       imports: [MdSidenavModule.forRoot(), A11yModule.forRoot(), PlatformModule.forRoot()],
       declarations: [
         BasicTestApp,
-        SidenavContainerTwoSidenavTestApp,
-        SidenavContainerNoSidenavTestApp,
+        SidenavLayoutTwoSidenavTestApp,
+        SidenavLayoutNoSidenavTestApp,
         SidenavSetToOpenedFalse,
         SidenavSetToOpenedTrue,
         SidenavDynamicAlign,
@@ -194,7 +193,7 @@ describe('MdSidenav', () => {
       }).not.toThrow();
     }));
 
-    it('should emit the backdropClick event when the backdrop is clicked', fakeAsync(() => {
+    it('should emit the backdrop-clicked event when the backdrop is clicked', fakeAsync(() => {
       let fixture = TestBed.createComponent(BasicTestApp);
 
       let testComponent: BasicTestApp = fixture.debugElement.componentInstance;
@@ -236,107 +235,6 @@ describe('MdSidenav', () => {
       expect(testComponent.backdropClickedCount).toBe(1);
     }));
 
-    it('should close when pressing escape', fakeAsync(() => {
-      let fixture = TestBed.createComponent(BasicTestApp);
-      let testComponent: BasicTestApp = fixture.debugElement.componentInstance;
-      let sidenav: MdSidenav = fixture.debugElement
-        .query(By.directive(MdSidenav)).componentInstance;
-
-      sidenav.open();
-
-      fixture.detectChanges();
-      endSidenavTransition(fixture);
-      tick();
-
-      expect(testComponent.openCount).toBe(1);
-      expect(testComponent.closeCount).toBe(0);
-
-      // Simulate pressing the escape key.
-      sidenav.handleKeydown({
-        keyCode: ESCAPE,
-        stopPropagation: () => {}
-      } as KeyboardEvent);
-
-      fixture.detectChanges();
-      endSidenavTransition(fixture);
-      tick();
-
-      expect(testComponent.closeCount).toBe(1);
-    }));
-
-    it('should not close by pressing escape when disableClose is set', fakeAsync(() => {
-      let fixture = TestBed.createComponent(BasicTestApp);
-      let testComponent = fixture.debugElement.componentInstance;
-      let sidenav = fixture.debugElement.query(By.directive(MdSidenav)).componentInstance;
-
-      sidenav.disableClose = true;
-      sidenav.open();
-
-      fixture.detectChanges();
-      endSidenavTransition(fixture);
-      tick();
-
-      sidenav.handleKeydown({
-        keyCode: ESCAPE,
-        stopPropagation: () => {}
-      });
-
-      fixture.detectChanges();
-      endSidenavTransition(fixture);
-      tick();
-
-      expect(testComponent.closeCount).toBe(0);
-    }));
-
-    it('should not close by clicking on the backdrop when disableClose is set', fakeAsync(() => {
-      let fixture = TestBed.createComponent(BasicTestApp);
-      let testComponent = fixture.debugElement.componentInstance;
-      let sidenav = fixture.debugElement.query(By.directive(MdSidenav)).componentInstance;
-
-      sidenav.disableClose = true;
-      sidenav.open();
-
-      fixture.detectChanges();
-      endSidenavTransition(fixture);
-      tick();
-
-      let backdropEl = fixture.debugElement.query(By.css('.md-sidenav-backdrop')).nativeElement;
-      backdropEl.click();
-      fixture.detectChanges();
-      tick();
-
-      fixture.detectChanges();
-      endSidenavTransition(fixture);
-      tick();
-
-      expect(testComponent.closeCount).toBe(0);
-    }));
-
-    it('should restore focus to the trigger element on close', fakeAsync(() => {
-      let fixture = TestBed.createComponent(BasicTestApp);
-      let sidenav: MdSidenav = fixture.debugElement
-        .query(By.directive(MdSidenav)).componentInstance;
-      let trigger = document.createElement('button');
-
-      document.body.appendChild(trigger);
-      trigger.focus();
-      sidenav.open();
-
-      fixture.detectChanges();
-      endSidenavTransition(fixture);
-      tick();
-
-      sidenav.close();
-
-      fixture.detectChanges();
-      endSidenavTransition(fixture);
-      tick();
-
-      expect(document.activeElement)
-          .toBe(trigger, 'Expected focus to be restored to the trigger on close.');
-
-      trigger.parentNode.removeChild(trigger);
-    }));
   });
 
   describe('attributes', () => {
@@ -445,24 +343,24 @@ describe('MdSidenav', () => {
 });
 
 
-/** Test component that contains an MdSidenavContainer but no MdSidenav. */
-@Component({template: `<md-sidenav-container></md-sidenav-container>`})
-class SidenavContainerNoSidenavTestApp { }
+/** Test component that contains an MdSidenavLayout but no MdSidenav. */
+@Component({template: `<md-sidenav-layout></md-sidenav-layout>`})
+class SidenavLayoutNoSidenavTestApp { }
 
-/** Test component that contains an MdSidenavContainer and 2 MdSidenav on the same side. */
+/** Test component that contains an MdSidenavLayout and 2 MdSidenav on the same side. */
 @Component({
   template: `
-    <md-sidenav-container>
+    <md-sidenav-layout>
       <md-sidenav> </md-sidenav>
       <md-sidenav> </md-sidenav>
-    </md-sidenav-container>`,
+    </md-sidenav-layout>`,
 })
-class SidenavContainerTwoSidenavTestApp { }
+class SidenavLayoutTwoSidenavTestApp { }
 
-/** Test component that contains an MdSidenavContainer and one MdSidenav. */
+/** Test component that contains an MdSidenavLayout and one MdSidenav. */
 @Component({
   template: `
-    <md-sidenav-container (backdropClick)="backdropClicked()">
+    <md-sidenav-layout (backdrop-clicked)="backdropClicked()">
       <md-sidenav #sidenav align="start"
                   (open-start)="openStart()"
                   (open)="open()"
@@ -472,7 +370,7 @@ class SidenavContainerTwoSidenavTestApp { }
       </md-sidenav>
       <button (click)="sidenav.open()" class="open"></button>
       <button (click)="sidenav.close()" class="close"></button>
-    </md-sidenav-container>`,
+    </md-sidenav-layout>`,
 })
 class BasicTestApp {
   openStartCount: number = 0;
@@ -504,30 +402,30 @@ class BasicTestApp {
 
 @Component({
   template: `
-    <md-sidenav-container>
+    <md-sidenav-layout>
       <md-sidenav #sidenav mode="side" opened="false">
         Closed Sidenav.
       </md-sidenav>
-    </md-sidenav-container>`,
+    </md-sidenav-layout>`,
 })
 class SidenavSetToOpenedFalse { }
 
 @Component({
   template: `
-    <md-sidenav-container>
+    <md-sidenav-layout>
       <md-sidenav #sidenav mode="side" opened="true">
         Closed Sidenav.
       </md-sidenav>
-    </md-sidenav-container>`,
+    </md-sidenav-layout>`,
 })
 class SidenavSetToOpenedTrue { }
 
 @Component({
   template: `
-    <md-sidenav-container>
+    <md-sidenav-layout>
       <md-sidenav #sidenav1 [align]="sidenav1Align"></md-sidenav>
       <md-sidenav #sidenav2 [align]="sidenav2Align"></md-sidenav>
-    </md-sidenav-container>`,
+    </md-sidenav-layout>`,
 })
 class SidenavDynamicAlign {
   sidenav1Align = 'start';
@@ -536,12 +434,12 @@ class SidenavDynamicAlign {
 
 @Component({
   template: `
-    <md-sidenav-container>
+    <md-sidenav-layout>
       <md-sidenav align="start" [mode]="mode">
         <a class="link1" href="#">link1</a>
       </md-sidenav>
       <a class="link2" href="#">link2</a>
-    </md-sidenav-container>`,
+    </md-sidenav-layout>`,
 })
 class SidenavWitFocusableElements {
   mode: string = 'over';

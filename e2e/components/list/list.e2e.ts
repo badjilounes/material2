@@ -1,14 +1,12 @@
-import {browser} from 'protractor';
-import {expectToExist} from '../../util/asserts';
-
 describe('list', () => {
   beforeEach(() => browser.get('/list'));
 
   it('should render a list container', () => {
-    expectToExist('md-list');
+    expect(element(by.css('md-list')).isPresent()).toBe(true);
   });
 
   it('should render list items inside the list container', () => {
-    expectToExist('md-list md-list-item');
+    let container = element(by.css('md-list'));
+    expect(container.isElementPresent(by.css('md-list-item'))).toBe(true);
   });
 });

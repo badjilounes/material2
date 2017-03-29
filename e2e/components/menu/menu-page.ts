@@ -1,33 +1,70 @@
-import {browser, by, element, ElementFinder} from 'protractor';
+import ElementFinder = protractor.ElementFinder;
 
 export class MenuPage {
-  constructor() { browser.get('/menu'); }
 
-  menu(): ElementFinder { return element(by.css('.md-menu-panel')); }
+  constructor() {
+    browser.get('/menu');
+  }
 
-  start(): ElementFinder { return element(by.id('start')); }
+  menu() { return element(by.css('.md-menu-panel')); }
 
-  trigger(): ElementFinder { return element(by.id('trigger')); }
+  start() { return element(by.id('start')); }
 
-  triggerTwo(): ElementFinder { return element(by.id('trigger-two')); }
+  trigger() { return element(by.id('trigger')); }
 
-  backdrop(): ElementFinder { return element(by.css('.cdk-overlay-backdrop')); }
+  triggerTwo() { return element(by.id('trigger-two')); }
 
-  items(index: number): ElementFinder { return element.all(by.css('[md-menu-item]')).get(index); }
+  backdrop() { return element(by.css('.md-overlay-backdrop')); }
 
-  textArea(): ElementFinder { return element(by.id('text')); }
+  items(index: number) {
+    return element.all(by.css('[md-menu-item]')).get(index);
+  }
 
-  beforeTrigger(): ElementFinder { return element(by.id('before-t')); }
+  textArea() { return element(by.id('text')); }
 
-  aboveTrigger(): ElementFinder { return element(by.id('above-t')); }
+  beforeTrigger() { return element(by.id('before-t')); }
 
-  combinedTrigger(): ElementFinder { return element(by.id('combined-t')); }
+  aboveTrigger() { return element(by.id('above-t')); }
 
-  beforeMenu(): ElementFinder { return element(by.css('.md-menu-panel.before')); }
+  combinedTrigger() { return element(by.id('combined-t')); }
 
-  aboveMenu(): ElementFinder { return element(by.css('.md-menu-panel.above')); }
+  beforeMenu() { return element(by.css('.md-menu-panel.before')); }
 
-  combinedMenu(): ElementFinder { return element(by.css('.md-menu-panel.combined')); }
+  aboveMenu() { return element(by.css('.md-menu-panel.above')); }
 
-  getResultText() { return this.textArea().getText(); }
+  combinedMenu() { return element(by.css('.md-menu-panel.combined')); }
+
+  // TODO(kara): move to common testing utility
+  pressKey(key: any): void {
+    browser.actions().sendKeys(key).perform();
+  }
+
+  // TODO(kara): move to common testing utility
+  expectFocusOn(el: ElementFinder): void {
+    expect(browser.driver.switchTo().activeElement().getInnerHtml())
+        .toBe(el.getInnerHtml());
+  }
+
+  expectMenuPresent(expected: boolean) {
+    return browser.isElementPresent(by.css('.md-menu-panel')).then(isPresent => {
+      expect(isPresent).toBe(expected);
+    });
+  }
+
+  expectMenuLocation(el: ElementFinder, {x, y}: {x: number, y: number}) {
+    el.getLocation().then(loc => {
+      expect(loc.x).toEqual(x);
+      expect(loc.y).toEqual(y);
+    });
+  }
+
+  expectMenuAlignedWith(el: ElementFinder, id: string) {
+    element(by.id(id)).getLocation().then(loc => {
+      this.expectMenuLocation(el, {x: loc.x, y: loc.y});
+    });
+  }
+
+  getResultText() {
+    return this.textArea().getText();
+  }
 }

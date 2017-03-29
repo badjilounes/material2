@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,27 +8,27 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Injectable, Directive, NgModule, ElementRef } from '@angular/core';
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = require("@angular/core");
 // "Polyfill" for `Node.replaceWith()`.
 // cf. https://developer.mozilla.org/en-US/docs/Web/API/ChildNode/replaceWith
 function _replaceWith(toReplaceEl, otherEl) {
     toReplaceEl.parentElement.replaceChild(otherEl, toReplaceEl);
 }
-/** @docs-private */
-export var DomProjectionHost = (function () {
+var DomProjectionHost = (function () {
     function DomProjectionHost(ref) {
         this.ref = ref;
     }
-    DomProjectionHost = __decorate([
-        Directive({
-            selector: 'cdk-dom-projection-host'
-        }), 
-        __metadata('design:paramtypes', [ElementRef])
-    ], DomProjectionHost);
     return DomProjectionHost;
 }());
-/** @docs-private */
-export var DomProjection = (function () {
+DomProjectionHost = __decorate([
+    core_1.Directive({
+        selector: 'dom-projection-host'
+    }),
+    __metadata("design:paramtypes", [core_1.ElementRef])
+], DomProjectionHost);
+exports.DomProjectionHost = DomProjectionHost;
+var DomProjection = (function () {
     function DomProjection() {
     }
     /**
@@ -40,10 +41,10 @@ export var DomProjection = (function () {
      * ```
      *   @Component({
      *     template: `<div>
-     *       <cdk-dom-projection-host>
+     *       <dom-projection-host>
      *         <div>other</div>
      *         <ng-content></ng-content>
-     *       </cdk-dom-projection-host>
+     *       </dom-projection-host>
      *     </div>`
      *   })
      *   class Cmpt {
@@ -57,9 +58,6 @@ export var DomProjection = (function () {
      * contain the `<div>other</div>` HTML as well as its own children.
      *
      * Note: without `<ng-content></ng-content>` the projection will project an empty element.
-     *
-     * @param ref ElementRef to be projected.
-     * @param host Projection host into which to project the `ElementRef`.
      */
     DomProjection.prototype.project = function (ref, host) {
         var projectedEl = ref.nativeElement;
@@ -82,30 +80,29 @@ export var DomProjection = (function () {
         _replaceWith(hostEl, projectedEl);
         // At this point the host is replaced by the component. Nothing else to be done.
     };
-    DomProjection = __decorate([
-        Injectable(), 
-        __metadata('design:paramtypes', [])
-    ], DomProjection);
     return DomProjection;
 }());
-/** @docs-private */
-export var ProjectionModule = (function () {
+DomProjection = __decorate([
+    core_1.Injectable()
+], DomProjection);
+exports.DomProjection = DomProjection;
+var ProjectionModule = ProjectionModule_1 = (function () {
     function ProjectionModule() {
     }
-    /** @deprecated */
     ProjectionModule.forRoot = function () {
         return {
-            ngModule: ProjectionModule,
+            ngModule: ProjectionModule_1,
+            providers: [DomProjection]
         };
     };
-    ProjectionModule = __decorate([
-        NgModule({
-            exports: [DomProjectionHost],
-            declarations: [DomProjectionHost],
-            providers: [DomProjection],
-        }), 
-        __metadata('design:paramtypes', [])
-    ], ProjectionModule);
     return ProjectionModule;
 }());
-//# sourceMappingURL=projection.js.map
+ProjectionModule = ProjectionModule_1 = __decorate([
+    core_1.NgModule({
+        exports: [DomProjectionHost],
+        declarations: [DomProjectionHost],
+    })
+], ProjectionModule);
+exports.ProjectionModule = ProjectionModule;
+var ProjectionModule_1;
+//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/core/projection/projection.js.map

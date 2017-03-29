@@ -6,27 +6,35 @@
   transform: translateZ(0);
   transition: opacity 250ms linear;
   width: 100%; }
-  :host .md-progress-bar-element, :host .md-progress-bar-fill::after {
-    height: 100%;
-    position: absolute;
-    width: 100%; }
   :host .md-progress-bar-background {
     background-repeat: repeat-x;
     background-size: 10px 4px;
-    display: none; }
+    height: 100%;
+    position: absolute;
+    visibility: hidden;
+    width: 100%; }
   :host .md-progress-bar-buffer {
+    height: 100%;
+    position: absolute;
     transform-origin: top left;
-    transition: transform 250ms ease; }
+    transition: transform 250ms ease;
+    width: 100%; }
   :host .md-progress-bar-secondary {
-    display: none; }
+    visibility: hidden; }
   :host .md-progress-bar-fill {
     animation: none;
+    height: 100%;
+    position: absolute;
     transform-origin: top left;
-    transition: transform 250ms ease; }
+    transition: transform 250ms ease;
+    width: 100%; }
   :host .md-progress-bar-fill::after {
     animation: none;
     content: '';
     display: inline-block;
+    height: 100%;
+    position: absolute;
+    width: 100%;
     left: 0; }
   :host[mode='query'] {
     transform: rotateZ(180deg); }
@@ -40,12 +48,12 @@
   :host[mode='indeterminate'] .md-progress-bar-secondary, :host[mode='query'] .md-progress-bar-secondary {
     animation: md-progress-bar-secondary-indeterminate-translate 2000ms infinite linear;
     left: -54.888891%;
-    display: block; }
+    visibility: visible; }
   :host[mode='indeterminate'] .md-progress-bar-secondary.md-progress-bar-fill::after, :host[mode='query'] .md-progress-bar-secondary.md-progress-bar-fill::after {
     animation: md-progress-bar-secondary-indeterminate-scale 2000ms infinite linear; }
   :host[mode='buffer'] .md-progress-bar-background {
     animation: md-progress-bar-background-scroll 250ms infinite linear;
-    display: block; }
+    visibility: visible; }
 
 :host-context([dir='rtl']) {
   transform: rotateY(180deg); }

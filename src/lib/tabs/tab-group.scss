@@ -6,15 +6,12 @@
   display: flex;
   flex-direction: column;
   font-family: $md-font-family;
-
-  &.md-tab-group-inverted-header {
-    flex-direction: column-reverse;
-  }
 }
 
 // Wraps each tab label
 .md-tab-label {
   @include tab-label;
+  display: inline-block;
   position: relative;
 }
 
@@ -42,7 +39,6 @@ md-tab-body {
   @include md-fill;
   display: block;
   overflow: hidden;
-
   &.md-tab-body-active {
     position: relative;
     overflow-x: hidden;
@@ -50,8 +46,7 @@ md-tab-body {
     z-index: 1;
     flex-grow: 1;
   }
-
-  :host.md-tab-group-dynamic-height &.md-tab-body-active {
+  :host[md-dynamic-height] &.md-tab-body-active {
     overflow-y: hidden;
   }
 }

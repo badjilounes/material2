@@ -1,5 +1,5 @@
-import {browser, by, element, ElementArrayFinder, ElementFinder, Key} from 'protractor';
-import {pressKeys} from '../../util/actions';
+import ElementArrayFinder = protractor.ElementArrayFinder;
+import ElementFinder = protractor.ElementFinder;
 
 describe('tabs', () => {
   describe('basic behavior', () => {
@@ -25,32 +25,34 @@ describe('tabs', () => {
     });
 
     it('should change focus with keyboard interaction', () => {
-      let right = Key.RIGHT;
-      let left = Key.LEFT;
-
       tabLabels.get(0).click();
       expect(getFocusStates(tabLabels)).toEqual([true, false, false]);
 
-      pressKeys(right);
+      pressKey(protractor.Key.RIGHT);
       expect(getFocusStates(tabLabels)).toEqual([false, true, false]);
 
-      pressKeys(right);
+      pressKey(protractor.Key.RIGHT);
       expect(getFocusStates(tabLabels)).toEqual([false, false, true]);
 
-      pressKeys(right);
+      pressKey(protractor.Key.RIGHT);
       expect(getFocusStates(tabLabels)).toEqual([false, false, true]);
 
-      pressKeys(left);
+      pressKey(protractor.Key.LEFT);
       expect(getFocusStates(tabLabels)).toEqual([false, true, false]);
 
-      pressKeys(left);
+      pressKey(protractor.Key.LEFT);
       expect(getFocusStates(tabLabels)).toEqual([true, false, false]);
 
-      pressKeys(left);
+      pressKey(protractor.Key.LEFT);
       expect(getFocusStates(tabLabels)).toEqual([true, false, false]);
     });
   });
 });
+
+/** A helper function to perform the sendKey action. */
+function pressKey(key: string) {
+  browser.actions().sendKeys(key).perform();
+}
 
 /**
  * Returns an array of true/false that represents the focus states of the provided elements.

@@ -3,13 +3,13 @@ import {
   ViewContainerRef, Input, TemplateRef, ViewChild, OnInit, ContentChild,
   Component
 } from '@angular/core';
-import {coerceBooleanProperty} from '../core/coercion/boolean-property';
+import {coerceBooleanProperty} from '../core/coersion/boolean-property';
 
 import {MdTabLabel} from './tab-label';
 
 @Component({
   moduleId: module.id,
-  selector: 'md-tab, mat-tab',
+  selector: 'md-tab',
   templateUrl: 'tab.html',
 })
 export class MdTab implements OnInit {
@@ -39,10 +39,7 @@ export class MdTab implements OnInit {
   origin: number = null;
 
   private _disabled = false;
-
-  /** Whether the tab is disabled */
-  @Input()
-  set disabled(value: boolean) { this._disabled = coerceBooleanProperty(value); }
+  @Input() set disabled(value: boolean) { this._disabled = coerceBooleanProperty(value); }
   get disabled(): boolean { return this._disabled; }
 
   constructor(private _viewContainerRef: ViewContainerRef) { }

@@ -2,8 +2,6 @@
   display: flex;
   flex-direction: column;
   font-family: Roboto, "Helvetica Neue", sans-serif; }
-  :host.md-tab-group-inverted-header {
-    flex-direction: column-reverse; }
 
 .md-tab-label {
   line-height: 48px;
@@ -18,6 +16,7 @@
   opacity: 0.6;
   min-width: 160px;
   text-align: center;
+  display: inline-block;
   position: relative; }
   .md-tab-label:focus {
     outline: none;
@@ -51,7 +50,7 @@ md-tab-body {
     overflow-y: auto;
     z-index: 1;
     flex-grow: 1; }
-  :host.md-tab-group-dynamic-height md-tab-body.md-tab-body-active {
+  :host[md-dynamic-height] md-tab-body.md-tab-body-active {
     overflow-y: hidden; }
 
 .md-tab-disabled {

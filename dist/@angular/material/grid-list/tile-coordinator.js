@@ -1,4 +1,6 @@
-import { MdGridTileTooWideError } from './grid-list-errors';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var grid_list_errors_1 = require("./grid-list-errors");
 /**
  * Class for determining, from a list of tiles, the (row, col) position of each of those tiles
  * in the grid. This is necessary (rather than just rendering the tiles in normal document flow)
@@ -13,10 +15,8 @@ import { MdGridTileTooWideError } from './grid-list-errors';
  * column are already occupied; zero indicates an empty cell. Moving "down" to the next row
  * decrements each value in the tracking array (indicating that the column is one cell closer to
  * being free).
- *
- * @docs-private
  */
-export var TileCoordinator = (function () {
+var TileCoordinator = (function () {
     function TileCoordinator(numColumns, tiles) {
         var _this = this;
         /** Index at which the search for the next gap will start. */
@@ -59,7 +59,7 @@ export var TileCoordinator = (function () {
     /** Finds the next available space large enough to fit the tile. */
     TileCoordinator.prototype._findMatchingGap = function (tileCols) {
         if (tileCols > this.tracker.length) {
-            throw new MdGridTileTooWideError(tileCols, this.tracker.length);
+            throw new grid_list_errors_1.MdGridTileTooWideError(tileCols, this.tracker.length);
         }
         // Start index is inclusive, end index is exclusive.
         var gapStartIndex = -1;
@@ -81,6 +81,7 @@ export var TileCoordinator = (function () {
             // If a gap large enough isn't found, we want to start looking immediately after the current
             // gap on the next iteration.
             this.columnIndex = gapStartIndex + 1;
+            // Continue iterating until we find a gap wide enough for this tile.
         } while (gapEndIndex - gapStartIndex < tileCols);
         return gapStartIndex;
     };
@@ -114,15 +115,14 @@ export var TileCoordinator = (function () {
     };
     return TileCoordinator;
 }());
-/**
- * Simple data structure for tile position (row, col).
- * @docs-private
- */
-export var TilePosition = (function () {
+exports.TileCoordinator = TileCoordinator;
+/** Simple data structure for tile position (row, col). */
+var TilePosition = (function () {
     function TilePosition(row, col) {
         this.row = row;
         this.col = col;
     }
     return TilePosition;
 }());
-//# sourceMappingURL=tile-coordinator.js.map
+exports.TilePosition = TilePosition;
+//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/grid-list/tile-coordinator.js.map

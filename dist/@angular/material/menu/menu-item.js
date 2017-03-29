@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,12 +8,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Component, ElementRef, Input, HostBinding, Renderer } from '@angular/core';
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = require("@angular/core");
 /**
  * This directive is intended to be used inside an md-menu tag.
  * It exists mostly to set the role attribute.
  */
-export var MdMenuItem = (function () {
+var MdMenuItem = (function () {
     function MdMenuItem(_renderer, _elementRef) {
         this._renderer = _renderer;
         this._elementRef = _elementRef;
@@ -22,8 +24,9 @@ export var MdMenuItem = (function () {
     };
     Object.defineProperty(MdMenuItem.prototype, "disabled", {
         // this is necessary to support anchors
-        /** Whether the menu item is disabled. */
-        get: function () { return this._disabled; },
+        get: function () {
+            return this._disabled;
+        },
         set: function (value) {
             this._disabled = (value === false || value === undefined) ? null : true;
         },
@@ -31,13 +34,16 @@ export var MdMenuItem = (function () {
         configurable: true
     });
     Object.defineProperty(MdMenuItem.prototype, "isAriaDisabled", {
-        /** Sets the aria-disabled property on the menu item. */
-        get: function () { return String(!!this.disabled); },
+        get: function () {
+            return String(!!this.disabled);
+        },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(MdMenuItem.prototype, "_tabindex", {
-        get: function () { return this.disabled ? '-1' : '0'; },
+        get: function () {
+            return this.disabled ? '-1' : '0';
+        },
         enumerable: true,
         configurable: true
     });
@@ -50,27 +56,32 @@ export var MdMenuItem = (function () {
             event.stopPropagation();
         }
     };
-    __decorate([
-        HostBinding('attr.disabled'),
-        Input(), 
-        __metadata('design:type', Boolean)
-    ], MdMenuItem.prototype, "disabled", null);
-    __decorate([
-        HostBinding('attr.aria-disabled'), 
-        __metadata('design:type', String)
-    ], MdMenuItem.prototype, "isAriaDisabled", null);
-    MdMenuItem = __decorate([
-        Component({selector: '[md-menu-item], [mat-menu-item]',
-            host: {
-                'role': 'menuitem',
-                '(click)': '_checkDisabled($event)',
-                '[attr.tabindex]': '_tabindex'
-            },
-            template: "<ng-content></ng-content> <div class=\"md-menu-ripple\" *ngIf=\"!disabled\" md-ripple mdRippleBackgroundColor=\"rgba(0,0,0,0)\" [mdRippleTrigger]=\"_getHostElement()\"> </div> ",
-            exportAs: 'mdMenuItem'
-        }), 
-        __metadata('design:paramtypes', [Renderer, ElementRef])
-    ], MdMenuItem);
     return MdMenuItem;
 }());
-//# sourceMappingURL=menu-item.js.map
+__decorate([
+    core_1.HostBinding('attr.disabled'),
+    core_1.Input(),
+    __metadata("design:type", Boolean),
+    __metadata("design:paramtypes", [Boolean])
+], MdMenuItem.prototype, "disabled", null);
+__decorate([
+    core_1.HostBinding('attr.aria-disabled'),
+    __metadata("design:type", String),
+    __metadata("design:paramtypes", [])
+], MdMenuItem.prototype, "isAriaDisabled", null);
+MdMenuItem = __decorate([
+    core_1.Component({
+        moduleId: module.id,
+        selector: '[md-menu-item], [mat-menu-item]',
+        host: {
+            'role': 'menuitem',
+            '(click)': '_checkDisabled($event)',
+            '[attr.tabindex]': '_tabindex'
+        },
+        templateUrl: 'menu-item.html',
+        exportAs: 'mdMenuItem'
+    }),
+    __metadata("design:paramtypes", [core_1.Renderer, core_1.ElementRef])
+], MdMenuItem);
+exports.MdMenuItem = MdMenuItem;
+//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/menu/menu-item.js.map

@@ -9,7 +9,7 @@ import{
 
 /**
  * Below are all the animations for the md-menu component.
- * Animation duration and timing values are based on AngularJS Material.
+ * Animation duration and timing values are based on Material 1.
  */
 
 
@@ -20,9 +20,9 @@ import{
  *
  * When the menu panel is removed from the DOM, it simply fades out after a brief
  * delay to display the ripple.
+ *
+ * TODO(kara): switch to :enter and :leave once Mobile Safari is sorted out.
  */
-
-// TODO(kara): switch to :enter and :leave once Mobile Safari is sorted out.
 export const transformMenu: AnimationEntryMetadata = trigger('transformMenu', [
   state('showing', style({
     opacity: 1,

@@ -11,23 +11,16 @@ import {OverlayConnectionPosition, OriginConnectionPosition} from './connected-p
 export class OverlayPositionBuilder {
   constructor(private _viewportRuler: ViewportRuler) { }
 
-  /**
-   * Creates a global position strategy.
-   */
-  global(): GlobalPositionStrategy {
+  /** Creates a global position strategy. */
+  global() {
     return new GlobalPositionStrategy();
   }
 
-  /**
-   * Creates a relative position strategy.
-   * @param elementRef
-   * @param originPos
-   * @param overlayPos
-   */
+  /** Creates a relative position strategy. */
   connectedTo(
       elementRef: ElementRef,
       originPos: OriginConnectionPosition,
-      overlayPos: OverlayConnectionPosition): ConnectedPositionStrategy {
+      overlayPos: OverlayConnectionPosition) {
     return new ConnectedPositionStrategy(elementRef, originPos, overlayPos, this._viewportRuler);
   }
 }

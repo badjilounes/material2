@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10,36 +11,34 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { NgModule, Component, Directive, Input, ElementRef, ViewContainerRef, style, trigger, state, transition, animate, NgZone, Optional, ChangeDetectorRef } from '@angular/core';
-import { Overlay, OverlayState, OverlayModule, ComponentPortal, CompatibilityModule } from '../core';
-import { MdTooltipInvalidPositionError } from './tooltip-errors';
-import { Subject } from 'rxjs/Subject';
-import { Dir } from '../core/rtl/dir';
-import 'rxjs/add/operator/first';
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = require("@angular/core");
+var core_2 = require("../core");
+var tooltip_errors_1 = require("./tooltip-errors");
+var Subject_1 = require("rxjs/Subject");
+var dir_1 = require("../core/rtl/dir");
 /** Time in ms to delay before changing the tooltip visibility to hidden */
-export var TOUCHEND_HIDE_DELAY = 1500;
+exports.TOUCHEND_HIDE_DELAY = 1500;
 /**
  * Directive that attaches a material design tooltip to the host element. Animates the showing and
  * hiding of a tooltip provided position (defaults to below the element).
  *
  * https://material.google.com/components/tooltips.html
  */
-export var MdTooltip = (function () {
+var MdTooltip = (function () {
     function MdTooltip(_overlay, _elementRef, _viewContainerRef, _ngZone, _dir) {
         this._overlay = _overlay;
         this._elementRef = _elementRef;
         this._viewContainerRef = _viewContainerRef;
         this._ngZone = _ngZone;
         this._dir = _dir;
+        /** Allows the user to define the position of the tooltip relative to the parent element */
         this._position = 'below';
-        /** The default delay in ms before showing the tooltip after show is called */
-        this.showDelay = 0;
-        /** The default delay in ms before hiding the tooltip after hide is called */
-        this.hideDelay = 0;
     }
     Object.defineProperty(MdTooltip.prototype, "position", {
-        /** Allows the user to define the position of the tooltip relative to the parent element */
-        get: function () { return this._position; },
+        get: function () {
+            return this._position;
+        },
         set: function (value) {
             if (value !== this._position) {
                 this._position = value;
@@ -53,16 +52,10 @@ export var MdTooltip = (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(MdTooltip.prototype, "_positionDeprecated", {
-        /** @deprecated */
-        get: function () { return this._position; },
-        set: function (value) { this._position = value; },
-        enumerable: true,
-        configurable: true
-    });
     Object.defineProperty(MdTooltip.prototype, "message", {
-        /** The message to be displayed in the tooltip */
-        get: function () { return this._message; },
+        get: function () {
+            return this._message;
+        },
         set: function (value) {
             this._message = value;
             if (this._tooltipInstance) {
@@ -72,52 +65,14 @@ export var MdTooltip = (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(MdTooltip.prototype, "_deprecatedMessage", {
-        /** @deprecated */
-        get: function () { return this.message; },
-        set: function (v) { this.message = v; },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(MdTooltip.prototype, "_matMessage", {
-        // Properties with `mat-` prefix for noconflict mode.
-        get: function () { return this.message; },
-        set: function (v) { this.message = v; },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(MdTooltip.prototype, "_matPosition", {
-        // Properties with `mat-` prefix for noconflict mode.
-        get: function () { return this.position; },
-        set: function (v) { this.position = v; },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(MdTooltip.prototype, "_matHideDelay", {
-        // Properties with `mat-` prefix for noconflict mode.
-        get: function () { return this.hideDelay; },
-        set: function (v) { this.hideDelay = v; },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(MdTooltip.prototype, "_matShowDelay", {
-        // Properties with `mat-` prefix for noconflict mode.
-        get: function () { return this.showDelay; },
-        set: function (v) { this.showDelay = v; },
-        enumerable: true,
-        configurable: true
-    });
-    /**
-     * Dispose the tooltip when destroyed.
-     */
+    /** Dispose the tooltip when destroyed */
     MdTooltip.prototype.ngOnDestroy = function () {
         if (this._tooltipInstance) {
             this._disposeTooltip();
         }
     };
-    /** Shows the tooltip after the delay in ms, defaults to tooltip-delay-show or 0ms if no input */
-    MdTooltip.prototype.show = function (delay) {
-        if (delay === void 0) { delay = this.showDelay; }
+    /** Shows the tooltip */
+    MdTooltip.prototype.show = function () {
         if (!this._message || !this._message.trim()) {
             return;
         }
@@ -125,11 +80,11 @@ export var MdTooltip = (function () {
             this._createTooltip();
         }
         this._setTooltipMessage(this._message);
-        this._tooltipInstance.show(this._position, delay);
+        this._tooltipInstance.show(this._position);
     };
-    /** Hides the tooltip after the delay in ms, defaults to tooltip-delay-hide or 0ms if no input */
+    /** Hides the tooltip after the provided delay in ms, defaulting to 0ms. */
     MdTooltip.prototype.hide = function (delay) {
-        if (delay === void 0) { delay = this.hideDelay; }
+        if (delay === void 0) { delay = 0; }
         if (this._tooltipInstance) {
             this._tooltipInstance.hide(delay);
         }
@@ -146,7 +101,7 @@ export var MdTooltip = (function () {
     MdTooltip.prototype._createTooltip = function () {
         var _this = this;
         this._createOverlay();
-        var portal = new ComponentPortal(TooltipComponent, this._viewContainerRef);
+        var portal = new core_2.ComponentPortal(TooltipComponent, this._viewContainerRef);
         this._tooltipInstance = this._overlayRef.attach(portal).instance;
         // Dispose the overlay when finished the shown tooltip.
         this._tooltipInstance.afterHidden().subscribe(function () {
@@ -161,7 +116,7 @@ export var MdTooltip = (function () {
         var origin = this._getOrigin();
         var position = this._getOverlayPosition();
         var strategy = this._overlay.position().connectedTo(this._elementRef, origin, position);
-        var config = new OverlayState();
+        var config = new core_2.OverlayState();
         config.positionStrategy = strategy;
         this._overlayRef = this._overlay.create(config);
     };
@@ -187,7 +142,7 @@ export var MdTooltip = (function () {
             this.position == 'before' && !isDirectionLtr) {
             return { originX: 'end', originY: 'center' };
         }
-        throw new MdTooltipInvalidPositionError(this.position);
+        throw new tooltip_errors_1.MdTooltipInvalidPositionError(this.position);
     };
     /** Returns the overlay position based on the user's preference */
     MdTooltip.prototype._getOverlayPosition = function () {
@@ -208,7 +163,7 @@ export var MdTooltip = (function () {
             this.position == 'before' && !isLtr) {
             return { overlayX: 'start', overlayY: 'center' };
         }
-        throw new MdTooltipInvalidPositionError(this.position);
+        throw new tooltip_errors_1.MdTooltipInvalidPositionError(this.position);
     };
     /** Updates the tooltip message and repositions the overlay according to the new message length */
     MdTooltip.prototype._setTooltipMessage = function (message) {
@@ -222,131 +177,72 @@ export var MdTooltip = (function () {
             }
         });
     };
-    __decorate([
-        Input('mdTooltipPosition'), 
-        __metadata('design:type', String)
-    ], MdTooltip.prototype, "position", null);
-    __decorate([
-        Input('tooltip-position'), 
-        __metadata('design:type', String)
-    ], MdTooltip.prototype, "_positionDeprecated", null);
-    __decorate([
-        Input('mdTooltipShowDelay'), 
-        __metadata('design:type', Object)
-    ], MdTooltip.prototype, "showDelay", void 0);
-    __decorate([
-        Input('mdTooltipHideDelay'), 
-        __metadata('design:type', Object)
-    ], MdTooltip.prototype, "hideDelay", void 0);
-    __decorate([
-        Input('mdTooltip'), 
-        __metadata('design:type', Object)
-    ], MdTooltip.prototype, "message", null);
-    __decorate([
-        Input('md-tooltip'), 
-        __metadata('design:type', String)
-    ], MdTooltip.prototype, "_deprecatedMessage", null);
-    __decorate([
-        Input('matTooltip'), 
-        __metadata('design:type', Object)
-    ], MdTooltip.prototype, "_matMessage", null);
-    __decorate([
-        Input('matTooltipPosition'), 
-        __metadata('design:type', Object)
-    ], MdTooltip.prototype, "_matPosition", null);
-    __decorate([
-        Input('matTooltipHideDelay'), 
-        __metadata('design:type', Object)
-    ], MdTooltip.prototype, "_matHideDelay", null);
-    __decorate([
-        Input('matTooltipShowDelay'), 
-        __metadata('design:type', Object)
-    ], MdTooltip.prototype, "_matShowDelay", null);
-    MdTooltip = __decorate([
-        Directive({
-            selector: '[md-tooltip], [mdTooltip], [mat-tooltip], [matTooltip]',
-            host: {
-                '(longpress)': 'show()',
-                '(touchend)': 'hide(' + TOUCHEND_HIDE_DELAY + ')',
-                '(mouseenter)': 'show()',
-                '(mouseleave)': 'hide()',
-            },
-            exportAs: 'mdTooltip',
-        }),
-        __param(4, Optional()), 
-        __metadata('design:paramtypes', [Overlay, ElementRef, ViewContainerRef, NgZone, Dir])
-    ], MdTooltip);
     return MdTooltip;
 }());
-/**
- * Internal component that wraps the tooltip's content.
- * @docs-private
- */
-export var TooltipComponent = (function () {
-    function TooltipComponent(_dir, _changeDetectorRef) {
+__decorate([
+    core_1.Input('tooltip-position'),
+    __metadata("design:type", String),
+    __metadata("design:paramtypes", [String])
+], MdTooltip.prototype, "position", null);
+__decorate([
+    core_1.Input('md-tooltip'),
+    __metadata("design:type", Object),
+    __metadata("design:paramtypes", [String])
+], MdTooltip.prototype, "message", null);
+MdTooltip = __decorate([
+    core_1.Directive({
+        selector: '[md-tooltip], [mat-tooltip]',
+        host: {
+            '(longpress)': 'show()',
+            '(touchend)': 'hide(' + exports.TOUCHEND_HIDE_DELAY + ')',
+            '(mouseenter)': 'show()',
+            '(mouseleave)': 'hide()',
+        },
+        exportAs: 'mdTooltip',
+    }),
+    __param(4, core_1.Optional()),
+    __metadata("design:paramtypes", [core_2.Overlay, core_1.ElementRef,
+        core_1.ViewContainerRef, core_1.NgZone,
+        dir_1.Dir])
+], MdTooltip);
+exports.MdTooltip = MdTooltip;
+var TooltipComponent = (function () {
+    function TooltipComponent(_dir) {
         this._dir = _dir;
-        this._changeDetectorRef = _changeDetectorRef;
-        /** Property watched by the animation framework to show or hide the tooltip */
-        this._visibility = 'initial';
         /** Whether interactions on the page should close the tooltip */
         this._closeOnInteraction = false;
         /** The transform origin used in the animation for showing and hiding the tooltip */
         this._transformOrigin = 'bottom';
         /** Subject for notifying that the tooltip has been hidden from the view */
-        this._onHide = new Subject();
+        this._onHide = new Subject_1.Subject();
     }
-    /**
-     * Shows the tooltip with an animation originating from the provided origin
-     * @param position Position of the tooltip.
-     * @param delay Amount of milliseconds to the delay showing the tooltip.
-     */
-    TooltipComponent.prototype.show = function (position, delay) {
+    /** Shows the tooltip with an animation originating from the provided origin */
+    TooltipComponent.prototype.show = function (position) {
         var _this = this;
+        this._closeOnInteraction = false;
+        this._visibility = 'visible';
+        this._setTransformOrigin(position);
         // Cancel the delayed hide if it is scheduled
         if (this._hideTimeoutId) {
             clearTimeout(this._hideTimeoutId);
         }
-        // Body interactions should cancel the tooltip if there is a delay in showing.
-        this._closeOnInteraction = true;
-        this._setTransformOrigin(position);
-        this._showTimeoutId = setTimeout(function () {
-            _this._visibility = 'visible';
-            // If this was set to true immediately, then a body click that triggers show() would
-            // trigger interaction and close the tooltip right after it was displayed.
-            _this._closeOnInteraction = false;
-            // Mark for check so if any parent component has set the 
-            // ChangeDetectionStrategy to OnPush it will be checked anyways
-            _this._changeDetectorRef.markForCheck();
-            setTimeout(function () { _this._closeOnInteraction = true; }, 0);
-        }, delay);
+        // If this was set to true immediately, then the body click would trigger interaction and
+        // close the tooltip right after it was displayed.
+        setTimeout(function () { _this._closeOnInteraction = true; }, 0);
     };
-    /**
-     * Begins the animation to hide the tooltip after the provided delay in ms.
-     * @param delay Amount of milliseconds to delay showing the tooltip.
-     */
+    /** Begins the animation to hide the tooltip after the provided delay in ms */
     TooltipComponent.prototype.hide = function (delay) {
         var _this = this;
-        // Cancel the delayed show if it is scheduled
-        if (this._showTimeoutId) {
-            clearTimeout(this._showTimeoutId);
-        }
         this._hideTimeoutId = setTimeout(function () {
             _this._visibility = 'hidden';
             _this._closeOnInteraction = false;
-            // Mark for check so if any parent component has set the 
-            // ChangeDetectionStrategy to OnPush it will be checked anyways
-            _this._changeDetectorRef.markForCheck();
         }, delay);
     };
-    /**
-     * Returns an observable that notifies when the tooltip has been hidden from view
-     */
+    /** Returns an observable that notifies when the tooltip has been hidden from view */
     TooltipComponent.prototype.afterHidden = function () {
         return this._onHide.asObservable();
     };
-    /**
-     * Whether the tooltip is being displayed
-     */
+    /** Whether the tooltip is being displayed */
     TooltipComponent.prototype.isVisible = function () {
         return this._visibility === 'visible';
     };
@@ -372,7 +268,7 @@ export var TooltipComponent = (function () {
             case 'below':
                 this._transformOrigin = 'top';
                 break;
-            default: throw new MdTooltipInvalidPositionError(value);
+            default: throw new tooltip_errors_1.MdTooltipInvalidPositionError(value);
         }
     };
     TooltipComponent.prototype._afterVisibilityAnimation = function (e) {
@@ -390,48 +286,50 @@ export var TooltipComponent = (function () {
             this.hide(0);
         }
     };
-    TooltipComponent = __decorate([
-        Component({selector: 'md-tooltip-component, mat-tooltip-component',
-            template: "<div class=\"md-tooltip\" [style.transform-origin]=\"_transformOrigin\" [@state]=\"_visibility\" (@state.done)=\"_afterVisibilityAnimation($event)\"> {{message}} </div>",
-            styles: ["/** * Applies styles for users in high contrast mode. Note that this only applies * to Microsoft browsers. Chrome can be included by checking for the `html[hc]` * attribute, however Chrome handles high contrast differently. */ :host { pointer-events: none; } .md-tooltip { color: white; padding: 6px 8px; border-radius: 2px; font-family: Roboto, \"Helvetica Neue\", sans-serif; font-size: 10px; margin: 14px; max-width: 250px; } @media screen and (-ms-high-contrast: active) { .md-tooltip { outline: solid 1px; } } /*# sourceMappingURL=tooltip.css.map */ "],
-            animations: [
-                trigger('state', [
-                    state('void', style({ transform: 'scale(0)' })),
-                    state('initial', style({ transform: 'scale(0)' })),
-                    state('visible', style({ transform: 'scale(1)' })),
-                    state('hidden', style({ transform: 'scale(0)' })),
-                    transition('* => visible', animate('150ms cubic-bezier(0.0, 0.0, 0.2, 1)')),
-                    transition('* => hidden', animate('150ms cubic-bezier(0.4, 0.0, 1, 1)')),
-                ])
-            ],
-            host: {
-                '(body:click)': 'this._handleBodyInteraction()'
-            }
-        }),
-        __param(0, Optional()), 
-        __metadata('design:paramtypes', [Dir, ChangeDetectorRef])
-    ], TooltipComponent);
     return TooltipComponent;
 }());
-export var MdTooltipModule = (function () {
+TooltipComponent = __decorate([
+    core_1.Component({
+        moduleId: module.id,
+        selector: 'md-tooltip-component, mat-tooltip-component',
+        templateUrl: 'tooltip.html',
+        styleUrls: ['tooltip.css'],
+        animations: [
+            core_1.trigger('state', [
+                core_1.state('void', core_1.style({ transform: 'scale(0)' })),
+                core_1.state('visible', core_1.style({ transform: 'scale(1)' })),
+                core_1.state('hidden', core_1.style({ transform: 'scale(0)' })),
+                core_1.transition('* => visible', core_1.animate('150ms cubic-bezier(0.0, 0.0, 0.2, 1)')),
+                core_1.transition('* => hidden', core_1.animate('150ms cubic-bezier(0.4, 0.0, 1, 1)')),
+            ])
+        ],
+        host: {
+            '(body:click)': 'this._handleBodyInteraction()'
+        }
+    }),
+    __param(0, core_1.Optional()),
+    __metadata("design:paramtypes", [dir_1.Dir])
+], TooltipComponent);
+exports.TooltipComponent = TooltipComponent;
+var MdTooltipModule = MdTooltipModule_1 = (function () {
     function MdTooltipModule() {
     }
-    /** @deprecated */
     MdTooltipModule.forRoot = function () {
         return {
-            ngModule: MdTooltipModule,
-            providers: []
+            ngModule: MdTooltipModule_1,
+            providers: core_2.OVERLAY_PROVIDERS,
         };
     };
-    MdTooltipModule = __decorate([
-        NgModule({
-            imports: [OverlayModule, CompatibilityModule],
-            exports: [MdTooltip, TooltipComponent, CompatibilityModule],
-            declarations: [MdTooltip, TooltipComponent],
-            entryComponents: [TooltipComponent],
-        }), 
-        __metadata('design:paramtypes', [])
-    ], MdTooltipModule);
     return MdTooltipModule;
 }());
-//# sourceMappingURL=tooltip.js.map
+MdTooltipModule = MdTooltipModule_1 = __decorate([
+    core_1.NgModule({
+        imports: [core_2.OverlayModule, core_2.DefaultStyleCompatibilityModeModule],
+        exports: [MdTooltip, TooltipComponent, core_2.DefaultStyleCompatibilityModeModule],
+        declarations: [MdTooltip, TooltipComponent],
+        entryComponents: [TooltipComponent],
+    })
+], MdTooltipModule);
+exports.MdTooltipModule = MdTooltipModule;
+var MdTooltipModule_1;
+//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/tooltip/tooltip.js.map

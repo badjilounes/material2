@@ -1,20 +1,18 @@
-import {Injectable} from '@angular/core';
+import {Injectable, NgModule, ModuleWithProviders} from '@angular/core';
 
 declare const window: any;
 
 // Whether the current platform supports the V8 Break Iterator. The V8 check
 // is necessary to detect all Blink based browsers.
-const hasV8BreakIterator = typeof(window) !== 'undefined' ?
-    (window.Intl && (window.Intl as any).v8BreakIterator) :
-    (typeof(Intl) !== 'undefined' && (Intl as any).v8BreakIterator);
+const hasV8BreakIterator = (window.Intl && (window.Intl as any).v8BreakIterator);
 
 /**
  * Service to detect the current platform by comparing the userAgent strings and
  * checking browser-specific global properties.
- * @docs-private
  */
 @Injectable()
-export class Platform {
+export class MdPlatform {
+
   /** Layout Engines */
   EDGE = /(edge)/i.test(navigator.userAgent);
   TRIDENT = /(msie|trident)/i.test(navigator.userAgent);
@@ -37,4 +35,15 @@ export class Platform {
 
   // Trident on mobile adds the android platform to the userAgent to trick detections.
   ANDROID = /android/i.test(navigator.userAgent) && !this.TRIDENT;
+
+}
+
+@NgModule({})
+export class PlatformModule {
+  static forRoot(): ModuleWithProviders {
+    return {
+      ngModule: PlatformModule,
+      providers: [MdPlatform],
+    };
+  }
 }

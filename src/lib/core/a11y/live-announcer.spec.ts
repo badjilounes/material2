@@ -1,21 +1,21 @@
 import {inject, fakeAsync, tick, ComponentFixture, TestBed} from '@angular/core/testing';
 import {Component} from '@angular/core';
 import {By} from '@angular/platform-browser';
-import {LiveAnnouncer, LIVE_ANNOUNCER_ELEMENT_TOKEN} from './live-announcer';
+import {MdLiveAnnouncer, LIVE_ANNOUNCER_ELEMENT_TOKEN} from './live-announcer';
 
 
-describe('LiveAnnouncer', () => {
-  let announcer: LiveAnnouncer;
+describe('MdLiveAnnouncer', () => {
+  let announcer: MdLiveAnnouncer;
   let ariaLiveElement: Element;
   let fixture: ComponentFixture<TestApp>;
 
   describe('with default element', () => {
     beforeEach(() => TestBed.configureTestingModule({
       declarations: [TestApp],
-      providers: [LiveAnnouncer]
+      providers: [MdLiveAnnouncer]
     }));
 
-    beforeEach(fakeAsync(inject([LiveAnnouncer], (la: LiveAnnouncer) => {
+    beforeEach(fakeAsync(inject([MdLiveAnnouncer], (la: MdLiveAnnouncer) => {
       announcer = la;
       ariaLiveElement = getLiveElement();
       fixture = TestBed.createComponent(TestApp);
@@ -80,12 +80,12 @@ describe('LiveAnnouncer', () => {
         declarations: [TestApp],
         providers: [
           {provide: LIVE_ANNOUNCER_ELEMENT_TOKEN, useValue: customLiveElement},
-          LiveAnnouncer,
+          MdLiveAnnouncer,
         ],
       });
     });
 
-    beforeEach(inject([LiveAnnouncer], (la: LiveAnnouncer) => {
+    beforeEach(inject([MdLiveAnnouncer], (la: MdLiveAnnouncer) => {
         announcer = la;
         ariaLiveElement = getLiveElement();
       }));
@@ -109,9 +109,10 @@ function getLiveElement(): Element {
 
 @Component({template: `<button (click)="announceText('Test')">Announce</button>`})
 class TestApp {
-  constructor(public live: LiveAnnouncer) { };
+  constructor(public live: MdLiveAnnouncer) { };
 
   announceText(message: string) {
     this.live.announce(message);
   }
 }
+

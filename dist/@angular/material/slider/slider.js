@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10,56 +11,49 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { NgModule, Component, ElementRef, Input, Output, ViewEncapsulation, forwardRef, EventEmitter, Optional } from '@angular/core';
-import { NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms';
-import { HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
-import { GestureConfig, coerceBooleanProperty, coerceNumberProperty, CompatibilityModule } from '../core';
-import { Dir } from '../core/rtl/dir';
-import { CommonModule } from '@angular/common';
-import { PAGE_UP, PAGE_DOWN, END, HOME, LEFT_ARROW, UP_ARROW, RIGHT_ARROW, DOWN_ARROW } from '../core/keyboard/keycodes';
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = require("@angular/core");
+var forms_1 = require("@angular/forms");
+var platform_browser_1 = require("@angular/platform-browser");
+var core_2 = require("../core");
+var dir_1 = require("../core/rtl/dir");
+var common_1 = require("@angular/common");
+var keycodes_1 = require("../core/keyboard/keycodes");
 /**
  * Visually, a 30px separation between tick marks looks best. This is very subjective but it is
  * the default separation we chose.
  */
 var MIN_AUTO_TICK_SEPARATION = 30;
-/** The thumb gap size for a disabled slider. */
-var DISABLED_THUMB_GAP = 7;
-/** The thumb gap size for a non-active slider at its minimum value. */
-var MIN_VALUE_NONACTIVE_THUMB_GAP = 7;
-/** The thumb gap size for an active slider at its minimum value. */
-var MIN_VALUE_ACTIVE_THUMB_GAP = 10;
 /**
  * Provider Expression that allows md-slider to register as a ControlValueAccessor.
  * This allows it to support [(ngModel)] and [formControl].
  */
-export var MD_SLIDER_VALUE_ACCESSOR = {
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(function () { return MdSlider; }),
+exports.MD_SLIDER_VALUE_ACCESSOR = {
+    provide: forms_1.NG_VALUE_ACCESSOR,
+    useExisting: core_1.forwardRef(function () { return MdSlider; }),
     multi: true
 };
 /** A simple change event emitted by the MdSlider component. */
-export var MdSliderChange = (function () {
+var MdSliderChange = (function () {
     function MdSliderChange() {
     }
     return MdSliderChange;
 }());
-/**
- * Allows users to select from a range of values by moving the slider thumb. It is similar in
- * behavior to the native `<input type="range">` element.
- */
-export var MdSlider = (function () {
+exports.MdSliderChange = MdSliderChange;
+var MdSlider = (function () {
     function MdSlider(_dir, elementRef) {
         this._dir = _dir;
         /** A renderer to handle updating the slider's thumb and fill track. */
         this._renderer = null;
         /** The dimensions of the slider. */
         this._sliderDimensions = null;
+        /** Whether or not the slider is disabled. */
         this._disabled = false;
+        /** Whether or not to show the thumb label. */
         this._thumbLabel = false;
         this._controlValueAccessorChangeFn = function () { };
-        /** The last values for which a change or input event was emitted. */
-        this._lastChangeValue = null;
-        this._lastInputValue = null;
+        /** The last value for which a change event was emitted. */
+        this._lastEmittedValue = null;
         /** onTouch function registered via registerOnTouch (ControlValueAccessor). */
         this.onTouched = function () { };
         /**
@@ -72,87 +66,65 @@ export var MdSlider = (function () {
          * Used to shrink and grow the thumb as according to the Material Design spec.
          */
         this._isActive = false;
-        this._step = 1;
-        this._tickInterval = 0;
-        this._tickIntervalPercent = 0;
-        this._percent = 0;
-        this._value = null;
-        this._min = 0;
-        this._max = 100;
-        this._invert = false;
-        this._vertical = false;
-        /** Event emitted when the slider value has changed. */
-        this.change = new EventEmitter();
-        /** Event emitted when the slider thumb moves. */
-        this.input = new EventEmitter();
-        this._renderer = new SliderRenderer(elementRef);
-    }
-    Object.defineProperty(MdSlider.prototype, "disabled", {
-        /** Whether or not the slider is disabled. */
-        get: function () { return this._disabled; },
-        set: function (value) { this._disabled = coerceBooleanProperty(value); },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(MdSlider.prototype, "thumbLabel", {
-        /** Whether or not to show the thumb label. */
-        get: function () { return this._thumbLabel; },
-        set: function (value) { this._thumbLabel = coerceBooleanProperty(value); },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(MdSlider.prototype, "_thumbLabelDeprecated", {
-        /** @deprecated */
-        get: function () { return this._thumbLabel; },
-        set: function (value) { this._thumbLabel = value; },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(MdSlider.prototype, "step", {
         /** The values at which the thumb will snap. */
-        get: function () { return this._step; },
-        set: function (v) {
-            this._step = coerceNumberProperty(v, this._step);
-            if (this._step % 1 !== 0) {
-                this._roundLabelTo = this._step.toString().split('.').pop().length;
-            }
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(MdSlider.prototype, "tickInterval", {
+        this._step = 1;
         /**
          * How often to show ticks. Relative to the step so that a tick always appears on a step.
          * Ex: Tick interval of 4 with a step of 3 will draw a tick every 4 steps (every 12 values).
          */
+        this._tickInterval = 0;
+        /** The size of a tick interval as a percentage of the size of the track. */
+        this._tickIntervalPercent = 0;
+        /** The percentage of the slider that coincides with the value. */
+        this._percent = 0;
+        /** Value of the slider. */
+        this._value = null;
+        /** The miniumum value that the slider can have. */
+        this._min = 0;
+        /** The maximum value that the slider can have. */
+        this._max = 100;
+        this._invert = false;
+        this._vertical = false;
+        this.change = new core_1.EventEmitter();
+        this._renderer = new SliderRenderer(elementRef);
+    }
+    Object.defineProperty(MdSlider.prototype, "disabled", {
+        get: function () { return this._disabled; },
+        set: function (value) { this._disabled = core_2.coerceBooleanProperty(value); },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(MdSlider.prototype, "thumbLabel", {
+        get: function () { return this._thumbLabel; },
+        set: function (value) { this._thumbLabel = core_2.coerceBooleanProperty(value); },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(MdSlider.prototype, "step", {
+        get: function () { return this._step; },
+        set: function (v) { this._step = core_2.coerceNumberProperty(v, this._step); },
+        enumerable: true,
+        configurable: true
+    });
+    Object.defineProperty(MdSlider.prototype, "tickInterval", {
         get: function () { return this._tickInterval; },
         set: function (v) {
-            this._tickInterval = (v == 'auto') ? v : coerceNumberProperty(v, this._tickInterval);
+            this._tickInterval = (v == 'auto') ? v : core_2.coerceNumberProperty(v, this._tickInterval);
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(MdSlider.prototype, "_tickIntervalDeprecated", {
-        /** @deprecated */
-        get: function () { return this.tickInterval; },
-        set: function (v) { this.tickInterval = v; },
-        enumerable: true,
-        configurable: true
-    });
     Object.defineProperty(MdSlider.prototype, "tickIntervalPercent", {
-        /** The size of a tick interval as a percentage of the size of the track. */
         get: function () { return this._tickIntervalPercent; },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(MdSlider.prototype, "percent", {
-        /** The percentage of the slider that coincides with the value. */
         get: function () { return this._clamp(this._percent); },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(MdSlider.prototype, "value", {
-        /** Value of the slider. */
         get: function () {
             // If the value needs to be read and it is still uninitialized, initialize it to the min.
             if (this._value === null) {
@@ -161,19 +133,18 @@ export var MdSlider = (function () {
             return this._value;
         },
         set: function (v) {
-            this._value = coerceNumberProperty(v, this._value);
+            this._value = core_2.coerceNumberProperty(v, this._value);
             this._percent = this._calculatePercentage(this._value);
         },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(MdSlider.prototype, "min", {
-        /** The minimum value that the slider can have. */
         get: function () {
             return this._min;
         },
         set: function (v) {
-            this._min = coerceNumberProperty(v, this._min);
+            this._min = core_2.coerceNumberProperty(v, this._min);
             // If the value wasn't explicitly set by the user, set it to the min.
             if (this._value === null) {
                 this.value = this._min;
@@ -184,12 +155,11 @@ export var MdSlider = (function () {
         configurable: true
     });
     Object.defineProperty(MdSlider.prototype, "max", {
-        /** The maximum value that the slider can have. */
         get: function () {
             return this._max;
         },
         set: function (v) {
-            this._max = coerceNumberProperty(v, this._max);
+            this._max = core_2.coerceNumberProperty(v, this._max);
             this._percent = this._calculatePercentage(this.value);
         },
         enumerable: true,
@@ -198,28 +168,14 @@ export var MdSlider = (function () {
     Object.defineProperty(MdSlider.prototype, "invert", {
         /** Whether the slider is inverted. */
         get: function () { return this._invert; },
-        set: function (value) { this._invert = coerceBooleanProperty(value); },
+        set: function (value) { this._invert = core_2.coerceBooleanProperty(value); },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(MdSlider.prototype, "vertical", {
         /** Whether the slider is vertical. */
         get: function () { return this._vertical; },
-        set: function (value) { this._vertical = coerceBooleanProperty(value); },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(MdSlider.prototype, "displayValue", {
-        /** The value to be used for display purposes. */
-        get: function () {
-            // Note that this could be improved further by rounding something like 0.999 to 1 or
-            // 0.899 to 0.9, however it is very performance sensitive, because it gets called on
-            // every change detection cycle.
-            if (this._roundLabelTo && this.value % 1 !== 0) {
-                return this.value.toFixed(this._roundLabelTo);
-            }
-            return this.value;
-        },
+        set: function (value) { this._vertical = core_2.coerceBooleanProperty(value); },
         enumerable: true,
         configurable: true
     });
@@ -247,50 +203,12 @@ export var MdSlider = (function () {
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(MdSlider.prototype, "_isMinValue", {
-        /** Whether the slider is at its minimum value. */
-        get: function () {
-            return this.percent === 0;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(MdSlider.prototype, "_thumbGap", {
-        /**
-         * The amount of space to leave between the slider thumb and the track fill & track background
-         * elements.
-         */
-        get: function () {
-            if (this.disabled) {
-                return DISABLED_THUMB_GAP;
-            }
-            if (this._isMinValue && !this.thumbLabel) {
-                return this._isActive ? MIN_VALUE_ACTIVE_THUMB_GAP : MIN_VALUE_NONACTIVE_THUMB_GAP;
-            }
-            return 0;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Object.defineProperty(MdSlider.prototype, "trackBackgroundStyles", {
-        /** CSS styles for the track background element. */
-        get: function () {
-            var axis = this.vertical ? 'Y' : 'X';
-            var sign = this.invertMouseCoords ? '-' : '';
-            return {
-                'transform': "translate" + axis + "(" + sign + this._thumbGap + "px) scale" + axis + "(" + (1 - this.percent) + ")"
-            };
-        },
-        enumerable: true,
-        configurable: true
-    });
     Object.defineProperty(MdSlider.prototype, "trackFillStyles", {
         /** CSS styles for the track fill element. */
         get: function () {
             var axis = this.vertical ? 'Y' : 'X';
-            var sign = this.invertMouseCoords ? '' : '-';
             return {
-                'transform': "translate" + axis + "(" + sign + this._thumbGap + "px) scale" + axis + "(" + this.percent + ")"
+                'transform': "scale" + axis + "(" + this.percent + ")"
             };
         },
         enumerable: true,
@@ -322,18 +240,11 @@ export var MdSlider = (function () {
             // ticks 180 degrees so we're really cutting off the end edge abd not the start.
             var sign = !this.vertical && this.direction == 'rtl' ? '-' : '';
             var rotate = !this.vertical && this.direction == 'rtl' ? ' rotate(180deg)' : '';
-            var styles = {
+            return {
                 'backgroundSize': backgroundSize,
                 // Without translateZ ticks sometimes jitter as the slider moves on Chrome & Firefox.
                 'transform': "translateZ(0) translate" + axis + "(" + sign + tickSize / 2 + "%)" + rotate
             };
-            if (this._isMinValue && this._thumbGap) {
-                var side = this.vertical ?
-                    (this.invertAxis ? 'Bottom' : 'Top') :
-                    (this.invertAxis ? 'Right' : 'Left');
-                styles[("padding" + side)] = this._thumbGap + "px";
-            }
-            return styles;
         },
         enumerable: true,
         configurable: true
@@ -377,8 +288,6 @@ export var MdSlider = (function () {
         this._isSliding = false;
         this._renderer.addFocus();
         this._updateValueFromPosition({ x: event.clientX, y: event.clientY });
-        /* Emits a change and input event if the value changed. */
-        this._emitInputEvent();
         this._emitValueIfChanged();
     };
     MdSlider.prototype._onSlide = function (event) {
@@ -388,8 +297,6 @@ export var MdSlider = (function () {
         // Prevent the slide from selecting anything else.
         event.preventDefault();
         this._updateValueFromPosition({ x: event.center.x, y: event.center.y });
-        // Native range elements always emit `input` events when the value changed while sliding.
-        this._emitInputEvent();
     };
     MdSlider.prototype._onSlideStart = function (event) {
         if (this.disabled) {
@@ -416,19 +323,19 @@ export var MdSlider = (function () {
             return;
         }
         switch (event.keyCode) {
-            case PAGE_UP:
+            case keycodes_1.PAGE_UP:
                 this._increment(10);
                 break;
-            case PAGE_DOWN:
+            case keycodes_1.PAGE_DOWN:
                 this._increment(-10);
                 break;
-            case END:
+            case keycodes_1.END:
                 this.value = this.max;
                 break;
-            case HOME:
+            case keycodes_1.HOME:
                 this.value = this.min;
                 break;
-            case LEFT_ARROW:
+            case keycodes_1.LEFT_ARROW:
                 // NOTE: For a sighted user it would make more sense that when they press an arrow key on an
                 // inverted slider the thumb moves in that direction. However for a blind user, nothing
                 // about the slider indicates that it is inverted. They will expect left to be decrement,
@@ -438,14 +345,14 @@ export var MdSlider = (function () {
                 // sighted users, therefore we do not swap the meaning.
                 this._increment(this.direction == 'rtl' ? 1 : -1);
                 break;
-            case UP_ARROW:
+            case keycodes_1.UP_ARROW:
                 this._increment(1);
                 break;
-            case RIGHT_ARROW:
+            case keycodes_1.RIGHT_ARROW:
                 // See comment on LEFT_ARROW about the conditions under which we flip the meaning.
                 this._increment(this.direction == 'rtl' ? -1 : 1);
                 break;
-            case DOWN_ARROW:
+            case keycodes_1.DOWN_ARROW:
                 this._increment(-1);
                 break;
             default:
@@ -453,19 +360,15 @@ export var MdSlider = (function () {
                 // it.
                 return;
         }
-        this._isSliding = true;
         event.preventDefault();
-    };
-    MdSlider.prototype._onKeyup = function () {
-        this._isSliding = false;
     };
     /** Increments the slider by the given number of steps (negative number decrements). */
     MdSlider.prototype._increment = function (numSteps) {
         this.value = this._clamp(this.value + this.step * numSteps, this.min, this.max);
-        this._emitInputEvent();
-        this._emitValueIfChanged();
     };
-    /** Calculate the new value from the new physical location. The value will always be snapped. */
+    /**
+     * Calculate the new value from the new physical location. The value will always be snapped.
+     */
     MdSlider.prototype._updateValueFromPosition = function (pos) {
         if (!this._sliderDimensions) {
             return;
@@ -487,22 +390,18 @@ export var MdSlider = (function () {
     };
     /** Emits a change event if the current value is different from the last emitted value. */
     MdSlider.prototype._emitValueIfChanged = function () {
-        if (this.value != this._lastChangeValue) {
-            var event_1 = this._createChangeEvent();
-            this._lastChangeValue = this.value;
+        if (this.value != this._lastEmittedValue) {
+            var event_1 = new MdSliderChange();
+            event_1.source = this;
+            event_1.value = this.value;
+            this._lastEmittedValue = this.value;
             this._controlValueAccessorChangeFn(this.value);
             this.change.emit(event_1);
         }
     };
-    /** Emits an input event when the current value is different from the last emitted value. */
-    MdSlider.prototype._emitInputEvent = function () {
-        if (this.value != this._lastInputValue) {
-            var event_2 = this._createChangeEvent();
-            this._lastInputValue = this.value;
-            this.input.emit(event_2);
-        }
-    };
-    /** Updates the amount of space between ticks as a percentage of the width of the slider. */
+    /**
+     * Updates the amount of space between ticks as a percentage of the width of the slider.
+     */
     MdSlider.prototype._updateTickIntervalPercent = function () {
         if (!this.tickInterval) {
             return;
@@ -518,154 +417,141 @@ export var MdSlider = (function () {
             this._tickIntervalPercent = this.tickInterval * this.step / (this.max - this.min);
         }
     };
-    /** Creates a slider change object from the specified value. */
-    MdSlider.prototype._createChangeEvent = function (value) {
-        if (value === void 0) { value = this.value; }
-        var event = new MdSliderChange();
-        event.source = this;
-        event.value = value;
-        return event;
-    };
-    /** Calculates the percentage of the slider that a value is. */
+    /**
+     * Calculates the percentage of the slider that a value is.
+     */
     MdSlider.prototype._calculatePercentage = function (value) {
         return (value - this.min) / (this.max - this.min);
     };
-    /** Calculates the value a percentage of the slider corresponds to. */
+    /**
+     * Calculates the value a percentage of the slider corresponds to.
+     */
     MdSlider.prototype._calculateValue = function (percentage) {
         return this.min + percentage * (this.max - this.min);
     };
-    /** Return a number between two numbers. */
+    /**
+     * Return a number between two numbers.
+     */
     MdSlider.prototype._clamp = function (value, min, max) {
         if (min === void 0) { min = 0; }
         if (max === void 0) { max = 1; }
         return Math.max(min, Math.min(value, max));
     };
     /**
-     * Sets the model value. Implemented as part of ControlValueAccessor.
-     * @param value
+     * Implemented as part of ControlValueAccessor.
      */
     MdSlider.prototype.writeValue = function (value) {
         this.value = value;
     };
     /**
-     * Registers a callback to eb triggered when the value has changed.
      * Implemented as part of ControlValueAccessor.
-     * @param fn Callback to be registered.
      */
     MdSlider.prototype.registerOnChange = function (fn) {
         this._controlValueAccessorChangeFn = fn;
     };
     /**
-     * Registers a callback to be triggered when the component is touched.
      * Implemented as part of ControlValueAccessor.
-     * @param fn Callback to be registered.
      */
     MdSlider.prototype.registerOnTouched = function (fn) {
         this.onTouched = fn;
     };
     /**
-     * Sets whether the component should be disabled.
      * Implemented as part of ControlValueAccessor.
-     * @param isDisabled
      */
     MdSlider.prototype.setDisabledState = function (isDisabled) {
         this.disabled = isDisabled;
     };
-    __decorate([
-        Input(), 
-        __metadata('design:type', Boolean)
-    ], MdSlider.prototype, "disabled", null);
-    __decorate([
-        Input('thumbLabel'), 
-        __metadata('design:type', Boolean)
-    ], MdSlider.prototype, "thumbLabel", null);
-    __decorate([
-        Input('thumb-label'), 
-        __metadata('design:type', Boolean)
-    ], MdSlider.prototype, "_thumbLabelDeprecated", null);
-    __decorate([
-        Input(), 
-        __metadata('design:type', Object)
-    ], MdSlider.prototype, "step", null);
-    __decorate([
-        Input(), 
-        __metadata('design:type', Object)
-    ], MdSlider.prototype, "tickInterval", null);
-    __decorate([
-        Input('tick-interval'), 
-        __metadata('design:type', Object)
-    ], MdSlider.prototype, "_tickIntervalDeprecated", null);
-    __decorate([
-        Input(), 
-        __metadata('design:type', Object)
-    ], MdSlider.prototype, "value", null);
-    __decorate([
-        Input(), 
-        __metadata('design:type', Object)
-    ], MdSlider.prototype, "min", null);
-    __decorate([
-        Input(), 
-        __metadata('design:type', Object)
-    ], MdSlider.prototype, "max", null);
-    __decorate([
-        Input(), 
-        __metadata('design:type', Object)
-    ], MdSlider.prototype, "invert", null);
-    __decorate([
-        Input(), 
-        __metadata('design:type', Object)
-    ], MdSlider.prototype, "vertical", null);
-    __decorate([
-        Output(), 
-        __metadata('design:type', Object)
-    ], MdSlider.prototype, "change", void 0);
-    __decorate([
-        Output(), 
-        __metadata('design:type', Object)
-    ], MdSlider.prototype, "input", void 0);
-    MdSlider = __decorate([
-        Component({selector: 'md-slider, mat-slider',
-            providers: [MD_SLIDER_VALUE_ACCESSOR],
-            host: {
-                '(blur)': '_onBlur()',
-                '(click)': '_onClick($event)',
-                '(keydown)': '_onKeydown($event)',
-                '(keyup)': '_onKeyup()',
-                '(mouseenter)': '_onMouseenter()',
-                '(slide)': '_onSlide($event)',
-                '(slideend)': '_onSlideEnd()',
-                '(slidestart)': '_onSlideStart($event)',
-                'role': 'slider',
-                'tabindex': '0',
-                '[attr.aria-disabled]': 'disabled',
-                '[attr.aria-valuemax]': 'max',
-                '[attr.aria-valuemin]': 'min',
-                '[attr.aria-valuenow]': 'value',
-                '[class.md-slider-active]': '_isActive',
-                '[class.md-slider-disabled]': 'disabled',
-                '[class.md-slider-has-ticks]': 'tickInterval',
-                '[class.md-slider-horizontal]': '!vertical',
-                '[class.md-slider-axis-inverted]': 'invertAxis',
-                '[class.md-slider-sliding]': '_isSliding',
-                '[class.md-slider-thumb-label-showing]': 'thumbLabel',
-                '[class.md-slider-vertical]': 'vertical',
-                '[class.md-slider-min-value]': '_isMinValue',
-                '[class.md-slider-hide-last-tick]': '_isMinValue && _thumbGap && invertAxis || disabled',
-            },
-            template: "<div class=\"md-slider-wrapper\"> <div class=\"md-slider-track-wrapper\"> <div class=\"md-slider-track-background\" [ngStyle]=\"trackBackgroundStyles\"></div> <div class=\"md-slider-track-fill\" [ngStyle]=\"trackFillStyles\"></div> </div> <div class=\"md-slider-ticks-container\" [ngStyle]=\"ticksContainerStyles\"> <div class=\"md-slider-ticks\" [ngStyle]=\"ticksStyles\"></div> </div> <div class=\"md-slider-thumb-container\" [ngStyle]=\"thumbContainerStyles\"> <div class=\"md-slider-thumb\"></div> <div class=\"md-slider-thumb-label\"> <span class=\"md-slider-thumb-label-text\">{{displayValue}}</span> </div> </div> </div> ",
-            styles: ["md-slider { display: inline-block; position: relative; box-sizing: border-box; padding: 8px; outline: none; vertical-align: middle; } .md-slider-wrapper { position: absolute; } .md-slider-track-wrapper { position: absolute; top: 0; left: 0; overflow: hidden; } .md-slider-track-fill { position: absolute; transform-origin: 0 0; transition: transform 400ms cubic-bezier(0.25, 0.8, 0.25, 1), background-color 400ms cubic-bezier(0.25, 0.8, 0.25, 1); } .md-slider-track-background { position: absolute; transform-origin: 100% 100%; transition: transform 400ms cubic-bezier(0.25, 0.8, 0.25, 1), background-color 400ms cubic-bezier(0.25, 0.8, 0.25, 1); } .md-slider-ticks-container { position: absolute; left: 0; top: 0; overflow: hidden; } .md-slider-ticks { box-sizing: border-box; opacity: 0; transition: opacity 400ms cubic-bezier(0.25, 0.8, 0.25, 1); } .md-slider-disabled .md-slider-ticks { opacity: 0; } .md-slider-thumb-container { position: absolute; z-index: 1; transition: transform 400ms cubic-bezier(0.25, 0.8, 0.25, 1); } .md-slider-thumb { position: absolute; right: -10px; bottom: -10px; box-sizing: border-box; width: 20px; height: 20px; border: 3px solid transparent; border-radius: 50%; transform: scale(0.7); transition: transform 400ms cubic-bezier(0.25, 0.8, 0.25, 1), background-color 400ms cubic-bezier(0.25, 0.8, 0.25, 1), border-color 400ms cubic-bezier(0.25, 0.8, 0.25, 1); } .md-slider-thumb-label { display: none; align-items: center; justify-content: center; position: absolute; width: 28px; height: 28px; border-radius: 50%; transition: transform 400ms cubic-bezier(0.25, 0.8, 0.25, 1), border-radius 400ms cubic-bezier(0.25, 0.8, 0.25, 1), background-color 400ms cubic-bezier(0.25, 0.8, 0.25, 1); } .md-slider-thumb-label-text { z-index: 1; font-size: 12px; font-weight: bold; opacity: 0; transition: opacity 400ms cubic-bezier(0.25, 0.8, 0.25, 1); } .md-slider-sliding .md-slider-track-fill, .md-slider-sliding .md-slider-track-background, .md-slider-sliding .md-slider-thumb-container { transition-duration: 0ms; } .md-slider-has-ticks .md-slider-wrapper::after { content: ''; position: absolute; border: 0 solid rgba(0, 0, 0, 0.6); opacity: 0; transition: opacity 400ms cubic-bezier(0.25, 0.8, 0.25, 1); } .md-slider-has-ticks.md-slider-active:not(.md-slider-hide-last-tick) .md-slider-wrapper::after, .md-slider-has-ticks:hover:not(.md-slider-hide-last-tick) .md-slider-wrapper::after { opacity: 1; } .md-slider-has-ticks.md-slider-active .md-slider-ticks, .md-slider-has-ticks:hover .md-slider-ticks { opacity: 1; } .md-slider-thumb-label-showing .md-slider-thumb-label { display: flex; } .md-slider-axis-inverted .md-slider-track-fill { transform-origin: 100% 100%; } .md-slider-axis-inverted .md-slider-track-background { transform-origin: 0 0; } .md-slider-active .md-slider-thumb { border-width: 2px; transform: scale(1); } .md-slider-active.md-slider-thumb-label-showing .md-slider-thumb { transform: scale(0); } .md-slider-active .md-slider-thumb-label { border-radius: 50% 50% 0; } .md-slider-active .md-slider-thumb-label-text { opacity: 1; } .md-slider-disabled .md-slider-thumb { border-width: 4px; transform: scale(0.5); } .md-slider-disabled .md-slider-thumb-label { display: none; } .md-slider-horizontal { height: 48px; min-width: 128px; } .md-slider-horizontal .md-slider-wrapper { height: 2px; top: 23px; left: 8px; right: 8px; } .md-slider-horizontal .md-slider-wrapper::after { height: 2px; border-left-width: 2px; right: 0; top: 0; } .md-slider-horizontal .md-slider-track-wrapper { height: 2px; width: 100%; } .md-slider-horizontal .md-slider-track-fill { height: 2px; width: 100%; transform: scaleX(0); } .md-slider-horizontal .md-slider-track-background { height: 2px; width: 100%; transform: scaleX(1); } .md-slider-horizontal .md-slider-ticks-container { height: 2px; width: 100%; } .md-slider-horizontal .md-slider-ticks { background: repeating-linear-gradient(to right, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6) 2px, transparent 0, transparent) repeat; background: -moz-repeating-linear-gradient(0.0001deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6) 2px, transparent 0, transparent) repeat; background-clip: content-box; height: 2px; width: 100%; } .md-slider-horizontal .md-slider-thumb-container { width: 100%; height: 0; top: 50%; } .md-slider-horizontal .md-slider-thumb-label { right: -14px; top: -40px; transform: translateY(26px) scale(0.01) rotate(45deg); } .md-slider-horizontal .md-slider-thumb-label-text { transform: rotate(-45deg); } .md-slider-horizontal.md-slider-active .md-slider-thumb-label { transform: rotate(45deg); } .md-slider-vertical { width: 48px; min-height: 128px; } .md-slider-vertical .md-slider-wrapper { width: 2px; top: 8px; bottom: 8px; left: 23px; } .md-slider-vertical .md-slider-wrapper::after { width: 2px; border-top-width: 2px; bottom: 0; left: 0; } .md-slider-vertical .md-slider-track-wrapper { height: 100%; width: 2px; } .md-slider-vertical .md-slider-track-fill { height: 100%; width: 2px; transform: scaleY(0); } .md-slider-vertical .md-slider-track-background { height: 100%; width: 2px; transform: scaleY(1); } .md-slider-vertical .md-slider-ticks-container { width: 2px; height: 100%; } .md-slider-vertical .md-slider-ticks { background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6) 2px, transparent 0, transparent) repeat; background-clip: content-box; width: 2px; height: 100%; } .md-slider-vertical .md-slider-thumb-container { height: 100%; width: 0; left: 50%; } .md-slider-vertical .md-slider-thumb-label { bottom: -14px; left: -40px; transform: translateX(26px) scale(0.01) rotate(-45deg); } .md-slider-vertical .md-slider-thumb-label-text { transform: rotate(45deg); } .md-slider-vertical.md-slider-active .md-slider-thumb-label { transform: rotate(-45deg); } [dir='rtl'] .md-slider-wrapper::after { left: 0; right: auto; } [dir='rtl'] .md-slider-horizontal .md-slider-track-fill { transform-origin: 100% 100%; } [dir='rtl'] .md-slider-horizontal .md-slider-track-background { transform-origin: 0 0; } [dir='rtl'] .md-slider-horizontal.md-slider-axis-inverted .md-slider-track-fill { transform-origin: 0 0; } [dir='rtl'] .md-slider-horizontal.md-slider-axis-inverted .md-slider-track-background { transform-origin: 100% 100%; } /*# sourceMappingURL=slider.css.map */ "],
-            encapsulation: ViewEncapsulation.None,
-        }),
-        __param(0, Optional()), 
-        __metadata('design:paramtypes', [Dir, ElementRef])
-    ], MdSlider);
     return MdSlider;
 }());
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Boolean),
+    __metadata("design:paramtypes", [Object])
+], MdSlider.prototype, "disabled", null);
+__decorate([
+    core_1.Input('thumb-label'),
+    __metadata("design:type", Boolean),
+    __metadata("design:paramtypes", [Object])
+], MdSlider.prototype, "thumbLabel", null);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Object),
+    __metadata("design:paramtypes", [Object])
+], MdSlider.prototype, "step", null);
+__decorate([
+    core_1.Input('tick-interval'),
+    __metadata("design:type", Object),
+    __metadata("design:paramtypes", [Object])
+], MdSlider.prototype, "tickInterval", null);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Object),
+    __metadata("design:paramtypes", [Number])
+], MdSlider.prototype, "value", null);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Object),
+    __metadata("design:paramtypes", [Number])
+], MdSlider.prototype, "min", null);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Object),
+    __metadata("design:paramtypes", [Number])
+], MdSlider.prototype, "max", null);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Object),
+    __metadata("design:paramtypes", [Object])
+], MdSlider.prototype, "invert", null);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Object),
+    __metadata("design:paramtypes", [Object])
+], MdSlider.prototype, "vertical", null);
+__decorate([
+    core_1.Output(),
+    __metadata("design:type", Object)
+], MdSlider.prototype, "change", void 0);
+MdSlider = __decorate([
+    core_1.Component({
+        moduleId: module.id,
+        selector: 'md-slider, mat-slider',
+        providers: [exports.MD_SLIDER_VALUE_ACCESSOR],
+        host: {
+            '(blur)': '_onBlur()',
+            '(click)': '_onClick($event)',
+            '(keydown)': '_onKeydown($event)',
+            '(mouseenter)': '_onMouseenter()',
+            '(slide)': '_onSlide($event)',
+            '(slideend)': '_onSlideEnd()',
+            '(slidestart)': '_onSlideStart($event)',
+            'role': 'slider',
+            'tabindex': '0',
+            '[attr.aria-disabled]': 'disabled',
+            '[attr.aria-valuemax]': 'max',
+            '[attr.aria-valuemin]': 'min',
+            '[attr.aria-valuenow]': 'value',
+            '[class.md-slider-active]': '_isActive',
+            '[class.md-slider-disabled]': 'disabled',
+            '[class.md-slider-has-ticks]': 'tickInterval',
+            '[class.md-slider-horizontal]': '!vertical',
+            '[class.md-slider-axis-inverted]': 'invertAxis',
+            '[class.md-slider-sliding]': '_isSliding',
+            '[class.md-slider-thumb-label-showing]': 'thumbLabel',
+            '[class.md-slider-vertical]': 'vertical',
+        },
+        templateUrl: 'slider.html',
+        styleUrls: ['slider.css'],
+        encapsulation: core_1.ViewEncapsulation.None,
+    }),
+    __param(0, core_1.Optional()),
+    __metadata("design:paramtypes", [dir_1.Dir, core_1.ElementRef])
+], MdSlider);
+exports.MdSlider = MdSlider;
 /**
  * Renderer class in order to keep all dom manipulation in one place and outside of the main class.
- * @docs-private
  */
-export var SliderRenderer = (function () {
+var SliderRenderer = (function () {
     function SliderRenderer(elementRef) {
         this._sliderElement = elementRef.nativeElement;
     }
@@ -675,8 +561,8 @@ export var SliderRenderer = (function () {
      * take up.
      */
     SliderRenderer.prototype.getSliderDimensions = function () {
-        var wrapperElement = this._sliderElement.querySelector('.md-slider-wrapper');
-        return wrapperElement.getBoundingClientRect();
+        var trackElement = this._sliderElement.querySelector('.md-slider-track');
+        return trackElement.getBoundingClientRect();
     };
     /**
      * Focuses the native element.
@@ -687,25 +573,28 @@ export var SliderRenderer = (function () {
     };
     return SliderRenderer;
 }());
-export var MdSliderModule = (function () {
+exports.SliderRenderer = SliderRenderer;
+var MdSliderModule = MdSliderModule_1 = (function () {
     function MdSliderModule() {
     }
-    /** @deprecated */
     MdSliderModule.forRoot = function () {
         return {
-            ngModule: MdSliderModule,
-            providers: []
+            ngModule: MdSliderModule_1,
+            providers: [{ provide: platform_browser_1.HAMMER_GESTURE_CONFIG, useClass: core_2.MdGestureConfig }]
         };
     };
-    MdSliderModule = __decorate([
-        NgModule({
-            imports: [CommonModule, FormsModule, CompatibilityModule],
-            exports: [MdSlider, CompatibilityModule],
-            declarations: [MdSlider],
-            providers: [{ provide: HAMMER_GESTURE_CONFIG, useClass: GestureConfig }]
-        }), 
-        __metadata('design:paramtypes', [])
-    ], MdSliderModule);
     return MdSliderModule;
 }());
-//# sourceMappingURL=slider.js.map
+MdSliderModule = MdSliderModule_1 = __decorate([
+    core_1.NgModule({
+        imports: [common_1.CommonModule, forms_1.FormsModule, core_2.DefaultStyleCompatibilityModeModule],
+        exports: [MdSlider, core_2.DefaultStyleCompatibilityModeModule],
+        declarations: [MdSlider],
+        providers: [
+            { provide: platform_browser_1.HAMMER_GESTURE_CONFIG, useClass: core_2.MdGestureConfig },
+        ],
+    })
+], MdSliderModule);
+exports.MdSliderModule = MdSliderModule;
+var MdSliderModule_1;
+//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/slider/slider.js.map

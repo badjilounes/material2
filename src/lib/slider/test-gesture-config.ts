@@ -1,12 +1,12 @@
 import {Injectable} from '@angular/core';
-import {GestureConfig, HammerManager} from '../core';
+import {MdGestureConfig} from '../core';
 
 /**
- * An extension of GestureConfig that exposes the underlying HammerManager instances.
+ * An extension of MdGestureConfig that exposes the underlying HammerManager instances.
  * Tests can use these instances to emit fake gesture events.
  */
 @Injectable()
-export class TestGestureConfig extends GestureConfig {
+export class TestGestureConfig extends MdGestureConfig {
   /**
    * A map of Hammer instances to element.
    * Used to emit events over instances for an element.
@@ -17,7 +17,7 @@ export class TestGestureConfig extends GestureConfig {
    * Create a mapping of Hammer instances to element so that events can be emitted during testing.
    */
   buildHammer(element: HTMLElement) {
-    let mc = super.buildHammer(element) as HammerManager;
+    let mc = super.buildHammer(element);
 
     if (this.hammerInstances.get(element)) {
       this.hammerInstances.get(element).push(mc);

@@ -62,23 +62,6 @@ describe('Overlay', () => {
     expect(overlayContainerElement.textContent).toBe('');
   });
 
-  it('should disable pointer events of the pane element if detached', () => {
-    let overlayRef = overlay.create();
-    let paneElement = overlayRef.overlayElement;
-
-    overlayRef.attach(componentPortal);
-
-    expect(paneElement.childNodes.length).not.toBe(0);
-    expect(paneElement.style.pointerEvents)
-      .toBeFalsy('Expected the overlay pane to enable pointerEvents when attached.');
-
-    overlayRef.detach();
-
-    expect(paneElement.childNodes.length).toBe(0);
-    expect(paneElement.style.pointerEvents)
-      .toBe('none', 'Expected the overlay pane to disable pointerEvents when detached.');
-  });
-
   it('should open multiple overlays', () => {
     let pizzaOverlayRef = overlay.create();
     pizzaOverlayRef.attach(componentPortal);
@@ -207,9 +190,9 @@ describe('Overlay', () => {
       overlayRef.attach(componentPortal);
 
       viewContainerFixture.detectChanges();
-      let backdrop = overlayContainerElement.querySelector('.cdk-overlay-backdrop') as HTMLElement;
+      let backdrop = overlayContainerElement.querySelector('.md-overlay-backdrop') as HTMLElement;
       expect(backdrop).toBeTruthy();
-      expect(backdrop.classList).not.toContain('cdk-overlay-backdrop-showing');
+      expect(backdrop.classList).not.toContain('md-overlay-backdrop-showing');
 
       let backdropClickHandler = jasmine.createSpy('backdropClickHander');
       overlayRef.backdropClick().subscribe(backdropClickHandler);
@@ -223,19 +206,19 @@ describe('Overlay', () => {
       overlayRef.attach(componentPortal);
       viewContainerFixture.detectChanges();
 
-      let backdrop = overlayContainerElement.querySelector('.cdk-overlay-backdrop') as HTMLElement;
-      expect(backdrop.classList).toContain('cdk-overlay-dark-backdrop');
+      let backdrop = overlayContainerElement.querySelector('.md-overlay-backdrop') as HTMLElement;
+      expect(backdrop.classList).toContain('md-overlay-dark-backdrop');
     });
 
     it('should apply a custom overlay backdrop class', () => {
-      config.backdropClass = 'cdk-overlay-transparent-backdrop';
+      config.backdropClass = 'md-overlay-transparent-backdrop';
 
       let overlayRef = overlay.create(config);
       overlayRef.attach(componentPortal);
       viewContainerFixture.detectChanges();
 
-      let backdrop = overlayContainerElement.querySelector('.cdk-overlay-backdrop') as HTMLElement;
-      expect(backdrop.classList).toContain('cdk-overlay-transparent-backdrop');
+      let backdrop = overlayContainerElement.querySelector('.md-overlay-backdrop') as HTMLElement;
+      expect(backdrop.classList).toContain('md-overlay-transparent-backdrop');
     });
 
     it('should disable the pointer events of a backdrop that is being removed', () => {
@@ -243,29 +226,13 @@ describe('Overlay', () => {
       overlayRef.attach(componentPortal);
 
       viewContainerFixture.detectChanges();
-      let backdrop = overlayContainerElement.querySelector('.cdk-overlay-backdrop') as HTMLElement;
+      let backdrop = overlayContainerElement.querySelector('.md-overlay-backdrop') as HTMLElement;
 
       expect(backdrop.style.pointerEvents).toBeFalsy();
 
       overlayRef.detach();
 
       expect(backdrop.style.pointerEvents).toBe('none');
-    });
-
-    it('should insert the backdrop before the overlay pane in the DOM order', () => {
-      let overlayRef = overlay.create(config);
-      overlayRef.attach(componentPortal);
-
-      viewContainerFixture.detectChanges();
-
-      let backdrop = overlayContainerElement.querySelector('.cdk-overlay-backdrop');
-      let pane = overlayContainerElement.querySelector('.cdk-overlay-pane');
-      let children = Array.prototype.slice.call(overlayContainerElement.children);
-
-      expect(children.indexOf(backdrop)).toBeGreaterThan(-1);
-      expect(children.indexOf(pane)).toBeGreaterThan(-1);
-      expect(children.indexOf(backdrop))
-        .toBeLessThan(children.indexOf(pane), 'Expected backdrop to be before the pane in the DOM');
     });
 
   });
@@ -278,7 +245,7 @@ class PizzaMsg { }
 
 
 /** Test-bed component that contains a TempatePortal and an ElementRef. */
-@Component({template: `<template cdk-portal>Cake</template>`})
+@Component({template: `<template portal>Cake</template>`})
 class TestComponentWithTemplatePortals {
   @ViewChild(TemplatePortalDirective) templatePortal: TemplatePortalDirective;
 

@@ -10,5 +10,3 @@ import './tasks/release';
 import './tasks/serve';
 import './tasks/unit-test';
 import './tasks/docs';
-import './tasks/aot';
-import './tasks/payload';

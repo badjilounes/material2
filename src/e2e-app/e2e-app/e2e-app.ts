@@ -12,6 +12,4 @@ export class Home {}
   selector: 'e2e-app',
   templateUrl: 'e2e-app.html',
 })
-export class E2EApp {
-  showLinks: boolean = false;
-}
+export class E2EApp { }

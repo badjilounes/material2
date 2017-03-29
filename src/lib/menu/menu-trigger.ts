@@ -32,7 +32,7 @@ import {MenuPositionX, MenuPositionY} from './menu-positions';
  * responsible for toggling the display of the provided menu instance.
  */
 @Directive({
-  selector: '[md-menu-trigger-for], [mat-menu-trigger-for], [mdMenuTriggerFor]',
+  selector: '[md-menu-trigger-for], [mat-menu-trigger-for]',
   host: {
     'aria-haspopup': 'true',
     '(mousedown)': '_handleMousedown($event)',
@@ -51,18 +51,8 @@ export class MdMenuTrigger implements AfterViewInit, OnDestroy {
   // the first item of the list when the menu is opened via the keyboard
   private _openedByMouse: boolean = false;
 
-  /** @deprecated */
-  @Input('md-menu-trigger-for')
-  get _deprecatedMenuTriggerFor(): MdMenuPanel { return this.menu; }
-  set _deprecatedMenuTriggerFor(v: MdMenuPanel) { this.menu = v; }
-
-  /** References the menu instance that the trigger is associated with. */
-  @Input('mdMenuTriggerFor') menu: MdMenuPanel;
-
-  /** Event emitted when the associated menu is opened. */
+  @Input('md-menu-trigger-for') menu: MdMenuPanel;
   @Output() onMenuOpen = new EventEmitter<void>();
-
-  /** Event emitted when the associated menu is closed. */
   @Output() onMenuClose = new EventEmitter<void>();
 
   constructor(private _overlay: Overlay, private _element: ElementRef,
@@ -76,15 +66,12 @@ export class MdMenuTrigger implements AfterViewInit, OnDestroy {
 
   ngOnDestroy() { this.destroyMenu(); }
 
-  /** Whether the menu is open. */
   get menuOpen(): boolean { return this._menuOpen; }
 
-  /** Toggles the menu between the open and closed states. */
   toggleMenu(): void {
     return this._menuOpen ? this.closeMenu() : this.openMenu();
   }
 
-  /** Opens the menu. */
   openMenu(): void {
     if (!this._menuOpen) {
       this._createOverlay();
@@ -94,7 +81,6 @@ export class MdMenuTrigger implements AfterViewInit, OnDestroy {
     }
   }
 
-  /** Closes the menu. */
   closeMenu(): void {
     if (this._overlayRef) {
       this._overlayRef.detach();
@@ -103,7 +89,6 @@ export class MdMenuTrigger implements AfterViewInit, OnDestroy {
     }
   }
 
-  /** Removes the menu from the DOM. */
   destroyMenu(): void {
     if (this._overlayRef) {
       this._overlayRef.dispose();
@@ -113,7 +98,6 @@ export class MdMenuTrigger implements AfterViewInit, OnDestroy {
     }
   }
 
-  /** Focuses the menu trigger. */
   focus() {
     this._renderer.invokeElementMethod(this._element.nativeElement, 'focus');
   }
@@ -173,7 +157,7 @@ export class MdMenuTrigger implements AfterViewInit, OnDestroy {
 
   /**
    *  This method checks that a valid instance of MdMenu has been passed into
-   *  mdMenuTriggerFor. If not, an exception is thrown.
+   *  md-menu-trigger-for.  If not, an exception is thrown.
    */
   private _checkMenu() {
     if (!this.menu) {
@@ -203,7 +187,7 @@ export class MdMenuTrigger implements AfterViewInit, OnDestroy {
     overlayState.positionStrategy = this._getPosition()
                                         .withDirection(this.dir);
     overlayState.hasBackdrop = true;
-    overlayState.backdropClass = 'cdk-overlay-transparent-backdrop';
+    overlayState.backdropClass = 'md-overlay-transparent-backdrop';
     overlayState.direction = this.dir;
     return overlayState;
   }
@@ -216,12 +200,7 @@ export class MdMenuTrigger implements AfterViewInit, OnDestroy {
   private _subscribeToPositions(position: ConnectedPositionStrategy): void {
     this._positionSubscription = position.onPositionChange.subscribe((change) => {
       const posX: MenuPositionX = change.connectionPair.originX === 'start' ? 'after' : 'before';
-      let posY: MenuPositionY = change.connectionPair.originY === 'top' ? 'below' : 'above';
-
-      if (!this.menu.overlapTrigger) {
-        posY = posY === 'below' ? 'above' : 'below';
-      }
-
+      const posY: MenuPositionY = change.connectionPair.originY === 'top' ? 'below' : 'above';
       this.menu.setPositionClasses(posX, posY);
     });
   }
@@ -235,29 +214,21 @@ export class MdMenuTrigger implements AfterViewInit, OnDestroy {
     const [posX, fallbackX]: HorizontalConnectionPos[] =
       this.menu.positionX === 'before' ? ['end', 'start'] : ['start', 'end'];
 
-    const [overlayY, fallbackOverlayY]: VerticalConnectionPos[] =
+    const [posY, fallbackY]: VerticalConnectionPos[] =
       this.menu.positionY === 'above' ? ['bottom', 'top'] : ['top', 'bottom'];
-
-    let originY = overlayY;
-    let fallbackOriginY = fallbackOverlayY;
-
-    if (!this.menu.overlapTrigger) {
-      originY = overlayY === 'top' ? 'bottom' : 'top';
-      fallbackOriginY = fallbackOverlayY === 'top' ? 'bottom' : 'top';
-    }
 
     return this._overlay.position()
       .connectedTo(this._element,
-          {originX: posX, originY: originY}, {overlayX: posX, overlayY: overlayY})
+          {originX: posX, originY: posY}, {overlayX: posX, overlayY: posY})
       .withFallbackPosition(
-          {originX: fallbackX, originY: originY},
-          {overlayX: fallbackX, overlayY: overlayY})
+          {originX: fallbackX, originY: posY},
+          {overlayX: fallbackX, overlayY: posY})
       .withFallbackPosition(
-          {originX: posX, originY: fallbackOriginY},
-          {overlayX: posX, overlayY: fallbackOverlayY})
+          {originX: posX, originY: fallbackY},
+          {overlayX: posX, overlayY: fallbackY})
       .withFallbackPosition(
-          {originX: fallbackX, originY: fallbackOriginY},
-          {overlayX: fallbackX, overlayY: fallbackOverlayY});
+          {originX: fallbackX, originY: fallbackY},
+          {overlayX: fallbackX, overlayY: fallbackY});
   }
 
   private _cleanUpSubscriptions(): void {

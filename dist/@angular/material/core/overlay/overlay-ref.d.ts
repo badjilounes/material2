@@ -16,32 +16,12 @@ export declare class OverlayRef implements PortalHost {
     constructor(_portalHost: PortalHost, _pane: HTMLElement, _state: OverlayState, _ngZone: NgZone);
     /** The overlay's HTML element */
     readonly overlayElement: HTMLElement;
-    /**
-     * Attaches the overlay to a portal instance and adds the backdrop.
-     * @param portal Portal instance to which to attach the overlay.
-     * @returns The portal attachment result.
-     */
     attach(portal: Portal<any>): any;
-    /**
-     * Detaches an overlay from a portal.
-     * @returns Resolves when the overlay has been detached.
-     */
     detach(): Promise<any>;
-    /**
-     * Cleans up the overlay from the DOM.
-     */
     dispose(): void;
-    /**
-     * Checks whether the overlay has been attached.
-     */
     hasAttached(): boolean;
-    /**
-     * Returns an observable that emits when the backdrop has been clicked.
-     */
     backdropClick(): Observable<void>;
-    /**
-     * Gets the current state config of the overlay.
-     */
+    /** Gets the current state config of the overlay. */
     getState(): OverlayState;
     /** Updates the position of the overlay based on the position strategy. */
     updatePosition(): void;
@@ -49,8 +29,6 @@ export declare class OverlayRef implements PortalHost {
     private updateDirection();
     /** Updates the size of the overlay based on the overlay config. */
     updateSize(): void;
-    /** Toggles the pointer events for the overlay pane element. */
-    private _togglePointerEvents(enablePointer);
     /** Attaches a backdrop for this overlay. */
     private _attachBackdrop();
     /** Detaches the backdrop (if any) associated with the overlay. */

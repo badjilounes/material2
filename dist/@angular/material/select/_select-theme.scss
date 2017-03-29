@@ -16,7 +16,7 @@
       border-bottom: 1px solid md-color($primary);
     }
 
-    md-select.ng-invalid.ng-touched:not(.md-select-disabled) & {
+    .ng-invalid.ng-touched:not(.md-select-disabled) & {
       color: md-color($warn);
       border-bottom: 1px solid md-color($warn);
     }
@@ -29,12 +29,12 @@
       color: md-color($primary);
     }
 
-    md-select.ng-invalid.ng-touched:not(.md-select-disabled) & {
+    .ng-invalid.ng-touched:not(.md-select-disabled) & {
       color: md-color($warn);
     }
   }
 
-  .md-select-content, .md-select-panel-done-animating {
+  .md-select-content {
     background: md-color($background, card);
   }
 
@@ -44,5 +44,21 @@
     .md-select-disabled & {
       color: md-color($foreground, hint-text);
     }
+  }
+
+  md-option {
+    &:hover:not(.md-option-disabled), &:focus:not(.md-option-disabled) {
+     background: md-color($background, hover);
+    }
+
+    &.md-selected {
+      background: md-color($background, hover);
+      color: md-color($primary);
+    }
+
+    &.md-option-disabled {
+      color: md-color($foreground, hint-text);
+    }
+
   }
 }

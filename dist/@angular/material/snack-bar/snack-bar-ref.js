@@ -1,35 +1,33 @@
-import { Subject } from 'rxjs/Subject';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var Subject_1 = require("rxjs/Subject");
 // TODO(josephperrott): Implement onAction observable.
 /**
  * Reference to a snack bar dispatched from the snack bar service.
  */
-export var MdSnackBarRef = (function () {
+var MdSnackBarRef = (function () {
     function MdSnackBarRef(instance, containerInstance, _overlayRef) {
         var _this = this;
         this._overlayRef = _overlayRef;
         /** Subject for notifying the user that the snack bar has closed. */
-        this._afterClosed = new Subject();
+        this._afterClosed = new Subject_1.Subject();
         /** Subject for notifying the user that the snack bar action was called. */
-        this._onAction = new Subject();
+        this._onAction = new Subject_1.Subject();
         // Sets the readonly instance of the snack bar content component.
-        this._instance = instance;
+        this.instance = instance;
         this.containerInstance = containerInstance;
         // Dismiss snackbar on action.
         this.onAction().subscribe(function () { return _this.dismiss(); });
-        containerInstance._onExit().subscribe(function () { return _this._finishDismiss(); });
     }
-    Object.defineProperty(MdSnackBarRef.prototype, "instance", {
-        /** The instance of the component making up the content of the snack bar. */
-        get: function () {
-            return this._instance;
-        },
-        enumerable: true,
-        configurable: true
-    });
     /** Dismisses the snack bar. */
     MdSnackBarRef.prototype.dismiss = function () {
+        var _this = this;
         if (!this._afterClosed.closed) {
-            this.containerInstance.exit();
+            this.containerInstance.exit().subscribe(function () {
+                _this._overlayRef.dispose();
+                _this._afterClosed.next();
+                _this._afterClosed.complete();
+            });
         }
     };
     /** Marks the snackbar action clicked. */
@@ -46,12 +44,6 @@ export var MdSnackBarRef = (function () {
             this._afterOpened.complete();
         }
     };
-    /** Cleans up the DOM after closing. */
-    MdSnackBarRef.prototype._finishDismiss = function () {
-        this._overlayRef.dispose();
-        this._afterClosed.next();
-        this._afterClosed.complete();
-    };
     /** Gets an observable that is notified when the snack bar is finished closing. */
     MdSnackBarRef.prototype.afterDismissed = function () {
         return this._afterClosed.asObservable();
@@ -66,4 +58,5 @@ export var MdSnackBarRef = (function () {
     };
     return MdSnackBarRef;
 }());
-//# sourceMappingURL=snack-bar-ref.js.map
+exports.MdSnackBarRef = MdSnackBarRef;
+//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/snack-bar/snack-bar-ref.js.map

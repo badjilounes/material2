@@ -6,12 +6,10 @@ export declare class MdToolbar {
     private renderer;
     private _color;
     constructor(elementRef: ElementRef, renderer: Renderer);
-    /** The color of the toolbar. Can be primary, accent, or warn. */
     color: string;
     private _updateColor(newColor);
     private _setElementColor(color, isAdd);
 }
 export declare class MdToolbarModule {
-    /** @deprecated */
     static forRoot(): ModuleWithProviders;
 }

@@ -17,10 +17,8 @@ if is_lint; then
   $(npm bin)/gulp ci:lint
 elif is_e2e; then
   $(npm bin)/gulp ci:e2e
-elif is_aot; then
-  $(npm bin)/gulp ci:aot
-elif is_payload; then
-  $(npm bin)/gulp ci:payload
+elif is_extract_metadata; then
+  $(npm bin)/gulp ci:extract-metadata
 else
   $(npm bin)/gulp ci:test
 fi

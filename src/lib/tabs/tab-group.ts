@@ -1,21 +1,6 @@
-import {
-  NgModule,
-  ModuleWithProviders,
-  ViewChild,
-  Component,
-  Input,
-  Output,
-  EventEmitter,
-  QueryList,
-  ContentChildren,
-  ElementRef,
-  Renderer
-} from '@angular/core';
+import {NgModule, ModuleWithProviders, ViewChild, Component, Input, Output, EventEmitter, QueryList, ContentChildren, ElementRef, Renderer} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {
-  PortalModule,
-  coerceBooleanProperty
-} from '../core';
+import {PortalModule, coerceBooleanProperty} from '../core';
 import {MdTabLabel} from './tab-label';
 import {MdTabLabelWrapper} from './tab-label-wrapper';
 import {MdTabNavBar, MdTabLink, MdTabLinkRipple} from './tab-nav-bar/tab-nav-bar';
@@ -23,13 +8,10 @@ import {MdInkBar} from './ink-bar';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import {MdRippleModule} from '../core/ripple/ripple';
-import {ObserveContentModule} from '../core/observe-content/observe-content';
 import {MdTab} from './tab';
 import {MdTabBody} from './tab-body';
-import {VIEWPORT_RULER_PROVIDER} from '../core/overlay/position/viewport-ruler';
+import {ViewportRuler} from '../core/overlay/position/viewport-ruler';
 import {MdTabHeader} from './tab-header';
-import {SCROLL_DISPATCHER_PROVIDER} from '../core/overlay/scroll/scroll-dispatcher';
-
 
 /** Used to generate unique ID's for each tab component */
 let nextId = 0;
@@ -39,9 +21,6 @@ export class MdTabChangeEvent {
   index: number;
   tab: MdTab;
 }
-
-/** Possible positions for the tab header. */
-export type MdTabHeaderPosition = 'above' | 'below';
 
 /**
  * Material design tab-group component.  Supports basic tab pairs (label + content) and includes
@@ -53,10 +32,6 @@ export type MdTabHeaderPosition = 'above' | 'below';
   selector: 'md-tab-group',
   templateUrl: 'tab-group.html',
   styleUrls: ['tab-group.css'],
-  host: {
-    '[class.md-tab-group-dynamic-height]': 'dynamicHeight',
-    '[class.md-tab-group-inverted-header]': 'headerPosition === "below"',
-  }
 })
 export class MdTabGroup {
   @ContentChildren(MdTab) _tabs: QueryList<MdTab>;
@@ -74,25 +49,27 @@ export class MdTabGroup {
 
   /** Whether the tab group should grow to the size of the active tab */
   private _dynamicHeight: boolean = false;
-  @Input()
-  get dynamicHeight(): boolean { return this._dynamicHeight; }
-  set dynamicHeight(value: boolean) { this._dynamicHeight = coerceBooleanProperty(value); }
-
-  /** @deprecated */
-  @Input('md-dynamic-height')
-  get _dynamicHeightDeprecated(): boolean { return this._dynamicHeight; }
-  set _dynamicHeightDeprecated(value: boolean) { this._dynamicHeight = value; }
-
-  private _selectedIndex: number = null;
+  @Input('md-dynamic-height') set dynamicHeight(value: boolean) {
+    this._dynamicHeight = coerceBooleanProperty(value);
+  }
 
   /** The index of the active tab. */
-  @Input()
-  set selectedIndex(value: number) { this._indexToSelect = value; }
-  get selectedIndex(): number { return this._selectedIndex; }
+  private _selectedIndex: number = null;
+  @Input() set selectedIndex(value: number) {
+    this._indexToSelect = value;
+  }
+  get selectedIndex(): number {
+    return this._selectedIndex;
+  }
 
-  /** Position of the tab header. */
-  @Input()
-  headerPosition: MdTabHeaderPosition = 'above';
+  /** The center labels parameter. */
+  private _centerLabels: boolean = false;
+  @Input() set centerLabels(value: boolean) {
+    this._centerLabels = value;
+  }
+  get centerLabels(): boolean {
+    return this._centerLabels;
+  }
 
   /** Output to enable support for two-way binding on `selectedIndex`. */
   @Output() get selectedIndexChange(): Observable<number> {
@@ -100,16 +77,12 @@ export class MdTabGroup {
   }
 
   private _onFocusChange: EventEmitter<MdTabChangeEvent> = new EventEmitter<MdTabChangeEvent>();
-
-  /** Event emitted when focus has changed within a tab group. */
   @Output() get focusChange(): Observable<MdTabChangeEvent> {
     return this._onFocusChange.asObservable();
   }
 
   private _onSelectChange: EventEmitter<MdTabChangeEvent> =
       new EventEmitter<MdTabChangeEvent>(true);
-
-  /** Event emitted when the tab selection has changed. */
   @Output() get selectChange(): Observable<MdTabChangeEvent> {
     return this._onSelectChange.asObservable();
   }
@@ -127,11 +100,9 @@ export class MdTabGroup {
    * a new selected tab should transition in (from the left or right).
    */
   ngAfterContentChecked(): void {
-    // Clamp the next selected index to the bounds of 0 and the tabs length. Note the `|| 0`, which
-    // ensures that values like NaN can't get through and which would otherwise throw the
-    // component into an infinite loop (since Math.max(NaN, 0) === NaN).
+    // Clamp the next selected index to the bounds of 0 and the tabs length.
     this._indexToSelect =
-        Math.min(this._tabs.length - 1, Math.max(this._indexToSelect || 0, 0));
+        Math.min(this._tabs.length - 1, Math.max(this._indexToSelect, 0));
 
     // If there is a change in selected index, emit a change event. Should not trigger if
     // the selected index has not yet been initialized.
@@ -155,7 +126,8 @@ export class MdTabGroup {
 
   /**
    * Waits one frame for the view to update, then updates the ink bar
-   * Note: This must be run outside of the zone or it will create an infinite change detection loop.
+   * Note: This must be run outside of the zone or it will create an infinite change detection loop
+   * TODO: internal
    */
   ngAfterViewChecked(): void {
     this._isInitialized = true;
@@ -210,19 +182,17 @@ export class MdTabGroup {
 }
 
 @NgModule({
-  imports: [CommonModule, PortalModule, MdRippleModule, ObserveContentModule],
+  imports: [CommonModule, PortalModule, MdRippleModule],
   // Don't export all components because some are only to be used internally.
   exports: [MdTabGroup, MdTabLabel, MdTab, MdTabNavBar, MdTabLink, MdTabLinkRipple],
   declarations: [MdTabGroup, MdTabLabel, MdTab, MdInkBar, MdTabLabelWrapper,
     MdTabNavBar, MdTabLink, MdTabBody, MdTabLinkRipple, MdTabHeader],
-  providers: [VIEWPORT_RULER_PROVIDER, SCROLL_DISPATCHER_PROVIDER],
 })
 export class MdTabsModule {
-  /** @deprecated */
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: MdTabsModule,
-      providers: []
+      providers: [ViewportRuler]
     };
   }
 }

@@ -1,6 +1,6 @@
 import { AfterContentInit, ElementRef, EventEmitter, OnDestroy, QueryList, Renderer } from '@angular/core';
-import { MdOption } from '../core/option/option';
-import { FocusKeyManager } from '../core/a11y/focus-key-manager';
+import { MdOption } from './option';
+import { ListKeyManager } from '../core/a11y/list-key-manager';
 import { Dir } from '../core/rtl/dir';
 import { ControlValueAccessor, NgControl } from '@angular/forms';
 import { ConnectedOverlayDirective } from '../core/overlay/overlay-directives';
@@ -11,37 +11,31 @@ import { ViewportRuler } from '../core/overlay/position/viewport-ruler';
  * the trigger element.
  */
 /** The fixed height of every option element. */
-export declare const SELECT_OPTION_HEIGHT: number;
+export declare const SELECT_OPTION_HEIGHT = 48;
 /** The max height of the select's overlay panel */
-export declare const SELECT_PANEL_MAX_HEIGHT: number;
+export declare const SELECT_PANEL_MAX_HEIGHT = 256;
 /** The max number of options visible at once in the select panel. */
-export declare const SELECT_MAX_OPTIONS_DISPLAYED: number;
+export declare const SELECT_MAX_OPTIONS_DISPLAYED = 5;
 /** The fixed height of the select's trigger element. */
-export declare const SELECT_TRIGGER_HEIGHT: number;
+export declare const SELECT_TRIGGER_HEIGHT = 30;
 /**
  * Must adjust for the difference in height between the option and the trigger,
  * so the text will align on the y axis.
  * (SELECT_OPTION_HEIGHT (48) - SELECT_TRIGGER_HEIGHT (30)) / 2 = 9
  */
-export declare const SELECT_OPTION_HEIGHT_ADJUSTMENT: number;
+export declare const SELECT_OPTION_HEIGHT_ADJUSTMENT = 9;
 /** The panel's padding on the x-axis */
-export declare const SELECT_PANEL_PADDING_X: number;
+export declare const SELECT_PANEL_PADDING_X = 16;
 /**
  * The panel's padding on the y-axis. This padding indicates there are more
  * options available if you scroll.
  */
-export declare const SELECT_PANEL_PADDING_Y: number;
+export declare const SELECT_PANEL_PADDING_Y = 16;
 /**
  * The select panel will only "fit" inside the viewport if it is positioned at
  * this value or more away from the viewport boundary.
  */
-export declare const SELECT_PANEL_VIEWPORT_PADDING: number;
-/** Change event object that is emitted when the select value has changed. */
-export declare class MdSelectChange {
-    source: MdSelect;
-    value: any;
-    constructor(source: MdSelect, value: any);
-}
+export declare const SELECT_PANEL_VIEWPORT_PADDING = 8;
 export declare class MdSelect implements AfterContentInit, ControlValueAccessor, OnDestroy {
     private _element;
     private _renderer;
@@ -79,7 +73,7 @@ export declare class MdSelect implements AfterContentInit, ControlValueAccessor,
      */
     _selectedValueWidth: number;
     /** Manages keyboard events for options in the panel. */
-    _keyManager: FocusKeyManager;
+    _keyManager: ListKeyManager;
     /** View -> model callback called when value changes */
     _onChange: (value: any) => void;
     /** View -> model callback called when select has been touched */
@@ -88,8 +82,6 @@ export declare class MdSelect implements AfterContentInit, ControlValueAccessor,
     _optionIds: string;
     /** The value of the select panel's transform-origin property. */
     _transformOrigin: string;
-    /** Whether the panel's animation is done. */
-    _panelDoneAnimating: boolean;
     /**
      * The x-offset of the overlay panel in relation to the trigger's top start corner.
      * This must be adjusted to align the selected option text over the trigger text when
@@ -114,24 +106,14 @@ export declare class MdSelect implements AfterContentInit, ControlValueAccessor,
         overlayX: string;
         overlayY: string;
     }[];
-    /** Trigger that opens the select. */
     trigger: ElementRef;
-    /** Overlay pane containing the options. */
     overlayDir: ConnectedOverlayDirective;
-    /** All of the defined select options. */
     options: QueryList<MdOption>;
-    /** Placeholder to be shown if no value has been selected. */
     placeholder: string;
-    /** Whether the component is disabled. */
     disabled: any;
-    /** Whether the component is required. */
     required: any;
-    /** Event emitted when the select has been opened. */
-    onOpen: EventEmitter<void>;
-    /** Event emitted when the select has been closed. */
-    onClose: EventEmitter<void>;
-    /** Event emitted when the selected value has been changed by the user. */
-    change: EventEmitter<MdSelectChange>;
+    onOpen: EventEmitter<{}>;
+    onClose: EventEmitter<{}>;
     constructor(_element: ElementRef, _renderer: Renderer, _viewportRuler: ViewportRuler, _dir: Dir, _control: NgControl);
     ngAfterContentInit(): void;
     ngOnDestroy(): void;
@@ -144,31 +126,23 @@ export declare class MdSelect implements AfterContentInit, ControlValueAccessor,
     /**
      * Sets the select's value. Part of the ControlValueAccessor interface
      * required to integrate with Angular's core forms API.
-     *
-     * @param value New value to be written to the model.
      */
     writeValue(value: any): void;
     /**
      * Saves a callback function to be invoked when the select's value
      * changes from user input. Part of the ControlValueAccessor interface
      * required to integrate with Angular's core forms API.
-     *
-     * @param fn Callback to be triggered when the value changes.
      */
     registerOnChange(fn: (value: any) => void): void;
     /**
      * Saves a callback function to be invoked when the select is blurred
      * by the user. Part of the ControlValueAccessor interface required
      * to integrate with Angular's core forms API.
-     *
-     * @param fn Callback to be triggered when the component has been touched.
      */
     registerOnTouched(fn: () => {}): void;
     /**
      * Disables the select. Part of the ControlValueAccessor interface required
      * to integrate with Angular's core forms API.
-     *
-     * @param isDisabled Sets whether the component is disabled.
      */
     setDisabledState(isDisabled: boolean): void;
     /** Whether or not the overlay panel is open. */
@@ -183,35 +157,23 @@ export declare class MdSelect implements AfterContentInit, ControlValueAccessor,
     /** Ensures the panel opens if activated by the keyboard. */
     _handleKeydown(event: KeyboardEvent): void;
     /**
-     * When the panel element is finished transforming in (though not fading in), it
-     * emits an event and focuses an option if the panel is open.
+     * When the panel is finished animating, emits an event and focuses
+     * an option if the panel is open.
      */
     _onPanelDone(): void;
-    /**
-     * When the panel content is done fading in, the _panelDoneAnimating property is
-     * set so the proper class can be added to the panel.
-     */
-    _onFadeInDone(): void;
     /**
      * Calls the touched callback only if the panel is closed. Otherwise, the trigger will
      * "blur" to the panel when it opens, causing a false positive.
      */
     _onBlur(): void;
     /** Returns the correct tabindex for the select depending on disabled state. */
-    _getTabIndex(): string;
+    _getTabIndex(): "-1" | "0";
     /**
      * Sets the scroll position of the scroll container. This must be called after
      * the overlay pane is attached or the scroll container element will not yet be
      * present in the DOM.
      */
     _setScrollTop(): void;
-    /**
-     * Sets the selected option based on a value. If no option can be
-     * found with the designated value, the select trigger is cleared.
-     */
-    private _setSelectionByValue(value);
-    /** Clears the select trigger and deselects every option in the list. */
-    private _clearSelection();
     private _getTriggerRect();
     /** Sets up a key manager to listen to keyboard events on the overlay panel. */
     private _initKeyManager();
@@ -221,8 +183,6 @@ export declare class MdSelect implements AfterContentInit, ControlValueAccessor,
     private _listenToOptions();
     /** Unsubscribes from all option subscriptions. */
     private _dropSubscriptions();
-    /** Emits an event when the user selects an option. */
-    private _emitChangeEvent(option);
     /** Records option IDs to pass to the aria-owns property. */
     private _setOptionIds();
     /** When a new option is selected, deselects the others and closes the panel. */

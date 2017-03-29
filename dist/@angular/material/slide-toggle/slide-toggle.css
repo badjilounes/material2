@@ -45,29 +45,16 @@ md-slide-toggle {
   flex: 1;
   cursor: pointer; }
 
-/* If the label should be placed before the thumb then we just change the orders. */
-.md-slide-toggle-label-before .md-slide-toggle-label {
-  order: 1; }
-
-.md-slide-toggle-label-before .md-slide-toggle-container {
-  order: 2; }
-
 .md-slide-toggle-container {
   cursor: -webkit-grab;
   cursor: grab;
   width: 36px;
   height: 24px;
-  position: relative; }
-
-/* Apply the margin for slide-toggles and revert it for RTL toggles with labelPosition before. */
-[dir='rtl'] .md-slide-toggle-label-before .md-slide-toggle-container, .md-slide-toggle-container {
-  margin-right: 8px;
-  margin-left: 0; }
-
-/* Switch the margins in RTL mode and also switch it if the labelPosition is set to before. */
-[dir='rtl'] .md-slide-toggle-container, .md-slide-toggle-label-before .md-slide-toggle-container {
-  margin-left: 8px;
-  margin-right: 0; }
+  position: relative;
+  margin-right: 8px; }
+  [dir='rtl'] .md-slide-toggle-container {
+    margin-left: 8px;
+    margin-right: 0; }
 
 .md-slide-toggle-thumb-container {
   position: absolute;

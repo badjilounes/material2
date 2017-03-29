@@ -1,1 +1,1 @@
-{"version":3,"file":"index.js","sourceRoot":"","sources":["../../../../src/lib/button/index.ts"],"names":[],"mappings":"AAAA,cAAc,UAAU,CAAC","sourcesContent":["export * from './button';\n"]}
+{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;;;AAAA,8BAAyB","sourcesContent":["export * from './button';\n\ninterface DecoratorInvocation {\n  type: Function;\n  args?: any[];\n}\n"]}

@@ -6,16 +6,16 @@
   Pasta 2
 </button>
 
-<button cdk-overlay-origin (click)="openSpaghettiPanel()">
+<button overlay-origin (click)="openSpaghettiPanel()">
   Pasta 3
 </button>
 
 
-<button cdk-overlay-origin #trigger="cdkOverlayOrigin" (click)="isMenuOpen = !isMenuOpen">
+<button overlay-origin #trigger="overlayOrigin" (click)="isMenuOpen = !isMenuOpen">
   Open menu
 </button>
 
-<template cdk-connected-overlay [origin]="trigger" [width]="500" hasBackdrop [open]="isMenuOpen"
+<template connected-overlay [origin]="trigger" [width]="500" hasBackdrop [open]="isMenuOpen"
   (backdropClick)="isMenuOpen=false">
   <div style="background-color: mediumpurple" >
     This is the menu panel.
@@ -23,7 +23,7 @@
 </template>
 
 <!-- Template to load into an overlay. -->
-<template cdk-portal>
+<template portal>
   <p class="demo-fusilli"> Fusilli </p>
 </template>
 

@@ -6,7 +6,7 @@ md-simple-snackbar {
   box-sizing: border-box;
   border: none;
   color: white;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  font-family: Roboto, 'Helvetica Neue', sans-serif;
   font-size: 14px;
   line-height: 20px;
   outline: none;

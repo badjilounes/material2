@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
-    "declaration": false,
+    "declaration": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "lib": ["es6", "es2015", "dom"],
+    "mapRoot": "/",
     "module": "commonjs",
     "moduleResolution": "node",
     "noEmitOnError": true,
@@ -11,23 +12,20 @@
     "outDir": "../../dist/",
     "sourceMap": true,
     "target": "es5",
-    "stripInternal": false,
+    "stripInternal": true,
     "baseUrl": "",
     "typeRoots": [
-      "../../node_modules/@types/!(node)"
+      "../../node_modules/@types"
     ],
     "paths": {
       "@angular/material": [
         "../../dist/@angular/material"
       ]
-    }
+    },
+    "types": [
+      "hammerjs"
+    ]
   },
-  "files": [
-    "./demo-app-types.d.ts",
-    "./demo-app-module.ts",
-    "./system-config.ts",
-    "./main.ts"
-  ],
   "angularCompilerOptions": {
     "genDir": "../../dist",
     "skipTemplateCodegen": true,

@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,29 +8,29 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Component, ElementRef, Renderer, forwardRef, ChangeDetectionStrategy, Input, Output, EventEmitter, NgModule, ViewChild, ViewEncapsulation } from '@angular/core';
-import { HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
-import { FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
-import { applyCssTransform, coerceBooleanProperty, GestureConfig, CompatibilityModule } from '../core';
-import { Observable } from 'rxjs/Observable';
-export var MD_SLIDE_TOGGLE_VALUE_ACCESSOR = {
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: forwardRef(function () { return MdSlideToggle; }),
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = require("@angular/core");
+var platform_browser_1 = require("@angular/platform-browser");
+var forms_1 = require("@angular/forms");
+var core_2 = require("../core");
+var Observable_1 = require("rxjs/Observable");
+exports.MD_SLIDE_TOGGLE_VALUE_ACCESSOR = {
+    provide: forms_1.NG_VALUE_ACCESSOR,
+    useExisting: core_1.forwardRef(function () { return MdSlideToggle; }),
     multi: true
 };
 // A simple change event emitted by the MdSlideToggle component.
-export var MdSlideToggleChange = (function () {
+var MdSlideToggleChange = (function () {
     function MdSlideToggleChange() {
     }
     return MdSlideToggleChange;
 }());
+exports.MdSlideToggleChange = MdSlideToggleChange;
 // Increasing integer for generating unique ids for slide-toggle components.
 var nextId = 0;
-/**
- * Two-state control, which can be also called `switch`.
- */
-export var MdSlideToggle = (function () {
+var MdSlideToggle = (function () {
     function MdSlideToggle(_elementRef, _renderer) {
+        var _this = this;
         this._elementRef = _elementRef;
         this._renderer = _renderer;
         this.onChange = function (_) { };
@@ -43,42 +44,29 @@ export var MdSlideToggle = (function () {
         this._required = false;
         // Needs to be public to support AOT compilation (as host binding).
         this._hasFocus = false;
-        /** Name value will be applied to the input element if present */
         this.name = null;
-        /** A unique id for the slide-toggle input. If none is supplied, it will be auto-generated. */
         this.id = this._uniqueId;
-        /** Used to specify the tabIndex value for the underlying input element. */
         this.tabIndex = 0;
-        /** Whether the label should appear after or before the slide-toggle. Defaults to 'after' */
-        this.labelPosition = 'after';
-        /** Used to set the aria-label attribute on the underlying input element. */
         this.ariaLabel = null;
-        /** Used to set the aria-labelledby attribute on the underlying input element. */
         this.ariaLabelledby = null;
-        this._change = new EventEmitter();
-        /** An event will be dispatched each time the slide-toggle changes its value. */
+        this._change = new core_1.EventEmitter();
         this.change = this._change.asObservable();
+        // Returns the unique id for the visual hidden input.
+        this.getInputId = function () { return (_this.id || _this._uniqueId) + "-input"; };
     }
     Object.defineProperty(MdSlideToggle.prototype, "disabled", {
-        /** Whether the slide-toggle is disabled. */
         get: function () { return this._disabled; },
-        set: function (value) { this._disabled = coerceBooleanProperty(value); },
+        set: function (value) { this._disabled = core_2.coerceBooleanProperty(value); },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(MdSlideToggle.prototype, "required", {
-        /** Whether the slide-toggle is required. */
         get: function () { return this._required; },
-        set: function (value) { this._required = coerceBooleanProperty(value); },
+        set: function (value) { this._required = core_2.coerceBooleanProperty(value); },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(MdSlideToggle.prototype, "inputId", {
-        /** Returns the unique id for the visual hidden input. */
-        get: function () { return (this.id || this._uniqueId) + "-input"; },
-        enumerable: true,
-        configurable: true
-    });
+    /** TODO: internal */
     MdSlideToggle.prototype.ngAfterContentInit = function () {
         this._slideRenderer = new SlideToggleRenderer(this._elementRef);
     };
@@ -132,30 +120,41 @@ export var MdSlideToggle = (function () {
         this._hasFocus = false;
         this.onTouched();
     };
-    /** Implemented as part of ControlValueAccessor. */
+    /**
+     * Implemented as part of ControlValueAccessor.
+     * TODO: internal
+     */
     MdSlideToggle.prototype.writeValue = function (value) {
         this.checked = value;
     };
-    /** Implemented as part of ControlValueAccessor. */
+    /**
+     * Implemented as part of ControlValueAccessor.
+     * TODO: internal
+     */
     MdSlideToggle.prototype.registerOnChange = function (fn) {
         this.onChange = fn;
     };
-    /** Implemented as part of ControlValueAccessor. */
+    /**
+     * Implemented as part of ControlValueAccessor.
+     * TODO: internal
+     */
     MdSlideToggle.prototype.registerOnTouched = function (fn) {
         this.onTouched = fn;
     };
-    /** Implemented as a part of ControlValueAccessor. */
+    /**
+     * Implemented as a part of ControlValueAccessor.
+     */
     MdSlideToggle.prototype.setDisabledState = function (isDisabled) {
         this.disabled = isDisabled;
     };
-    /** Focuses the slide-toggle. */
     MdSlideToggle.prototype.focus = function () {
         this._renderer.invokeElementMethod(this._inputElement.nativeElement, 'focus');
         this._onInputFocus();
     };
     Object.defineProperty(MdSlideToggle.prototype, "checked", {
-        /** Whether the slide-toggle is checked. */
-        get: function () { return !!this._checked; },
+        get: function () {
+            return !!this._checked;
+        },
         set: function (value) {
             if (this.checked !== !!value) {
                 this._checked = value;
@@ -166,15 +165,15 @@ export var MdSlideToggle = (function () {
         configurable: true
     });
     Object.defineProperty(MdSlideToggle.prototype, "color", {
-        /** The color of the slide-toggle. Can be primary, accent, or warn. */
-        get: function () { return this._color; },
+        get: function () {
+            return this._color;
+        },
         set: function (value) {
             this._updateColor(value);
         },
         enumerable: true,
         configurable: true
     });
-    /** Toggles the checked state of the slide-toggle. */
     MdSlideToggle.prototype.toggle = function () {
         this.checked = !this.checked;
     };
@@ -195,16 +194,19 @@ export var MdSlideToggle = (function () {
         event.checked = this.checked;
         this._change.emit(event);
     };
+    /** TODO: internal */
     MdSlideToggle.prototype._onDragStart = function () {
         if (!this.disabled) {
             this._slideRenderer.startThumbDrag(this.checked);
         }
     };
+    /** TODO: internal */
     MdSlideToggle.prototype._onDrag = function (event) {
         if (this._slideRenderer.isDragging()) {
             this._slideRenderer.updateThumbPosition(event.deltaX);
         }
     };
+    /** TODO: internal */
     MdSlideToggle.prototype._onDragEnd = function () {
         var _this = this;
         if (!this._slideRenderer.isDragging()) {
@@ -217,74 +219,76 @@ export var MdSlideToggle = (function () {
             _this._emitChangeEvent();
         }, 0);
     };
-    __decorate([
-        Input(), 
-        __metadata('design:type', String)
-    ], MdSlideToggle.prototype, "name", void 0);
-    __decorate([
-        Input(), 
-        __metadata('design:type', String)
-    ], MdSlideToggle.prototype, "id", void 0);
-    __decorate([
-        Input(), 
-        __metadata('design:type', Number)
-    ], MdSlideToggle.prototype, "tabIndex", void 0);
-    __decorate([
-        Input(), 
-        __metadata('design:type', Object)
-    ], MdSlideToggle.prototype, "labelPosition", void 0);
-    __decorate([
-        Input('aria-label'), 
-        __metadata('design:type', String)
-    ], MdSlideToggle.prototype, "ariaLabel", void 0);
-    __decorate([
-        Input('aria-labelledby'), 
-        __metadata('design:type', String)
-    ], MdSlideToggle.prototype, "ariaLabelledby", void 0);
-    __decorate([
-        Input(), 
-        __metadata('design:type', Boolean)
-    ], MdSlideToggle.prototype, "disabled", null);
-    __decorate([
-        Input(), 
-        __metadata('design:type', Boolean)
-    ], MdSlideToggle.prototype, "required", null);
-    __decorate([
-        Output(), 
-        __metadata('design:type', Observable)
-    ], MdSlideToggle.prototype, "change", void 0);
-    __decorate([
-        ViewChild('input'), 
-        __metadata('design:type', ElementRef)
-    ], MdSlideToggle.prototype, "_inputElement", void 0);
-    __decorate([
-        Input(), 
-        __metadata('design:type', Object)
-    ], MdSlideToggle.prototype, "checked", null);
-    __decorate([
-        Input(), 
-        __metadata('design:type', String)
-    ], MdSlideToggle.prototype, "color", null);
-    MdSlideToggle = __decorate([
-        Component({selector: 'md-slide-toggle, mat-slide-toggle',
-            host: {
-                '[class.md-checked]': 'checked',
-                '[class.md-disabled]': 'disabled',
-                // This md-slide-toggle prefix will change, once the temporary ripple is removed.
-                '[class.md-slide-toggle-focused]': '_hasFocus',
-                '[class.md-slide-toggle-label-before]': 'labelPosition == "before"',
-                '(mousedown)': '_setMousedown()'
-            },
-            template: "<label class=\"md-slide-toggle-label\"> <div class=\"md-slide-toggle-container\"> <div class=\"md-slide-toggle-bar\"></div> <div class=\"md-slide-toggle-thumb-container\" (slidestart)=\"_onDragStart()\" (slide)=\"_onDrag($event)\" (slideend)=\"_onDragEnd()\"> <div class=\"md-slide-toggle-thumb\"> <div class=\"md-ink-ripple\"></div> </div> </div> <input #input class=\"md-slide-toggle-input cdk-visually-hidden\" type=\"checkbox\" [id]=\"inputId\" [required]=\"required\" [tabIndex]=\"tabIndex\" [checked]=\"checked\" [disabled]=\"disabled\" [attr.name]=\"name\" [attr.aria-label]=\"ariaLabel\" [attr.aria-labelledby]=\"ariaLabelledby\" (blur)=\"_onInputBlur()\" (focus)=\"_onInputFocus()\" (change)=\"_onChangeEvent($event)\" (click)=\"_onInputClick($event)\"> </div> <span class=\"md-slide-toggle-content\"> <ng-content></ng-content> </span> </label> ",
-            styles: ["/** * Applies styles for users in high contrast mode. Note that this only applies * to Microsoft browsers. Chrome can be included by checking for the `html[hc]` * attribute, however Chrome handles high contrast differently. */ md-slide-toggle { display: flex; height: 24px; margin: 16px 0; line-height: 24px; white-space: nowrap; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; outline: none; } md-slide-toggle.md-checked .md-slide-toggle-thumb-container { transform: translate3d(100%, 0, 0); } md-slide-toggle .md-ink-ripple { border-radius: 50%; opacity: 0; height: 48px; left: 50%; overflow: hidden; pointer-events: none; position: absolute; top: 50%; transform: translate(-50%, -50%); transition: opacity ease 280ms, background-color ease 280ms; width: 48px; } md-slide-toggle.md-slide-toggle-focused .md-ink-ripple { opacity: 1; } md-slide-toggle.md-slide-toggle-disabled .md-ink-ripple { background-color: #000; } md-slide-toggle.md-disabled .md-slide-toggle-label, md-slide-toggle.md-disabled .md-slide-toggle-container { cursor: default; } .md-slide-toggle-content { font-size: 14px; font-family: Roboto, \"Helvetica Neue\", sans-serif; font-weight: 500; } .md-slide-toggle-label { display: flex; flex: 1; cursor: pointer; } /* If the label should be placed before the thumb then we just change the orders. */ .md-slide-toggle-label-before .md-slide-toggle-label { order: 1; } .md-slide-toggle-label-before .md-slide-toggle-container { order: 2; } .md-slide-toggle-container { cursor: -webkit-grab; cursor: grab; width: 36px; height: 24px; position: relative; } /* Apply the margin for slide-toggles and revert it for RTL toggles with labelPosition before. */ [dir='rtl'] .md-slide-toggle-label-before .md-slide-toggle-container, .md-slide-toggle-container { margin-right: 8px; margin-left: 0; } /* Switch the margins in RTL mode and also switch it if the labelPosition is set to before. */ [dir='rtl'] .md-slide-toggle-container, .md-slide-toggle-label-before .md-slide-toggle-container { margin-left: 8px; margin-right: 0; } .md-slide-toggle-thumb-container { position: absolute; top: 2px; left: 0; z-index: 1; width: 16px; transform: translate3d(0, 0, 0); transition: all 80ms linear; transition-property: transform; } .md-slide-toggle-thumb-container.md-dragging { transition-duration: 0ms; } .md-slide-toggle-thumb { position: absolute; margin: 0; left: 0; top: 0; height: 20px; width: 20px; border-radius: 50%; box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12); } @media screen and (-ms-high-contrast: active) { .md-slide-toggle-thumb { background: #fff; border: solid 1px #000; } } .md-slide-toggle-bar { position: absolute; left: 1px; top: 5px; width: 34px; height: 14px; border-radius: 8px; } @media screen and (-ms-high-contrast: active) { .md-slide-toggle-bar { background: #fff; } } .md-slide-toggle-input { bottom: 0; left: 10px; } .md-slide-toggle-bar, .md-slide-toggle-thumb { transition: all 80ms linear; transition-property: background-color; transition-delay: 50ms; } /*# sourceMappingURL=slide-toggle.css.map */ "],
-            providers: [MD_SLIDE_TOGGLE_VALUE_ACCESSOR],
-            encapsulation: ViewEncapsulation.None,
-            changeDetection: ChangeDetectionStrategy.OnPush
-        }), 
-        __metadata('design:paramtypes', [ElementRef, Renderer])
-    ], MdSlideToggle);
     return MdSlideToggle;
 }());
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", String)
+], MdSlideToggle.prototype, "name", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", String)
+], MdSlideToggle.prototype, "id", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Number)
+], MdSlideToggle.prototype, "tabIndex", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", String)
+], MdSlideToggle.prototype, "ariaLabel", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", String)
+], MdSlideToggle.prototype, "ariaLabelledby", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Boolean),
+    __metadata("design:paramtypes", [Object])
+], MdSlideToggle.prototype, "disabled", null);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Boolean),
+    __metadata("design:paramtypes", [Object])
+], MdSlideToggle.prototype, "required", null);
+__decorate([
+    core_1.Output(),
+    __metadata("design:type", Observable_1.Observable)
+], MdSlideToggle.prototype, "change", void 0);
+__decorate([
+    core_1.ViewChild('input'),
+    __metadata("design:type", core_1.ElementRef)
+], MdSlideToggle.prototype, "_inputElement", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Object),
+    __metadata("design:paramtypes", [Object])
+], MdSlideToggle.prototype, "checked", null);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", String),
+    __metadata("design:paramtypes", [String])
+], MdSlideToggle.prototype, "color", null);
+MdSlideToggle = __decorate([
+    core_1.Component({
+        moduleId: module.id,
+        selector: 'md-slide-toggle, mat-slide-toggle',
+        host: {
+            '[class.md-checked]': 'checked',
+            '[class.md-disabled]': 'disabled',
+            // This md-slide-toggle prefix will change, once the temporary ripple is removed.
+            '[class.md-slide-toggle-focused]': '_hasFocus',
+            '(mousedown)': '_setMousedown()'
+        },
+        templateUrl: 'slide-toggle.html',
+        styleUrls: ['slide-toggle.css'],
+        providers: [exports.MD_SLIDE_TOGGLE_VALUE_ACCESSOR],
+        encapsulation: core_1.ViewEncapsulation.None,
+        changeDetection: core_1.ChangeDetectionStrategy.OnPush
+    }),
+    __metadata("design:paramtypes", [core_1.ElementRef, core_1.Renderer])
+], MdSlideToggle);
+exports.MdSlideToggle = MdSlideToggle;
 /**
  * Renderer for the Slide Toggle component, which separates DOM modification in its own class
  */
@@ -311,14 +315,14 @@ var SlideToggleRenderer = (function () {
         if (this.isDragging()) {
             this._thumbBarWidth = null;
             this._thumbEl.classList.remove('md-dragging');
-            applyCssTransform(this._thumbEl, '');
+            core_2.applyCssTransform(this._thumbEl, '');
             return this._percentage > 50;
         }
     };
     /** Updates the thumb containers position from the specified distance. */
     SlideToggleRenderer.prototype.updateThumbPosition = function (distance) {
         this._percentage = this._getThumbPercentage(distance);
-        applyCssTransform(this._thumbEl, "translate3d(" + this._percentage + "%, 0, 0)");
+        core_2.applyCssTransform(this._thumbEl, "translate3d(" + this._percentage + "%, 0, 0)");
     };
     /** Retrieves the percentage of thumb from the moved distance. */
     SlideToggleRenderer.prototype._getThumbPercentage = function (distance) {
@@ -331,25 +335,24 @@ var SlideToggleRenderer = (function () {
     };
     return SlideToggleRenderer;
 }());
-export var MdSlideToggleModule = (function () {
+var MdSlideToggleModule = MdSlideToggleModule_1 = (function () {
     function MdSlideToggleModule() {
     }
-    /** @deprecated */
     MdSlideToggleModule.forRoot = function () {
         return {
-            ngModule: MdSlideToggleModule,
-            providers: []
+            ngModule: MdSlideToggleModule_1,
+            providers: [{ provide: platform_browser_1.HAMMER_GESTURE_CONFIG, useClass: core_2.MdGestureConfig }]
         };
     };
-    MdSlideToggleModule = __decorate([
-        NgModule({
-            imports: [FormsModule, CompatibilityModule],
-            exports: [MdSlideToggle, CompatibilityModule],
-            declarations: [MdSlideToggle],
-            providers: [{ provide: HAMMER_GESTURE_CONFIG, useClass: GestureConfig }],
-        }), 
-        __metadata('design:paramtypes', [])
-    ], MdSlideToggleModule);
     return MdSlideToggleModule;
 }());
-//# sourceMappingURL=slide-toggle.js.map
+MdSlideToggleModule = MdSlideToggleModule_1 = __decorate([
+    core_1.NgModule({
+        imports: [forms_1.FormsModule, core_2.DefaultStyleCompatibilityModeModule],
+        exports: [MdSlideToggle, core_2.DefaultStyleCompatibilityModeModule],
+        declarations: [MdSlideToggle],
+    })
+], MdSlideToggleModule);
+exports.MdSlideToggleModule = MdSlideToggleModule;
+var MdSlideToggleModule_1;
+//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/slide-toggle/slide-toggle.js.map

@@ -1,29 +1,23 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};
-import { Injectable, Optional, SkipSelf } from '@angular/core';
-import { ScrollDispatcher } from '../scroll/scroll-dispatcher';
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = require("@angular/core");
 /**
  * Simple utility for getting the bounds of the browser viewport.
- * @docs-private
+ * TODO: internal
  */
-export var ViewportRuler = (function () {
-    function ViewportRuler(scrollDispatcher) {
-        var _this = this;
-        // Initially cache the document rectangle.
-        this._cacheViewportGeometry();
-        // Subscribe to scroll and resize events and update the document rectangle on changes.
-        scrollDispatcher.scrolled().subscribe(function () { return _this._cacheViewportGeometry(); });
+var ViewportRuler = (function () {
+    function ViewportRuler() {
     }
+    // TODO(jelbourn): cache the document's bounding rect and only update it when the window
+    // is resized (debounced).
     /** Gets a ClientRect for the viewport's bounds. */
-    ViewportRuler.prototype.getViewportRect = function (documentRect) {
-        if (documentRect === void 0) { documentRect = this._documentRect; }
+    ViewportRuler.prototype.getViewportRect = function () {
         // Use the document element's bounding rect rather than the window scroll properties
         // (e.g. pageYOffset, scrollY) due to in issue in Chrome and IE where window scroll
         // properties and client coordinates (boundingClientRect, clientX/Y, etc.) are in different
@@ -33,6 +27,7 @@ export var ViewportRuler = (function () {
         // We use the documentElement instead of the body because, by default (without a css reset)
         // browsers typically give the document body an 8px margin, which is not included in
         // getBoundingClientRect().
+        var documentRect = document.documentElement.getBoundingClientRect();
         var scrollPosition = this.getViewportScrollPosition(documentRect);
         var height = window.innerHeight;
         var width = window.innerWidth;
@@ -50,7 +45,7 @@ export var ViewportRuler = (function () {
      * @param documentRect
      */
     ViewportRuler.prototype.getViewportScrollPosition = function (documentRect) {
-        if (documentRect === void 0) { documentRect = this._documentRect; }
+        if (documentRect === void 0) { documentRect = document.documentElement.getBoundingClientRect(); }
         // The top-left-corner of the viewport is determined by the scroll position of the document
         // body, normally just (scrollLeft, scrollTop). However, Chrome and Firefox disagree about
         // whether `document.body` or `document.documentElement` is the scrolled element, so reading
@@ -61,23 +56,10 @@ export var ViewportRuler = (function () {
         var left = -documentRect.left || document.body.scrollLeft || window.scrollX || 0;
         return { top: top, left: left };
     };
-    /** Caches the latest client rectangle of the document element. */
-    ViewportRuler.prototype._cacheViewportGeometry = function () {
-        this._documentRect = document.documentElement.getBoundingClientRect();
-    };
-    ViewportRuler = __decorate([
-        Injectable(), 
-        __metadata('design:paramtypes', [ScrollDispatcher])
-    ], ViewportRuler);
     return ViewportRuler;
 }());
-export function VIEWPORT_RULER_PROVIDER_FACTORY(parentRuler, scrollDispatcher) {
-    return parentRuler || new ViewportRuler(scrollDispatcher);
-}
-export var VIEWPORT_RULER_PROVIDER = {
-    // If there is already a ViewportRuler available, use that. Otherwise, provide a new one.
-    provide: ViewportRuler,
-    deps: [[new Optional(), new SkipSelf(), ViewportRuler], ScrollDispatcher],
-    useFactory: VIEWPORT_RULER_PROVIDER_FACTORY
-};
-//# sourceMappingURL=viewport-ruler.js.map
+ViewportRuler = __decorate([
+    core_1.Injectable()
+], ViewportRuler);
+exports.ViewportRuler = ViewportRuler;
+//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/core/overlay/position/viewport-ruler.js.map

@@ -23,8 +23,6 @@ import {PortalModule} from '../portal/portal-directives';
 import {ConnectedPositionStrategy} from './position/connected-position-strategy';
 import {Subscription} from 'rxjs/Subscription';
 import {Dir, LayoutDirection} from '../rtl/dir';
-import {Scrollable} from './scroll/scrollable';
-import {coerceBooleanProperty} from '../coercion/boolean-property';
 
 /** Default set of positions for the overlay. Follows the behavior of a dropdown. */
 let defaultPositionList = [
@@ -42,11 +40,15 @@ let defaultPositionList = [
  * ConnectedPositionStrategy.
  */
 @Directive({
-  selector: '[cdk-overlay-origin], [overlay-origin]',
-  exportAs: 'cdkOverlayOrigin',
+  selector: '[overlay-origin]',
+  exportAs: 'overlayOrigin',
 })
 export class OverlayOrigin {
-  constructor(public elementRef: ElementRef) { }
+  constructor(private _elementRef: ElementRef) { }
+
+  get elementRef() {
+    return this._elementRef;
+  }
 }
 
 
@@ -55,8 +57,8 @@ export class OverlayOrigin {
  * Directive to facilitate declarative creation of an Overlay using a ConnectedPositionStrategy.
  */
 @Directive({
-  selector: '[cdk-connected-overlay], [connected-overlay]',
-  exportAs: 'cdkConnectedOverlay'
+  selector: '[connected-overlay]',
+  exportAs: 'connectedOverlay'
 })
 export class ConnectedOverlayDirective implements OnDestroy {
   private _overlayRef: OverlayRef;
@@ -69,10 +71,7 @@ export class ConnectedOverlayDirective implements OnDestroy {
   private _offsetY: number = 0;
   private _position: ConnectedPositionStrategy;
 
-  /** Origin for the connected overlay. */
   @Input() origin: OverlayOrigin;
-
-  /** Registered connected position pairs. */
   @Input() positions: ConnectionPositionPair[];
 
   /** The offset in pixels for the overlay connection point on the x-axis */
@@ -122,8 +121,9 @@ export class ConnectedOverlayDirective implements OnDestroy {
     return this._hasBackdrop;
   }
 
+  // TODO: move the boolean coercion logic to a shared function in core
   set hasBackdrop(value: any) {
-    this._hasBackdrop = coerceBooleanProperty(value);
+    this._hasBackdrop = value != null && `${value}` !== 'false';
   }
 
   @Input()
@@ -138,14 +138,8 @@ export class ConnectedOverlayDirective implements OnDestroy {
 
   /** Event emitted when the backdrop is clicked. */
   @Output() backdropClick = new EventEmitter<void>();
-
-  /** Event emitted when the position has changed. */
   @Output() positionChange = new EventEmitter<ConnectedOverlayPositionChange>();
-
-  /** Event emitted when the overlay has been attached. */
   @Output() attach = new EventEmitter<void>();
-
-  /** Event emitted when the overlay has been detached. */
   @Output() detach = new EventEmitter<void>();
 
   // TODO(jelbourn): inputs for size, scroll behavior, animation, etc.
@@ -158,16 +152,15 @@ export class ConnectedOverlayDirective implements OnDestroy {
     this._templatePortal = new TemplatePortal(templateRef, viewContainerRef);
   }
 
-  /** The associated overlay reference. */
   get overlayRef(): OverlayRef {
     return this._overlayRef;
   }
 
-  /** The element's layout direction. */
   get dir(): LayoutDirection {
     return this._dir ? this._dir.value : 'ltr';
   }
 
+  /** TODO: internal */
   ngOnDestroy() {
     this._destroyOverlay();
   }
@@ -293,16 +286,14 @@ export class ConnectedOverlayDirective implements OnDestroy {
 
 @NgModule({
   imports: [PortalModule],
-  exports: [ConnectedOverlayDirective, OverlayOrigin, Scrollable],
-  declarations: [ConnectedOverlayDirective, OverlayOrigin, Scrollable],
-  providers: [OVERLAY_PROVIDERS],
+  exports: [ConnectedOverlayDirective, OverlayOrigin],
+  declarations: [ConnectedOverlayDirective, OverlayOrigin],
 })
 export class OverlayModule {
-  /** @deprecated */
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: OverlayModule,
-      providers: [],
+      providers: OVERLAY_PROVIDERS,
     };
   }
 }

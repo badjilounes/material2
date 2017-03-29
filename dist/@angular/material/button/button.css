@@ -15,6 +15,7 @@
   font-size: 14px;
   font-family: Roboto, "Helvetica Neue", sans-serif;
   font-weight: 500;
+  color: currentColor;
   text-align: center;
   margin: 0;
   min-width: 88px;
@@ -40,12 +41,11 @@
  * to Microsoft browsers. Chrome can be included by checking for the `html[hc]`
  * attribute, however Chrome handles high contrast differently.
  */
-[md-button], [md-icon-button] {
-  color: currentColor; }
-  [md-button]:hover .md-button-focus-overlay, [md-icon-button]:hover .md-button-focus-overlay {
-    opacity: 1; }
-  [md-button][disabled]:hover.md-primary, [md-button][disabled]:hover.md-accent, [md-button][disabled]:hover.md-warn, [md-button][disabled]:hover .md-button-focus-overlay, [md-icon-button][disabled]:hover.md-primary, [md-icon-button][disabled]:hover.md-accent, [md-icon-button][disabled]:hover.md-warn, [md-icon-button][disabled]:hover .md-button-focus-overlay {
-    background-color: transparent; }
+[md-button]:hover .md-button-focus-overlay, [md-icon-button]:hover .md-button-focus-overlay {
+  opacity: 1; }
+
+[md-button][disabled]:hover.md-primary, [md-button][disabled]:hover.md-accent, [md-button][disabled]:hover.md-warn, [md-button][disabled]:hover .md-button-focus-overlay, [md-icon-button][disabled]:hover.md-primary, [md-icon-button][disabled]:hover.md-accent, [md-icon-button][disabled]:hover.md-warn, [md-icon-button][disabled]:hover .md-button-focus-overlay {
+  background-color: transparent; }
 
 [md-fab] {
   box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12);

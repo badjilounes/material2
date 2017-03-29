@@ -1,8 +1,7 @@
-export * from './tab-group';
-export { MdInkBar } from './ink-bar';
-export { MdTabBody } from './tab-body';
-export { MdTabHeader } from './tab-header';
-export { MdTabLabelWrapper } from './tab-label-wrapper';
-export { MdTab } from './tab';
-export { MdTabLabel } from './tab-label';
-//# sourceMappingURL=index.js.map
+"use strict";
+function __export(m) {
+    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
+}
+Object.defineProperty(exports, "__esModule", { value: true });
+__export(require("./tab-group"));
+//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/tabs/index.js.map

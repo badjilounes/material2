@@ -1,5 +1,6 @@
-/** @docs-private */
-export var RelativePositionStrategy = (function () {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var RelativePositionStrategy = (function () {
     function RelativePositionStrategy(_relativeTo) {
         this._relativeTo = _relativeTo;
     }
@@ -12,4 +13,5 @@ export var RelativePositionStrategy = (function () {
     };
     return RelativePositionStrategy;
 }());
-//# sourceMappingURL=relative-position-strategy.js.map
+exports.RelativePositionStrategy = RelativePositionStrategy;
+//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/core/overlay/position/relative-position-strategy.js.map

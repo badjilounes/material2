@@ -1,8 +1,14 @@
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+"use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -12,46 +18,41 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Injectable, SecurityContext } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
-import { Http } from '@angular/http';
-import { MdError } from '../core';
-import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/observable/forkJoin';
-import 'rxjs/add/observable/of';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/filter';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/share';
-import 'rxjs/add/operator/finally';
-import 'rxjs/add/operator/catch';
-/**
- * Exception thrown when attempting to load an icon with a name that cannot be found.
- * @docs-private
- */
-export var MdIconNameNotFoundError = (function (_super) {
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = require("@angular/core");
+var http_1 = require("@angular/http");
+var core_2 = require("../core");
+var Observable_1 = require("rxjs/Observable");
+require("rxjs/add/observable/forkJoin");
+require("rxjs/add/observable/of");
+require("rxjs/add/operator/map");
+require("rxjs/add/operator/filter");
+require("rxjs/add/operator/do");
+require("rxjs/add/operator/share");
+require("rxjs/add/operator/finally");
+require("rxjs/add/operator/catch");
+/** Exception thrown when attempting to load an icon with a name that cannot be found. */
+var MdIconNameNotFoundError = (function (_super) {
     __extends(MdIconNameNotFoundError, _super);
     function MdIconNameNotFoundError(iconName) {
-        _super.call(this, "Unable to find icon with the name \"" + iconName + "\"");
+        return _super.call(this, "Unable to find icon with the name \"" + iconName + "\"") || this;
     }
     return MdIconNameNotFoundError;
-}(MdError));
+}(core_2.MdError));
+exports.MdIconNameNotFoundError = MdIconNameNotFoundError;
 /**
  * Exception thrown when attempting to load SVG content that does not contain the expected
  * <svg> tag.
- * @docs-private
  */
-export var MdIconSvgTagNotFoundError = (function (_super) {
+var MdIconSvgTagNotFoundError = (function (_super) {
     __extends(MdIconSvgTagNotFoundError, _super);
     function MdIconSvgTagNotFoundError() {
-        _super.call(this, '<svg> tag not found');
+        return _super.call(this, '<svg> tag not found') || this;
     }
     return MdIconSvgTagNotFoundError;
-}(MdError));
-/**
- * Configuration for an icon, including the URL and possibly the cached SVG element.
- * @docs-private
- */
+}(core_2.MdError));
+exports.MdIconSvgTagNotFoundError = MdIconSvgTagNotFoundError;
+/** Configuration for an icon, including the URL and possibly the cached SVG element. */
 var SvgIconConfig = (function () {
     function SvgIconConfig(url) {
         this.url = url;
@@ -68,10 +69,9 @@ var iconKey = function (namespace, name) { return namespace + ':' + name; };
  * - Registers aliases for CSS classes, for use with icon fonts.
  * - Loads icons from URLs and extracts individual icons from icon sets.
  */
-export var MdIconRegistry = (function () {
-    function MdIconRegistry(_http, _sanitizer) {
+var MdIconRegistry = (function () {
+    function MdIconRegistry(_http) {
         this._http = _http;
-        this._sanitizer = _sanitizer;
         /**
          * URLs and cached SVG elements for individual icons. Keys are of the format "[namespace]:[icon]".
          */
@@ -94,37 +94,21 @@ export var MdIconRegistry = (function () {
          */
         this._defaultFontSetClass = 'material-icons';
     }
-    /**
-     * Registers an icon by URL in the default namespace.
-     * @param iconName Name under which the icon should be registered.
-     * @param url
-     */
+    /** Registers an icon by URL in the default namespace. */
     MdIconRegistry.prototype.addSvgIcon = function (iconName, url) {
         return this.addSvgIconInNamespace('', iconName, url);
     };
-    /**
-     * Registers an icon by URL in the specified namespace.
-     * @param namespace Namespace in which the icon should be registered.
-     * @param iconName Name under which the icon should be registered.
-     * @param url
-     */
+    /** Registers an icon by URL in the specified namespace. */
     MdIconRegistry.prototype.addSvgIconInNamespace = function (namespace, iconName, url) {
         var key = iconKey(namespace, iconName);
         this._svgIconConfigs.set(key, new SvgIconConfig(url));
         return this;
     };
-    /**
-     * Registers an icon set by URL in the default namespace.
-     * @param url
-     */
+    /** Registers an icon set by URL in the default namespace. */
     MdIconRegistry.prototype.addSvgIconSet = function (url) {
         return this.addSvgIconSetInNamespace('', url);
     };
-    /**
-     * Registers an icon set by URL in the specified namespace.
-     * @param namespace Namespace in which to register the icon set.
-     * @param url
-     */
+    /** Registers an icon set by URL in the specified namespace. */
     MdIconRegistry.prototype.addSvgIconSetInNamespace = function (namespace, url) {
         var config = new SvgIconConfig(url);
         if (this._iconSetConfigs.has(namespace)) {
@@ -139,9 +123,6 @@ export var MdIconRegistry = (function () {
      * Defines an alias for a CSS class name to be used for icon fonts. Creating an mdIcon
      * component with the alias as the fontSet input will cause the class name to be applied
      * to the <md-icon> element.
-     *
-     * @param alias Alias for the font.
-     * @param className Class name override to be used instead of the alias.
      */
     MdIconRegistry.prototype.registerFontClassAlias = function (alias, className) {
         if (className === void 0) { className = alias; }
@@ -158,8 +139,6 @@ export var MdIconRegistry = (function () {
     /**
      * Sets the CSS class name to be used for icon fonts when an <md-icon> component does not
      * have a fontSet input value, and is not loading an icon by name or URL.
-     *
-     * @param className
      */
     MdIconRegistry.prototype.setDefaultFontSetClass = function (className) {
         this._defaultFontSetClass = className;
@@ -177,14 +156,11 @@ export var MdIconRegistry = (function () {
      * The response from the URL may be cached so this will not always cause an HTTP request, but
      * the produced element will always be a new copy of the originally fetched icon. (That is,
      * it will not contain any modifications made to elements previously returned).
-     *
-     * @param safeUrl URL from which to fetch the SVG icon.
      */
-    MdIconRegistry.prototype.getSvgIconFromUrl = function (safeUrl) {
+    MdIconRegistry.prototype.getSvgIconFromUrl = function (url) {
         var _this = this;
-        var url = this._sanitizer.sanitize(SecurityContext.RESOURCE_URL, safeUrl);
         if (this._cachedIconsByUrl.has(url)) {
-            return Observable.of(cloneSvg(this._cachedIconsByUrl.get(url)));
+            return Observable_1.Observable.of(cloneSvg(this._cachedIconsByUrl.get(url)));
         }
         return this._loadSvgIconFromConfig(new SvgIconConfig(url))
             .do(function (svg) { return _this._cachedIconsByUrl.set(url, svg); })
@@ -194,9 +170,6 @@ export var MdIconRegistry = (function () {
      * Returns an Observable that produces the icon (as an <svg> DOM element) with the given name
      * and namespace. The icon must have been previously registered with addIcon or addIconSet;
      * if not, the Observable will throw an MdIconNameNotFoundError.
-     *
-     * @param name Name of the icon to be retrieved.
-     * @param namespace Namespace in which to look for the icon.
      */
     MdIconRegistry.prototype.getNamedSvgIcon = function (name, namespace) {
         if (namespace === void 0) { namespace = ''; }
@@ -210,7 +183,7 @@ export var MdIconRegistry = (function () {
         if (iconSetConfigs) {
             return this._getSvgFromIconSetConfigs(name, iconSetConfigs);
         }
-        return Observable.throw(new MdIconNameNotFoundError(key));
+        return Observable_1.Observable.throw(new MdIconNameNotFoundError(key));
     };
     /**
      * Returns the cached icon for a SvgIconConfig if available, or fetches it from its URL if not.
@@ -218,7 +191,7 @@ export var MdIconRegistry = (function () {
     MdIconRegistry.prototype._getSvgFromConfig = function (config) {
         if (config.svgElement) {
             // We already have the SVG element for this icon, return a copy.
-            return Observable.of(cloneSvg(config.svgElement));
+            return Observable_1.Observable.of(cloneSvg(config.svgElement));
         }
         else {
             // Fetch the icon from the config's URL, cache it, and return a copy.
@@ -244,7 +217,7 @@ export var MdIconRegistry = (function () {
             // We could cache namedIcon in _svgIconConfigs, but since we have to make a copy every
             // time anyway, there's probably not much advantage compared to just always extracting
             // it from the icon set.
-            return Observable.of(namedIcon);
+            return Observable_1.Observable.of(namedIcon);
         }
         // Not found in any cached icon sets. If there are icon sets with URLs that we haven't
         // fetched, fetch them now and look for iconName in the results.
@@ -253,11 +226,10 @@ export var MdIconRegistry = (function () {
             .map(function (iconSetConfig) {
             return _this._loadSvgIconSetFromConfig(iconSetConfig)
                 .catch(function (err, caught) {
-                var url = _this._sanitizer.sanitize(SecurityContext.RESOURCE_URL, iconSetConfig.url);
                 // Swallow errors fetching individual URLs so the combined Observable won't
                 // necessarily fail.
-                console.log("Loading icon set URL: " + url + " failed: " + err);
-                return Observable.of(null);
+                console.log("Loading icon set URL: " + iconSetConfig.url + " failed: " + err);
+                return Observable_1.Observable.of(null);
             })
                 .do(function (svg) {
                 // Cache SVG element.
@@ -268,7 +240,7 @@ export var MdIconRegistry = (function () {
         });
         // Fetch all the icon set URLs. When the requests complete, every IconSet should have a
         // cached SVG element (unless the request failed), and we can check again for the icon.
-        return Observable.forkJoin(iconSetFetchRequests)
+        return Observable_1.Observable.forkJoin(iconSetFetchRequests)
             .map(function (ignoredResults) {
             var foundIcon = _this._extractIconWithNameFromAnySet(name, iconSetConfigs);
             if (!foundIcon) {
@@ -287,7 +259,7 @@ export var MdIconRegistry = (function () {
         for (var i = iconSetConfigs.length - 1; i >= 0; i--) {
             var config = iconSetConfigs[i];
             if (config.svgElement) {
-                var foundIcon = this._extractSvgIconFromSet(config.svgElement, iconName);
+                var foundIcon = this._extractSvgIconFromSet(config.svgElement, iconName, config);
                 if (foundIcon) {
                     return foundIcon;
                 }
@@ -302,7 +274,7 @@ export var MdIconRegistry = (function () {
     MdIconRegistry.prototype._loadSvgIconFromConfig = function (config) {
         var _this = this;
         return this._fetchUrl(config.url)
-            .map(function (svgText) { return _this._createSvgElementForSingleIcon(svgText); });
+            .map(function (svgText) { return _this._createSvgElementForSingleIcon(svgText, config); });
     };
     /**
      * Loads the content of the icon set URL specified in the SvgIconConfig and creates an SVG element
@@ -317,9 +289,9 @@ export var MdIconRegistry = (function () {
     /**
      * Creates a DOM element from the given SVG string, and adds default attributes.
      */
-    MdIconRegistry.prototype._createSvgElementForSingleIcon = function (responseText) {
+    MdIconRegistry.prototype._createSvgElementForSingleIcon = function (responseText, config) {
         var svg = this._svgElementFromString(responseText);
-        this._setSvgAttributes(svg);
+        this._setSvgAttributes(svg, config);
         return svg;
     };
     /**
@@ -327,7 +299,7 @@ export var MdIconRegistry = (function () {
      * tag matches the specified name. If found, copies the nested element to a new SVG element and
      * returns it. Returns null if no matching element is found.
      */
-    MdIconRegistry.prototype._extractSvgIconFromSet = function (iconSet, iconName) {
+    MdIconRegistry.prototype._extractSvgIconFromSet = function (iconSet, iconName, config) {
         var iconNode = iconSet.querySelector('#' + iconName);
         if (!iconNode) {
             return null;
@@ -335,7 +307,7 @@ export var MdIconRegistry = (function () {
         // If the icon node is itself an <svg> node, clone and return it directly. If not, set it as
         // the content of a new <svg> node.
         if (iconNode.tagName.toLowerCase() == 'svg') {
-            return this._setSvgAttributes(iconNode.cloneNode(true));
+            return this._setSvgAttributes(iconNode.cloneNode(true), config);
         }
         // createElement('SVG') doesn't work as expected; the DOM ends up with
         // the correct nodes, but the SVG content doesn't render. Instead we
@@ -345,7 +317,7 @@ export var MdIconRegistry = (function () {
         var svg = this._svgElementFromString('<svg></svg>');
         // Clone the node so we don't remove it from the parent icon set element.
         svg.appendChild(iconNode.cloneNode(true));
-        return this._setSvgAttributes(svg);
+        return this._setSvgAttributes(svg, config);
     };
     /**
      * Creates a DOM element from the given SVG string.
@@ -364,7 +336,7 @@ export var MdIconRegistry = (function () {
     /**
      * Sets the default attributes for an SVG element to be used as an icon.
      */
-    MdIconRegistry.prototype._setSvgAttributes = function (svg) {
+    MdIconRegistry.prototype._setSvgAttributes = function (svg, config) {
         if (!svg.getAttribute('xmlns')) {
             svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
         }
@@ -379,9 +351,8 @@ export var MdIconRegistry = (function () {
      * Returns an Observable which produces the string contents of the given URL. Results may be
      * cached, so future calls with the same URL may not cause another HTTP request.
      */
-    MdIconRegistry.prototype._fetchUrl = function (safeUrl) {
+    MdIconRegistry.prototype._fetchUrl = function (url) {
         var _this = this;
-        var url = this._sanitizer.sanitize(SecurityContext.RESOURCE_URL, safeUrl);
         // Store in-progress fetches to avoid sending a duplicate request for a URL when there is
         // already a request in progress for that URL. It's necessary to call share() on the
         // Observable returned by http.get() so that multiple subscribers don't cause multiple XHRs.
@@ -399,14 +370,15 @@ export var MdIconRegistry = (function () {
         this._inProgressUrlFetches.set(url, req);
         return req;
     };
-    MdIconRegistry = __decorate([
-        Injectable(), 
-        __metadata('design:paramtypes', [Http, DomSanitizer])
-    ], MdIconRegistry);
     return MdIconRegistry;
 }());
+MdIconRegistry = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [http_1.Http])
+], MdIconRegistry);
+exports.MdIconRegistry = MdIconRegistry;
 /** Clones an SVGElement while preserving type information. */
 function cloneSvg(svg) {
     return svg.cloneNode(true);
 }
-//# sourceMappingURL=icon-registry.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/icon/icon-registry.js.map

@@ -1,3 +1,5 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Extends an object with the *enumerable* and *own* properties of one or more source objects,
  * similar to Object.assign.
@@ -5,7 +7,7 @@
  * @param dest The object which will have properties copied to it.
  * @param sources The source objects from which properties will be copied.
  */
-export function extendObject(dest) {
+function extendObject(dest) {
     var sources = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         sources[_i - 1] = arguments[_i];
@@ -25,4 +27,5 @@ export function extendObject(dest) {
     }
     return dest;
 }
-//# sourceMappingURL=object-extend.js.map
+exports.extendObject = extendObject;
+//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/core/util/object-extend.js.map

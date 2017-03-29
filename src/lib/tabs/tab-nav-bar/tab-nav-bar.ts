@@ -32,18 +32,17 @@ export class MdTabNavBar {
   }
 }
 
-/**
- * Link inside of a `md-tab-nav-bar`.
- */
 @Directive({
   selector: '[md-tab-link], [mat-tab-link]',
 })
 export class MdTabLink {
   private _isActive: boolean = false;
 
-  /** Whether the link is active. */
   @Input()
-  get active(): boolean { return this._isActive; }
+  get active(): boolean {
+    return this._isActive;
+  }
+
   set active(value: boolean) {
     this._isActive = value;
     if (value) {
@@ -66,9 +65,8 @@ export class MdTabLinkRipple extends MdRipple implements OnDestroy {
     super(_element, _ngZone, _ruler);
   }
 
-  /**
-   * In certain cases the parent destroy handler may not get called. See Angular issue #11606.
-   */
+  // In certain cases the parent destroy handler
+  // may not get called. See Angular issue #11606.
   ngOnDestroy() {
     super.ngOnDestroy();
   }

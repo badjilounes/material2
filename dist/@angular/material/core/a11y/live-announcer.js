@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10,21 +11,21 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { Injectable, OpaqueToken, Optional, Inject, SkipSelf } from '@angular/core';
-export var LIVE_ANNOUNCER_ELEMENT_TOKEN = new OpaqueToken('liveAnnouncerElement');
-export var LiveAnnouncer = (function () {
-    function LiveAnnouncer(elementToken) {
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = require("@angular/core");
+exports.LIVE_ANNOUNCER_ELEMENT_TOKEN = new core_1.OpaqueToken('mdLiveAnnouncerElement');
+var MdLiveAnnouncer = (function () {
+    function MdLiveAnnouncer(elementToken) {
         // We inject the live element as `any` because the constructor signature cannot reference
         // browser globals (HTMLElement) on non-browser environments, since having a class decorator
         // causes TypeScript to preserve the constructor signature types.
         this._liveElement = elementToken || this._createLiveElement();
     }
     /**
-     * Announces a message to screenreaders.
      * @param message Message to be announced to the screenreader
-     * @param politeness The politeness of the announcer element
+     * @param politeness The politeness of the announcer element.
      */
-    LiveAnnouncer.prototype.announce = function (message, politeness) {
+    MdLiveAnnouncer.prototype.announce = function (message, politeness) {
         var _this = this;
         if (politeness === void 0) { politeness = 'polite'; }
         this._liveElement.textContent = '';
@@ -38,38 +39,25 @@ export var LiveAnnouncer = (function () {
         setTimeout(function () { return _this._liveElement.textContent = message; }, 100);
     };
     /** Removes the aria-live element from the DOM. */
-    LiveAnnouncer.prototype._removeLiveElement = function () {
+    MdLiveAnnouncer.prototype._removeLiveElement = function () {
         if (this._liveElement && this._liveElement.parentNode) {
             this._liveElement.parentNode.removeChild(this._liveElement);
         }
     };
-    LiveAnnouncer.prototype._createLiveElement = function () {
+    MdLiveAnnouncer.prototype._createLiveElement = function () {
         var liveEl = document.createElement('div');
-        liveEl.classList.add('cdk-visually-hidden');
+        liveEl.classList.add('md-visually-hidden');
         liveEl.setAttribute('aria-atomic', 'true');
         liveEl.setAttribute('aria-live', 'polite');
         document.body.appendChild(liveEl);
         return liveEl;
     };
-    LiveAnnouncer = __decorate([
-        Injectable(),
-        __param(0, Optional()),
-        __param(0, Inject(LIVE_ANNOUNCER_ELEMENT_TOKEN)), 
-        __metadata('design:paramtypes', [Object])
-    ], LiveAnnouncer);
-    return LiveAnnouncer;
+    return MdLiveAnnouncer;
 }());
-export function LIVE_ANNOUNCER_PROVIDER_FACTORY(parentDispatcher, liveElement) {
-    return parentDispatcher || new LiveAnnouncer(liveElement);
-}
-;
-export var LIVE_ANNOUNCER_PROVIDER = {
-    // If there is already a LiveAnnouncer available, use that. Otherwise, provide a new one.
-    provide: LiveAnnouncer,
-    deps: [
-        [new Optional(), new SkipSelf(), LiveAnnouncer],
-        [new Optional(), new Inject(LIVE_ANNOUNCER_ELEMENT_TOKEN)]
-    ],
-    useFactory: LIVE_ANNOUNCER_PROVIDER_FACTORY
-};
-//# sourceMappingURL=live-announcer.js.map
+MdLiveAnnouncer = __decorate([
+    core_1.Injectable(),
+    __param(0, core_1.Optional()), __param(0, core_1.Inject(exports.LIVE_ANNOUNCER_ELEMENT_TOKEN)),
+    __metadata("design:paramtypes", [Object])
+], MdLiveAnnouncer);
+exports.MdLiveAnnouncer = MdLiveAnnouncer;
+//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/core/a11y/live-announcer.js.map

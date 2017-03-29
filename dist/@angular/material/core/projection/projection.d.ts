@@ -1,10 +1,8 @@
 import { ModuleWithProviders, ElementRef } from '@angular/core';
-/** @docs-private */
 export declare class DomProjectionHost {
     ref: ElementRef;
     constructor(ref: ElementRef);
 }
-/** @docs-private */
 export declare class DomProjection {
     /**
      * Project an element into a host element.
@@ -16,10 +14,10 @@ export declare class DomProjection {
      * ```
      *   @Component({
      *     template: `<div>
-     *       <cdk-dom-projection-host>
+     *       <dom-projection-host>
      *         <div>other</div>
      *         <ng-content></ng-content>
-     *       </cdk-dom-projection-host>
+     *       </dom-projection-host>
      *     </div>`
      *   })
      *   class Cmpt {
@@ -33,14 +31,9 @@ export declare class DomProjection {
      * contain the `<div>other</div>` HTML as well as its own children.
      *
      * Note: without `<ng-content></ng-content>` the projection will project an empty element.
-     *
-     * @param ref ElementRef to be projected.
-     * @param host Projection host into which to project the `ElementRef`.
      */
     project(ref: ElementRef, host: DomProjectionHost): void;
 }
-/** @docs-private */
 export declare class ProjectionModule {
-    /** @deprecated */
     static forRoot(): ModuleWithProviders;
 }

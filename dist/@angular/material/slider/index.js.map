@@ -1,1 +1,1 @@
-{"version":3,"file":"index.js","sourceRoot":"","sources":["../../../../src/lib/slider/index.ts"],"names":[],"mappings":"AAAA,cAAc,UAAU,CAAC","sourcesContent":["export * from './slider';\n"]}
+{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;;;AAAA,8BAAyB","sourcesContent":["export * from './slider';\n\ninterface DecoratorInvocation {\n  type: Function;\n  args?: any[];\n}\n"]}

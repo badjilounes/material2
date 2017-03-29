@@ -1,10 +1,9 @@
-import {TestBed, async, ComponentFixture} from '@angular/core/testing';
+import {TestBed, async} from '@angular/core/testing';
 import {By} from '@angular/platform-browser';
 import {
   Component,
   ElementRef,
   EventEmitter,
-  Input,
   Output,
   TemplateRef,
   ViewChild
@@ -19,17 +18,15 @@ import {
 import {OverlayContainer} from '../core/overlay/overlay-container';
 import {ViewportRuler} from '../core/overlay/position/viewport-ruler';
 import {Dir, LayoutDirection} from '../core/rtl/dir';
-import {extendObject} from '../core/util/object-extend';
 
 describe('MdMenu', () => {
   let overlayContainerElement: HTMLElement;
-  let dir: LayoutDirection;
+  let dir: LayoutDirection = 'ltr';
 
   beforeEach(async(() => {
-    dir = 'ltr';
     TestBed.configureTestingModule({
       imports: [MdMenuModule.forRoot()],
-      declarations: [SimpleMenu, PositionedMenu, OverlapMenu, CustomMenuPanel, CustomMenu],
+      declarations: [SimpleMenu, PositionedMenu, CustomMenuPanel, CustomMenu],
       providers: [
         {provide: OverlayContainer, useFactory: () => {
           overlayContainerElement = document.createElement('div');
@@ -75,7 +72,7 @@ describe('MdMenu', () => {
     fixture.detectChanges();
     fixture.componentInstance.trigger.openMenu();
 
-    const backdrop = <HTMLElement>overlayContainerElement.querySelector('.cdk-overlay-backdrop');
+    const backdrop = <HTMLElement>overlayContainerElement.querySelector('.md-overlay-backdrop');
     backdrop.click();
     fixture.detectChanges();
 
@@ -104,7 +101,7 @@ describe('MdMenu', () => {
     fixture.componentInstance.trigger.openMenu();
     fixture.detectChanges();
 
-    const overlayPane = overlayContainerElement.querySelector('.cdk-overlay-pane');
+    const overlayPane = overlayContainerElement.children[0];
     expect(overlayPane.getAttribute('dir')).toEqual('rtl');
   });
 
@@ -118,9 +115,6 @@ describe('MdMenu', () => {
       // Push trigger to the bottom edge of viewport,so it has space to open "above"
       trigger.style.position = 'relative';
       trigger.style.top = '600px';
-
-      // Push trigger to the right, so it has space to open "before"
-      trigger.style.left = '100px';
 
       fixture.componentInstance.trigger.openMenu();
       fixture.detectChanges();
@@ -150,7 +144,7 @@ describe('MdMenu', () => {
       // Push trigger to the right side of viewport, so it doesn't have space to open
       // in its default "after" position on the right side.
       trigger.style.position = 'relative';
-      trigger.style.left = '950px';
+      trigger.style.left = '900px';
 
       fixture.componentInstance.trigger.openMenu();
       fixture.detectChanges();
@@ -208,7 +202,7 @@ describe('MdMenu', () => {
       // push trigger to the bottom, right part of viewport, so it doesn't have space to open
       // in its default "after below" position.
       trigger.style.position = 'relative';
-      trigger.style.left = '950px';
+      trigger.style.left = '900px';
       trigger.style.top = '600px';
 
       fixture.componentInstance.trigger.openMenu();
@@ -254,108 +248,10 @@ describe('MdMenu', () => {
     });
 
     function getOverlayPane(): HTMLElement {
-      return overlayContainerElement.querySelector('.cdk-overlay-pane') as HTMLElement;
+      let pane = overlayContainerElement.children[0] as HTMLElement;
+      pane.style.position = 'absolute';
+      return pane;
     }
-  });
-
-  describe('overlapping trigger', () => {
-    /**
-     * This test class is used to create components containing a menu.
-     * It provides helpers to reposition the trigger, open the menu,
-     * and access the trigger and overlay positions.
-     * Additionally it can take any inputs for the menu wrapper component.
-     *
-     * Basic usage:
-     * const subject = new OverlapSubject(MyComponent);
-     * subject.openMenu();
-     */
-    class OverlapSubject<T extends TestableMenu> {
-      private readonly fixture: ComponentFixture<T>;
-      private readonly trigger: any;
-
-      constructor(ctor: {new(): T; }, inputs: {[key: string]: any} = {}) {
-        this.fixture = TestBed.createComponent(ctor);
-        extendObject(this.fixture.componentInstance, inputs);
-        this.fixture.detectChanges();
-        this.trigger = this.fixture.componentInstance.triggerEl.nativeElement;
-      }
-
-      openMenu() {
-        this.fixture.componentInstance.trigger.openMenu();
-        this.fixture.detectChanges();
-      }
-
-      updateTriggerStyle(style: any) {
-        return extendObject(this.trigger.style, style);
-      }
-
-      get overlayRect() {
-        return this.overlayPane.getBoundingClientRect();
-      }
-
-      get triggerRect() {
-        return this.trigger.getBoundingClientRect();
-      }
-
-      get menuPanel() {
-        return overlayContainerElement.querySelector('.md-menu-panel');
-      }
-
-      private get overlayPane() {
-        return overlayContainerElement.querySelector('.cdk-overlay-pane') as HTMLElement;
-      }
-    }
-
-    let subject: OverlapSubject<OverlapMenu>;
-    describe('explicitly overlapping', () => {
-      beforeEach(() => {
-        subject = new OverlapSubject(OverlapMenu, {overlapTrigger: true});
-      });
-
-      it('positions the overlay below the trigger', () => {
-        subject.openMenu();
-
-        // Since the menu is overlaying the trigger, the overlay top should be the trigger top.
-        expect(Math.round(subject.overlayRect.top))
-            .toBe(Math.round(subject.triggerRect.top),
-                `Expected menu to open in default "below" position.`);
-      });
-    });
-
-    describe('not overlapping', () => {
-      beforeEach(() => {
-        subject = new OverlapSubject(OverlapMenu, {overlapTrigger: false});
-      });
-
-      it('positions the overlay below the trigger', () => {
-        subject.openMenu();
-
-        // Since the menu is below the trigger, the overlay top should be the trigger bottom.
-        expect(Math.round(subject.overlayRect.top))
-            .toBe(Math.round(subject.triggerRect.bottom),
-                `Expected menu to open directly below the trigger.`);
-      });
-
-      it('supports above position fall back', () => {
-        // Push trigger to the bottom part of viewport, so it doesn't have space to open
-        // in its default "below" position below the trigger.
-        subject.updateTriggerStyle({position: 'relative', top: '650px'});
-        subject.openMenu();
-
-        // Since the menu is above the trigger, the overlay bottom should be the trigger top.
-        expect(Math.round(subject.overlayRect.bottom))
-            .toBe(Math.round(subject.triggerRect.top),
-                `Expected menu to open in "above" position if "below" position wouldn't fit.`);
-      });
-
-      it('repositions the origin to be below, so the menu opens from the trigger', () => {
-        subject.openMenu();
-
-        expect(subject.menuPanel.classList).toContain('md-menu-below');
-        expect(subject.menuPanel.classList).not.toContain('md-menu-above');
-      });
-
-    });
   });
 
   describe('animations', () => {
@@ -388,7 +284,7 @@ describe('MdMenu', () => {
 
 @Component({
   template: `
-    <button [mdMenuTriggerFor]="menu" #triggerEl>Toggle menu</button>
+    <button [md-menu-trigger-for]="menu" #triggerEl>Toggle menu</button>
     <md-menu #menu="mdMenu">
       <button md-menu-item> Item </button>
       <button md-menu-item disabled> Disabled </button>
@@ -402,7 +298,7 @@ class SimpleMenu {
 
 @Component({
   template: `
-    <button [mdMenuTriggerFor]="menu" #triggerEl>Toggle menu</button>
+    <button [md-menu-trigger-for]="menu" #triggerEl>Toggle menu</button>
     <md-menu x-position="before" y-position="above" #menu="mdMenu">
       <button md-menu-item> Positioned Content </button>
     </md-menu>
@@ -413,23 +309,6 @@ class PositionedMenu {
   @ViewChild('triggerEl') triggerEl: ElementRef;
 }
 
-interface TestableMenu {
-  trigger: MdMenuTrigger;
-  triggerEl: ElementRef;
-}
-@Component({
-  template: `
-    <button [mdMenuTriggerFor]="menu" #triggerEl>Toggle menu</button>
-    <md-menu [overlapTrigger]="overlapTrigger" #menu="mdMenu">
-      <button md-menu-item> Not overlapped Content </button>
-    </md-menu>
-  `
-})
-class OverlapMenu implements TestableMenu {
-  @Input() overlapTrigger: boolean;
-  @ViewChild(MdMenuTrigger) trigger: MdMenuTrigger;
-  @ViewChild('triggerEl') triggerEl: ElementRef;
-}
 
 @Component({
   selector: 'custom-menu',
@@ -444,7 +323,6 @@ class OverlapMenu implements TestableMenu {
 class CustomMenuPanel implements MdMenuPanel {
   positionX: MenuPositionX = 'after';
   positionY: MenuPositionY = 'below';
-  overlapTrigger: true;
 
   @ViewChild(TemplateRef) templateRef: TemplateRef<any>;
   @Output() close = new EventEmitter<void>();
@@ -454,7 +332,7 @@ class CustomMenuPanel implements MdMenuPanel {
 
 @Component({
   template: `
-    <button [mdMenuTriggerFor]="menu">Toggle menu</button>
+    <button [md-menu-trigger-for]="menu">Toggle menu</button>
     <custom-menu #menu="mdCustomMenu">
       <button md-menu-item> Custom Content </button>
     </custom-menu>

@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,10 +8,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Directive, ElementRef, Renderer, Input } from '@angular/core';
-import { coerceBooleanProperty } from '../core/coercion/boolean-property';
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = require("@angular/core");
+var boolean_property_1 = require("../core/coersion/boolean-property");
 /** Used in the `md-tab-group` view to display tab labels */
-export var MdTabLabelWrapper = (function () {
+var MdTabLabelWrapper = (function () {
     function MdTabLabelWrapper(elementRef, _renderer) {
         this.elementRef = elementRef;
         this._renderer = _renderer;
@@ -18,9 +20,8 @@ export var MdTabLabelWrapper = (function () {
         this._disabled = false;
     }
     Object.defineProperty(MdTabLabelWrapper.prototype, "disabled", {
-        /** Whether the element is disabled. */
         get: function () { return this._disabled; },
-        set: function (value) { this._disabled = coerceBooleanProperty(value); },
+        set: function (value) { this._disabled = boolean_property_1.coerceBooleanProperty(value); },
         enumerable: true,
         configurable: true
     });
@@ -34,19 +35,21 @@ export var MdTabLabelWrapper = (function () {
     MdTabLabelWrapper.prototype.getOffsetWidth = function () {
         return this.elementRef.nativeElement.offsetWidth;
     };
-    __decorate([
-        Input(), 
-        __metadata('design:type', Object)
-    ], MdTabLabelWrapper.prototype, "disabled", null);
-    MdTabLabelWrapper = __decorate([
-        Directive({
-            selector: '[md-tab-label-wrapper], [mat-tab-label-wrapper]',
-            host: {
-                '[class.md-tab-disabled]': 'disabled'
-            }
-        }), 
-        __metadata('design:paramtypes', [ElementRef, Renderer])
-    ], MdTabLabelWrapper);
     return MdTabLabelWrapper;
 }());
-//# sourceMappingURL=tab-label-wrapper.js.map
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Object),
+    __metadata("design:paramtypes", [Object])
+], MdTabLabelWrapper.prototype, "disabled", null);
+MdTabLabelWrapper = __decorate([
+    core_1.Directive({
+        selector: '[md-tab-label-wrapper], [mat-tab-label-wrapper]',
+        host: {
+            '[class.md-tab-disabled]': 'disabled'
+        }
+    }),
+    __metadata("design:paramtypes", [core_1.ElementRef, core_1.Renderer])
+], MdTabLabelWrapper);
+exports.MdTabLabelWrapper = MdTabLabelWrapper;
+//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/tabs/tab-label-wrapper.js.map

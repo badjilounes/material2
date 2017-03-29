@@ -1,8 +1,14 @@
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+"use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -12,20 +18,22 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Directive, TemplateRef, ViewContainerRef } from '@angular/core';
-import { TemplatePortalDirective } from '../core';
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = require("@angular/core");
+var core_2 = require("../core");
 /** Used to flag tab labels for use with the portal directive */
-export var MdTabLabel = (function (_super) {
+var MdTabLabel = (function (_super) {
     __extends(MdTabLabel, _super);
     function MdTabLabel(templateRef, viewContainerRef) {
-        _super.call(this, templateRef, viewContainerRef);
+        return _super.call(this, templateRef, viewContainerRef) || this;
     }
-    MdTabLabel = __decorate([
-        Directive({
-            selector: '[md-tab-label], [mat-tab-label]',
-        }), 
-        __metadata('design:paramtypes', [TemplateRef, ViewContainerRef])
-    ], MdTabLabel);
     return MdTabLabel;
-}(TemplatePortalDirective));
-//# sourceMappingURL=tab-label.js.map
+}(core_2.TemplatePortalDirective));
+MdTabLabel = __decorate([
+    core_1.Directive({
+        selector: '[md-tab-label], [mat-tab-label]',
+    }),
+    __metadata("design:paramtypes", [core_1.TemplateRef, core_1.ViewContainerRef])
+], MdTabLabel);
+exports.MdTabLabel = MdTabLabel;
+//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/tabs/tab-label.js.map

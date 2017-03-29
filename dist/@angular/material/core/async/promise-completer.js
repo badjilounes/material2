@@ -1,5 +1,6 @@
-/** @docs-private */
-export var PromiseCompleter = (function () {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var PromiseCompleter = (function () {
     function PromiseCompleter() {
         var _this = this;
         this.promise = new Promise(function (res, rej) {
@@ -9,4 +10,5 @@ export var PromiseCompleter = (function () {
     }
     return PromiseCompleter;
 }());
-//# sourceMappingURL=promise-completer.js.map
+exports.PromiseCompleter = PromiseCompleter;
+//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/core/async/promise-completer.js.map

@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10,12 +11,13 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { ViewChild, Component, Input, NgZone, QueryList, ElementRef, ViewEncapsulation, ContentChildren, Output, EventEmitter, Optional } from '@angular/core';
-import { RIGHT_ARROW, LEFT_ARROW, ENTER, Dir } from '../core';
-import { MdTabLabelWrapper } from './tab-label-wrapper';
-import { MdInkBar } from './ink-bar';
-import 'rxjs/add/operator/map';
-import { applyCssTransform } from '../core/style/apply-transform';
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = require("@angular/core");
+var core_2 = require("../core");
+var tab_label_wrapper_1 = require("./tab-label-wrapper");
+var ink_bar_1 = require("./ink-bar");
+require("rxjs/add/operator/map");
+var apply_transform_1 = require("../core/style/apply-transform");
 /**
  * The distance in pixels that will be overshot when scrolling a tab label into view. This helps
  * provide a small affordance to the label next to it.
@@ -27,7 +29,7 @@ var EXAGGERATED_OVERSCROLL = 60;
  * width of the header container, then arrows will be displayed to allow the user to scroll
  * left and right across the header.
  */
-export var MdTabHeader = (function () {
+var MdTabHeader = (function () {
     function MdTabHeader(_zone, _elementRef, _dir) {
         this._zone = _zone;
         this._elementRef = _elementRef;
@@ -44,15 +46,17 @@ export var MdTabHeader = (function () {
         this._disableScrollAfter = true;
         /** Whether the tab list can be scrolled more towards the beginning of the tab label list. */
         this._disableScrollBefore = true;
+        /** The index of the active tab. */
         this._selectedIndex = 0;
+        /** The center labels parameter. */
+        this._centerLabels = false;
         /** Event emitted when the option is selected. */
-        this.selectFocusedIndex = new EventEmitter();
+        this.selectFocusedIndex = new core_1.EventEmitter();
         /** Event emitted when a label is focused. */
-        this.indexFocused = new EventEmitter();
+        this.indexFocused = new core_1.EventEmitter();
     }
     Object.defineProperty(MdTabHeader.prototype, "selectedIndex", {
         get: function () { return this._selectedIndex; },
-        /** The index of the active tab. */
         set: function (value) {
             this._selectedIndexChanged = this._selectedIndex != value;
             this._selectedIndex = value;
@@ -61,10 +65,22 @@ export var MdTabHeader = (function () {
         enumerable: true,
         configurable: true
     });
+    Object.defineProperty(MdTabHeader.prototype, "centerLabels", {
+        get: function () {
+            return this._centerLabels;
+        },
+        set: function (value) {
+            this._centerLabels = value;
+        },
+        enumerable: true,
+        configurable: true
+    });
     MdTabHeader.prototype.ngAfterContentChecked = function () {
         // If the number of tab labels have changed, check if scrolling should be enabled
         if (this._tabLabelCount != this._labelWrappers.length) {
-            this._updatePagination();
+            this._checkPaginationEnabled();
+            this._checkScrollingControls();
+            this._updateTabScrollPosition();
             this._tabLabelCount = this._labelWrappers.length;
         }
         // If the selected index has changed, scroll to the label and check if the scrolling controls
@@ -72,7 +88,6 @@ export var MdTabHeader = (function () {
         if (this._selectedIndexChanged) {
             this._scrollToLabel(this._selectedIndex);
             this._checkScrollingControls();
-            this._alignInkBarToSelectedTab();
             this._selectedIndexChanged = false;
         }
         // If the scroll distance has been changed (tab selected, focused, scroll controls activated),
@@ -82,39 +97,30 @@ export var MdTabHeader = (function () {
             this._scrollDistanceChanged = false;
         }
     };
+    /**
+     * Waits one frame for the view to update, then updates the ink bar and scroll.
+     * Note: This must be run outside of the zone or it will create an infinite change detection loop
+     */
+    MdTabHeader.prototype.ngAfterViewChecked = function () {
+        var _this = this;
+        this._zone.runOutsideAngular(function () {
+            window.requestAnimationFrame(function () {
+                _this._alignInkBarToSelectedTab();
+            });
+        });
+    };
     MdTabHeader.prototype._handleKeydown = function (event) {
         switch (event.keyCode) {
-            case RIGHT_ARROW:
+            case core_2.RIGHT_ARROW:
                 this._focusNextTab();
                 break;
-            case LEFT_ARROW:
+            case core_2.LEFT_ARROW:
                 this._focusPreviousTab();
                 break;
-            case ENTER:
+            case core_2.ENTER:
                 this.selectFocusedIndex.emit(this.focusIndex);
                 break;
         }
-    };
-    /**
-     * Aligns the ink bar to the selected tab on load.
-     */
-    MdTabHeader.prototype.ngAfterContentInit = function () {
-        this._alignInkBarToSelectedTab();
-    };
-    /**
-     * Callback for when the MutationObserver detects that the content has changed.
-     */
-    MdTabHeader.prototype._onContentChanges = function () {
-        this._updatePagination();
-        this._alignInkBarToSelectedTab();
-    };
-    /**
-     * Updating the view whether pagination should be enabled or not
-     */
-    MdTabHeader.prototype._updatePagination = function () {
-        this._checkPaginationEnabled();
-        this._checkScrollingControls();
-        this._updateTabScrollPosition();
     };
     Object.defineProperty(MdTabHeader.prototype, "focusIndex", {
         /** Tracks which element has focus; used for keyboard navigation */
@@ -139,7 +145,7 @@ export var MdTabHeader = (function () {
         if (!this._labelWrappers) {
             return true;
         }
-        var tab = this._labelWrappers ? this._labelWrappers.toArray()[index] : null;
+        var tab = this._labelWrappers.toArray()[index];
         return tab && !tab.disabled;
     };
     /**
@@ -198,7 +204,7 @@ export var MdTabHeader = (function () {
         if (this._getLayoutDirection() == 'ltr') {
             translateX = '-' + translateX;
         }
-        applyCssTransform(this._tabList.nativeElement, "translate3d(" + translateX + ", 0, 0)");
+        apply_transform_1.applyCssTransform(this._tabList.nativeElement, "translate3d(" + translateX + ", 0, 0)");
     };
     Object.defineProperty(MdTabHeader.prototype, "scrollDistance", {
         get: function () { return this._scrollDistance; },
@@ -233,9 +239,7 @@ export var MdTabHeader = (function () {
      * should be called sparingly.
      */
     MdTabHeader.prototype._scrollToLabel = function (labelIndex) {
-        var selectedLabel = this._labelWrappers
-            ? this._labelWrappers.toArray()[labelIndex]
-            : null;
+        var selectedLabel = this._labelWrappers.toArray()[labelIndex];
         if (!selectedLabel) {
             return;
         }
@@ -304,59 +308,64 @@ export var MdTabHeader = (function () {
     };
     /** Tells the ink-bar to align itself to the current label wrapper */
     MdTabHeader.prototype._alignInkBarToSelectedTab = function () {
-        var _this = this;
         var selectedLabelWrapper = this._labelWrappers && this._labelWrappers.length
             ? this._labelWrappers.toArray()[this.selectedIndex].elementRef.nativeElement
             : null;
-        this._zone.runOutsideAngular(function () {
-            requestAnimationFrame(function () {
-                _this._inkBar.alignToElement(selectedLabelWrapper);
-            });
-        });
+        this._inkBar.alignToElement(selectedLabelWrapper);
     };
-    __decorate([
-        ContentChildren(MdTabLabelWrapper), 
-        __metadata('design:type', QueryList)
-    ], MdTabHeader.prototype, "_labelWrappers", void 0);
-    __decorate([
-        ViewChild(MdInkBar), 
-        __metadata('design:type', MdInkBar)
-    ], MdTabHeader.prototype, "_inkBar", void 0);
-    __decorate([
-        ViewChild('tabListContainer'), 
-        __metadata('design:type', ElementRef)
-    ], MdTabHeader.prototype, "_tabListContainer", void 0);
-    __decorate([
-        ViewChild('tabList'), 
-        __metadata('design:type', ElementRef)
-    ], MdTabHeader.prototype, "_tabList", void 0);
-    __decorate([
-        Input(), 
-        __metadata('design:type', Number), 
-        __metadata('design:paramtypes', [Number])
-    ], MdTabHeader.prototype, "selectedIndex", null);
-    __decorate([
-        Output(), 
-        __metadata('design:type', Object)
-    ], MdTabHeader.prototype, "selectFocusedIndex", void 0);
-    __decorate([
-        Output(), 
-        __metadata('design:type', Object)
-    ], MdTabHeader.prototype, "indexFocused", void 0);
-    MdTabHeader = __decorate([
-        Component({selector: 'md-tab-header',
-            template: "<div class=\"md-tab-header-pagination md-tab-header-pagination-before md-elevation-z4\" aria-hidden=\"true\" md-ripple [mdRippleDisabled]=\"_disableScrollBefore\" [class.md-tab-header-pagination-disabled]=\"_disableScrollBefore\" (click)=\"_scrollHeader('before')\"> <div class=\"md-tab-header-pagination-chevron\"></div> </div> <div class=\"md-tab-label-container\" #tabListContainer (keydown)=\"_handleKeydown($event)\"> <div class=\"md-tab-list\" #tabList role=\"tablist\" (cdkObserveContent)=\"_onContentChanges()\"> <ng-content></ng-content> <md-ink-bar></md-ink-bar> </div> </div> <div class=\"md-tab-header-pagination md-tab-header-pagination-after md-elevation-z4\" aria-hidden=\"true\" md-ripple [mdRippleDisabled]=\"_disableScrollAfter\" [class.md-tab-header-pagination-disabled]=\"_disableScrollAfter\" (click)=\"_scrollHeader('after')\"> <div class=\"md-tab-header-pagination-chevron\"></div> </div> ",
-            styles: [":host { display: flex; flex-direction: column; font-family: Roboto, \"Helvetica Neue\", sans-serif; } .md-tab-header { overflow: hidden; position: fixed !important; display: flex; flex-direction: row; flex-shrink: 0; align-items: center; z-index: 1000; height: 40px; width: 500px; margin: 0 auto; } .md-tab-label { line-height: 48px; height: 48px; padding: 0 12px; font-size: 13px !important; font-family: Roboto, \"Helvetica Neue\", sans-serif !important; font-weight: bold !important; cursor: pointer; box-sizing: border-box; color: currentColor; opacity: 1 !important; min-width: 160px; text-align: center; } .md-tab-label:focus { background-color: #ffffff; outline: none; opacity: 1; } .md-tab-disabled { cursor: default; pointer-events: none; } .md-tab-body-wrapper { height: inherit; top: 39px; width: 100%; padding: 0px 108px 89px 108px; flex-grow: 1; display: flex; } .md-tab-body { display: none; overflow: auto; box-sizing: border-box; flex-grow: 1; flex-shrink: 1; padding: 40px 0px 40px 0px; } .md-tab-body.md-tab-active { display: block; } md-ink-bar { position: absolute; bottom: 0; height: 2px; transition: 350ms ease-out; } md-tab-group { width: 100%; } .md-tab-header { width: 80%; min-width: 900px; max-width: 1200px; top: 255px; background-color: #ffffff; border-bottom: 1px solid #dadada !important; } /*# sourceMappingURL=tab-header.css.map */ "],
-            encapsulation: ViewEncapsulation.None,
-            host: {
-                'class': 'md-tab-header',
-                '[class.md-tab-header-pagination-controls-enabled]': '_showPaginationControls',
-                '[class.md-tab-header-rtl]': "_getLayoutDirection() == 'rtl'",
-            }
-        }),
-        __param(2, Optional()), 
-        __metadata('design:paramtypes', [NgZone, ElementRef, Dir])
-    ], MdTabHeader);
     return MdTabHeader;
 }());
-//# sourceMappingURL=tab-header.js.map
+__decorate([
+    core_1.ContentChildren(tab_label_wrapper_1.MdTabLabelWrapper),
+    __metadata("design:type", core_1.QueryList)
+], MdTabHeader.prototype, "_labelWrappers", void 0);
+__decorate([
+    core_1.ViewChild(ink_bar_1.MdInkBar),
+    __metadata("design:type", ink_bar_1.MdInkBar)
+], MdTabHeader.prototype, "_inkBar", void 0);
+__decorate([
+    core_1.ViewChild('tabListContainer'),
+    __metadata("design:type", core_1.ElementRef)
+], MdTabHeader.prototype, "_tabListContainer", void 0);
+__decorate([
+    core_1.ViewChild('tabList'),
+    __metadata("design:type", core_1.ElementRef)
+], MdTabHeader.prototype, "_tabList", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Number),
+    __metadata("design:paramtypes", [Number])
+], MdTabHeader.prototype, "selectedIndex", null);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Boolean),
+    __metadata("design:paramtypes", [Boolean])
+], MdTabHeader.prototype, "centerLabels", null);
+__decorate([
+    core_1.Output(),
+    __metadata("design:type", Object)
+], MdTabHeader.prototype, "selectFocusedIndex", void 0);
+__decorate([
+    core_1.Output(),
+    __metadata("design:type", Object)
+], MdTabHeader.prototype, "indexFocused", void 0);
+MdTabHeader = __decorate([
+    core_1.Component({
+        moduleId: module.id,
+        selector: 'md-tab-header',
+        templateUrl: 'tab-header.html',
+        styleUrls: ['tab-header.css'],
+        encapsulation: core_1.ViewEncapsulation.None,
+        host: {
+            'class': 'md-tab-header',
+            '[class.md-tab-header-pagination-controls-enabled]': '_showPaginationControls',
+            '[class.md-tab-header-rtl]': "_getLayoutDirection() == 'rtl'",
+        }
+    }),
+    __param(2, core_1.Optional()),
+    __metadata("design:paramtypes", [core_1.NgZone,
+        core_1.ElementRef,
+        core_2.Dir])
+], MdTabHeader);
+exports.MdTabHeader = MdTabHeader;
+//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/tabs/tab-header.js.map

@@ -18,9 +18,7 @@
 
 <div>
   Selected tab index:
-  <md-input-container>
-    <input mdInput type="number" [(ngModel)]="activeTabIndex">
-  </md-input-container>
+  <md-input type="number" [(ngModel)]="activeTabIndex"></md-input>
 </div>
 
 <div class="demo-dynamic-tabs">
@@ -35,9 +33,7 @@
       </md-checkbox>
       <div>
         Position:
-        <md-input-container>
-          <input mdInput type="number" [(ngModel)]="addTabPosition">
-        </md-input-container>
+        <md-input type="number" [(ngModel)]="addTabPosition"></md-input>
       </div>
       <button md-raised-button color="primary"
               (click)="addTab(createWithLongContent)">
@@ -46,7 +42,10 @@
     </md-card-content>
   </md-card>
 
-  <md-tab-group class="demo-tab-group" dynamicHeight [(selectedIndex)]="activeTabIndex">
+  <md-tab-group class="demo-tab-group"
+                md-dynamic-height
+                [(selectedIndex)]="activeTabIndex"
+                [centerLabels]="true">
     <md-tab *ngFor="let tab of dynamicTabs" [disabled]="tab.disabled">
       <template md-tab-label>{{tab.label}}</template>
       {{tab.content}}
@@ -81,9 +80,7 @@
       </div>
       <br>
       <br>
-      <md-input-container>
-        <input mdInput placeholder="Tab Label" [(ngModel)]="tab.label">
-      </md-input-container>
+      <md-input placeholder="Tab Label" [(ngModel)]="tab.label"></md-input>
       <br><br>
       <button md-raised-button
               [disabled]="dynamicTabs.length == 1"
@@ -96,7 +93,7 @@
 
 <h1>Tab Group Demo - Dynamic Height</h1>
 
-<md-tab-group class="demo-tab-group" dynamicHeight>
+<md-tab-group class="demo-tab-group" md-dynamic-height>
   <md-tab *ngFor="let tab of tabs" [disabled]="tab.disabled">
     <template md-tab-label>{{tab.label}}</template>
     {{tab.content}}
@@ -131,9 +128,7 @@
     </div>
     <br>
     <br>
-    <md-input-container>
-      <input mdInput placeholder="Tab Label" [(ngModel)]="tab.label">
-    </md-input-container>
+    <md-input placeholder="Tab Label" [(ngModel)]="tab.label"></md-input>
   </md-tab>
 </md-tab-group>
 
@@ -175,9 +170,7 @@
     </div>
     <br>
     <br>
-    <md-input-container>
-      <input mdInput placeholder="Tab Label" [(ngModel)]="tab.label">
-    </md-input-container>
+    <md-input placeholder="Tab Label" [(ngModel)]="tab.label"></md-input>
   </md-tab>
 </md-tab-group>
 
@@ -200,25 +193,13 @@
     <br>
     <br>
     <br>
-    <md-input-container>
-      <input mdInput placeholder="Tab Label" [(ngModel)]="tab.label">
-    </md-input-container>
+    <md-input placeholder="Tab Label" [(ngModel)]="tab.label"></md-input>
   </md-tab>
 </md-tab-group>
 
 <!-- Simple tabs api -->
 <h1>Tabs with simplified api</h1>
 <md-tab-group class="demo-tab-group">
-  <md-tab label="Earth">
-    This tab is about the Earth!
-  </md-tab>
-  <md-tab label="Fire">
-    This tab is about combustion!
-  </md-tab>
-</md-tab-group>
-
-<h1>Inverted tabs</h1>
-<md-tab-group class="demo-tab-group" headerPosition="below">
   <md-tab label="Earth">
     This tab is about the Earth!
   </md-tab>

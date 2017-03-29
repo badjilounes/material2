@@ -1,6 +1,6 @@
 import {Component, ViewEncapsulation, ViewChild, ElementRef, Input, NgZone} from '@angular/core';
 import {InteractivityChecker} from './interactivity-checker';
-import {coerceBooleanProperty} from '../coercion/boolean-property';
+import {coerceBooleanProperty} from '../coersion/boolean-property';
 
 
 /**
@@ -13,7 +13,7 @@ import {coerceBooleanProperty} from '../coercion/boolean-property';
  */
 @Component({
   moduleId: module.id,
-  selector: 'cdk-focus-trap, focus-trap',
+  selector: 'focus-trap',
   templateUrl: 'focus-trap.html',
   encapsulation: ViewEncapsulation.None,
 })
@@ -48,12 +48,10 @@ export class FocusTrap {
     });
   }
 
-  /**
-   * Focuses the first tabbable element within the focus trap region.
-   */
+  /** Focuses the first tabbable element within the focus trap region. */
   focusFirstTabbableElement() {
     let rootElement = this.trappedContent.nativeElement;
-    let redirectToElement = rootElement.querySelector('[cdk-focus-start]') as HTMLElement ||
+    let redirectToElement = rootElement.querySelector('[md-focus-start]') as HTMLElement ||
                             this._getFirstTabbableElement(rootElement);
 
     if (redirectToElement) {
@@ -61,12 +59,10 @@ export class FocusTrap {
     }
   }
 
-  /**
-   * Focuses the last tabbable element within the focus trap region.
-   */
+  /** Focuses the last tabbable element within the focus trap region. */
   focusLastTabbableElement() {
     let rootElement = this.trappedContent.nativeElement;
-    let focusTargets = rootElement.querySelectorAll('[cdk-focus-end]');
+    let focusTargets = rootElement.querySelectorAll('[md-focus-end]');
     let redirectToElement: HTMLElement = null;
 
     if (focusTargets.length) {

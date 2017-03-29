@@ -4,6 +4,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "lib": ["es6", "es2015", "dom"],
+    "mapRoot": "",
     "module": "commonjs",
     "moduleResolution": "node",
     "noEmitOnError": true,
@@ -13,12 +14,12 @@
     "sourceMap": true,
     "target": "es5",
     "inlineSources": true,
-    "stripInternal": false,
+    "stripInternal": true,
     "baseUrl": "",
     "paths": {
     },
     "typeRoots": [
-      "../../node_modules/@types/!(node)"
+      "../../node_modules/@types"
     ],
     "types": [
       "jasmine",

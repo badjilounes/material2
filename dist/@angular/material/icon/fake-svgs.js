@@ -1,7 +1,8 @@
-import { Response, ResponseOptions } from '@angular/http';
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var http_1 = require("@angular/http");
 /**
  * Fake URLs and associated SVG documents used by tests.
- * @docs-private
  */
 var FAKE_SVGS = (function () {
     var svgs = new Map();
@@ -14,17 +15,17 @@ var FAKE_SVGS = (function () {
 })();
 /**
  * Returns an HTTP response for a fake SVG URL.
- * @docs-private
  */
-export function getFakeSvgHttpResponse(url) {
+function getFakeSvgHttpResponse(url) {
     if (FAKE_SVGS.has(url)) {
-        return new Response(new ResponseOptions({
+        return new http_1.Response(new http_1.ResponseOptions({
             status: 200,
             body: FAKE_SVGS.get(url),
         }));
     }
     else {
-        return new Response(new ResponseOptions({ status: 404 }));
+        return new http_1.Response(new http_1.ResponseOptions({ status: 404 }));
     }
 }
-//# sourceMappingURL=fake-svgs.js.map
+exports.getFakeSvgHttpResponse = getFakeSvgHttpResponse;
+//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/icon/fake-svgs.js.map

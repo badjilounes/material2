@@ -1,1 +1,1 @@
-{"version":3,"file":"index.js","sourceRoot":"","sources":["../../../../src/lib/icon/index.ts"],"names":[],"mappings":"AAAA,cAAc,QAAQ,CAAC","sourcesContent":["export * from './icon';\n"]}
+{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;;;AAAA,4BAAuB","sourcesContent":["export * from './icon';\n\ninterface DecoratorInvocation {\n  type: Function;\n  args?: any[];\n}\n"]}

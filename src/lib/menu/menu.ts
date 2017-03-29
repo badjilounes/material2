@@ -1,6 +1,6 @@
 import {NgModule, ModuleWithProviders} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {OverlayModule, CompatibilityModule} from '../core';
+import {OverlayModule, OVERLAY_PROVIDERS, DefaultStyleCompatibilityModeModule} from '../core';
 import {MdMenu} from './menu-directive';
 import {MdMenuItem} from './menu-item';
 import {MdMenuTrigger} from './menu-trigger';
@@ -13,16 +13,15 @@ export {MenuPositionX, MenuPositionY} from './menu-positions';
 
 
 @NgModule({
-  imports: [OverlayModule, CommonModule, MdRippleModule, CompatibilityModule],
-  exports: [MdMenu, MdMenuItem, MdMenuTrigger, CompatibilityModule],
+  imports: [OverlayModule, CommonModule, MdRippleModule, DefaultStyleCompatibilityModeModule],
+  exports: [MdMenu, MdMenuItem, MdMenuTrigger, DefaultStyleCompatibilityModeModule],
   declarations: [MdMenu, MdMenuItem, MdMenuTrigger],
 })
 export class MdMenuModule {
-  /** @deprecated */
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: MdMenuModule,
-      providers: [],
+      providers: OVERLAY_PROVIDERS,
     };
   }
 }

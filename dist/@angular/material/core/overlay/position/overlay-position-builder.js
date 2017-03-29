@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,34 +8,29 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { ViewportRuler } from './viewport-ruler';
-import { ConnectedPositionStrategy } from './connected-position-strategy';
-import { Injectable } from '@angular/core';
-import { GlobalPositionStrategy } from './global-position-strategy';
+Object.defineProperty(exports, "__esModule", { value: true });
+var viewport_ruler_1 = require("./viewport-ruler");
+var connected_position_strategy_1 = require("./connected-position-strategy");
+var core_1 = require("@angular/core");
+var global_position_strategy_1 = require("./global-position-strategy");
 /** Builder for overlay position strategy. */
-export var OverlayPositionBuilder = (function () {
+var OverlayPositionBuilder = (function () {
     function OverlayPositionBuilder(_viewportRuler) {
         this._viewportRuler = _viewportRuler;
     }
-    /**
-     * Creates a global position strategy.
-     */
+    /** Creates a global position strategy. */
     OverlayPositionBuilder.prototype.global = function () {
-        return new GlobalPositionStrategy();
+        return new global_position_strategy_1.GlobalPositionStrategy();
     };
-    /**
-     * Creates a relative position strategy.
-     * @param elementRef
-     * @param originPos
-     * @param overlayPos
-     */
+    /** Creates a relative position strategy. */
     OverlayPositionBuilder.prototype.connectedTo = function (elementRef, originPos, overlayPos) {
-        return new ConnectedPositionStrategy(elementRef, originPos, overlayPos, this._viewportRuler);
+        return new connected_position_strategy_1.ConnectedPositionStrategy(elementRef, originPos, overlayPos, this._viewportRuler);
     };
-    OverlayPositionBuilder = __decorate([
-        Injectable(), 
-        __metadata('design:paramtypes', [ViewportRuler])
-    ], OverlayPositionBuilder);
     return OverlayPositionBuilder;
 }());
-//# sourceMappingURL=overlay-position-builder.js.map
+OverlayPositionBuilder = __decorate([
+    core_1.Injectable(),
+    __metadata("design:paramtypes", [viewport_ruler_1.ViewportRuler])
+], OverlayPositionBuilder);
+exports.OverlayPositionBuilder = OverlayPositionBuilder;
+//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/core/overlay/position/overlay-position-builder.js.map

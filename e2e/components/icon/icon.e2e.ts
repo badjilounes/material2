@@ -1,5 +1,3 @@
-import {browser, by, element} from 'protractor';
-
 describe('icon', () => {
   describe('font icons by ligature', () => {
     let testIcon: any;

@@ -1,14 +1,9 @@
-import {browser, by, element, Key} from 'protractor';
-import {expectToExist, expectFocusOn} from '../../util/asserts';
-import {pressKeys, clickElementAtPoint} from '../../util/actions';
-import {waitForElement} from '../../util/query';
-
 describe('dialog', () => {
   beforeEach(() => browser.get('/dialog'));
 
   it('should open a dialog', () => {
     element(by.id('default')).click();
-    expectToExist('md-dialog-container');
+    waitForDialog().then(isPresent => expect(isPresent).toBe(true));
   });
 
   it('should close by clicking on the backdrop', () => {
@@ -16,7 +11,7 @@ describe('dialog', () => {
 
     waitForDialog().then(() => {
       clickOnBackrop();
-      expectToExist('md-dialog-container', false);
+      waitForDialog().then(isPresent => expect(isPresent).toBe(false));
     });
   });
 
@@ -24,8 +19,8 @@ describe('dialog', () => {
     element(by.id('default')).click();
 
     waitForDialog().then(() => {
-      pressKeys(Key.ESCAPE);
-      expectToExist('md-dialog-container', false);
+      pressEscape();
+      waitForDialog().then(isPresent => expect(isPresent).toBe(false));
     });
   });
 
@@ -34,7 +29,7 @@ describe('dialog', () => {
 
     waitForDialog().then(() => {
       element(by.id('close')).click();
-      expectToExist('md-dialog-container', false);
+      waitForDialog().then(isPresent => expect(isPresent).toBe(false));
     });
   });
 
@@ -42,7 +37,7 @@ describe('dialog', () => {
     element(by.id('default')).click();
 
     waitForDialog().then(() => {
-      expectFocusOn('md-dialog-container input');
+      expectFocusOn(element(by.css('md-dialog-container input')));
     });
   });
 
@@ -61,10 +56,10 @@ describe('dialog', () => {
     element(by.id('default')).click();
 
     waitForDialog().then(() => {
-      let tab = Key.TAB;
+      let tab = protractor.Key.TAB;
 
-      pressKeys(tab, tab, tab);
-      expectFocusOn('#close');
+      browser.actions().sendKeys(tab, tab, tab).perform();
+      expectFocusOn(element(by.id('close')));
     });
   });
 
@@ -73,7 +68,7 @@ describe('dialog', () => {
 
     waitForDialog().then(() => {
       clickOnBackrop();
-      expectToExist('md-dialog-container');
+      waitForDialog().then(isPresent => expect(isPresent).toBe(true));
     });
   });
 
@@ -81,16 +76,30 @@ describe('dialog', () => {
     element(by.id('disabled')).click();
 
     waitForDialog().then(() => {
-      pressKeys(Key.ESCAPE);
-      expectToExist('md-dialog-container');
+      pressEscape();
+      waitForDialog().then(isPresent => expect(isPresent).toBe(true));
     });
   });
 
   function waitForDialog() {
-    return waitForElement('md-dialog-container');
+    return browser.isElementPresent(by.css('md-dialog-container'));
   }
 
   function clickOnBackrop() {
-    clickElementAtPoint('.cdk-overlay-backdrop', { x: 0, y: 0 });
+    browser.actions()
+      // We need to move the cursor to the top left so
+      // the dialog doesn't receive the click accidentally.
+      .mouseMove(element(by.css('.md-overlay-backdrop')).getWebElement(), { x: 0, y: 0 })
+      .click()
+      .perform();
+  }
+
+  function pressEscape() {
+    browser.actions().sendKeys(protractor.Key.ESCAPE).perform();
+  }
+
+  // TODO(crisbeto): should be moved to a common util. copied from the menu e2e setup.
+  function expectFocusOn(el: any): void {
+    expect(browser.driver.switchTo().activeElement().getInnerHtml()).toBe(el.getInnerHtml());
   }
 });

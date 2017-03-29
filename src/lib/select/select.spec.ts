@@ -1,14 +1,12 @@
-import {TestBed, async, ComponentFixture, fakeAsync, tick} from '@angular/core/testing';
+import {TestBed, async, ComponentFixture} from '@angular/core/testing';
 import {By} from '@angular/platform-browser';
 import {Component, DebugElement, QueryList, ViewChild, ViewChildren} from '@angular/core';
 import {MdSelectModule} from './index';
 import {OverlayContainer} from '../core/overlay/overlay-container';
 import {MdSelect} from './select';
-import {MdOption} from '../core/option/option';
+import {MdOption} from './option';
 import {Dir} from '../core/rtl/dir';
-import {
-  ControlValueAccessor, FormControl, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule
-} from '@angular/forms';
+import {FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {ViewportRuler} from '../core/overlay/position/viewport-ruler';
 
 describe('MdSelect', () => {
@@ -18,21 +16,15 @@ describe('MdSelect', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [MdSelectModule.forRoot(), ReactiveFormsModule, FormsModule],
-      declarations: [
-        BasicSelect,
-        NgModelSelect,
-        ManySelects,
-        NgIfSelect,
-        SelectInitWithoutOptions,
-        SelectWithChangeEvent,
-        CustomSelectAccessor,
-        CompWithCustomSelect
-      ],
+      declarations: [BasicSelect, NgModelSelect, ManySelects, NgIfSelect],
       providers: [
         {provide: OverlayContainer, useFactory: () => {
-          overlayContainerElement = document.createElement('div') as HTMLElement;
-          overlayContainerElement.classList.add('cdk-overlay-container');
+          overlayContainerElement = document.createElement('div');
 
+          // add fixed positioning to match real overlay container styles
+          overlayContainerElement.style.position = 'fixed';
+          overlayContainerElement.style.top = '0';
+          overlayContainerElement.style.left = '0';
           document.body.appendChild(overlayContainerElement);
 
           // remove body padding to keep consistent cross-browser
@@ -94,9 +86,7 @@ describe('MdSelect', () => {
       trigger.click();
       fixture.detectChanges();
 
-      const backdrop =
-          overlayContainerElement.querySelector('.cdk-overlay-backdrop') as HTMLElement;
-
+      const backdrop = overlayContainerElement.querySelector('.md-overlay-backdrop') as HTMLElement;
       backdrop.click();
       fixture.detectChanges();
 
@@ -112,7 +102,7 @@ describe('MdSelect', () => {
       fixture.whenStable().then(() => {
         trigger.click();
         fixture.detectChanges();
-        const pane = overlayContainerElement.querySelector('.cdk-overlay-pane') as HTMLElement;
+        const pane = overlayContainerElement.children[0] as HTMLElement;
         expect(pane.style.minWidth).toBe('200px');
       });
     }));
@@ -139,7 +129,7 @@ describe('MdSelect', () => {
       fixture.detectChanges();
 
       fixture.whenStable().then(() => {
-        expect(fixture.componentInstance.select._keyManager.activeItemIndex).toEqual(0);
+        expect(fixture.componentInstance.select._keyManager.focusedItemIndex).toEqual(0);
       });
     }));
 
@@ -184,28 +174,6 @@ describe('MdSelect', () => {
       expect(optionInstances[2].selected).toBe(false);
     });
 
-    it('should remove selection if option has been removed', async(() => {
-      let select = fixture.componentInstance.select;
-
-      trigger.click();
-      fixture.detectChanges();
-
-      let firstOption = overlayContainerElement.querySelectorAll('md-option')[0] as HTMLElement;
-
-      firstOption.click();
-      fixture.detectChanges();
-
-      expect(select.selected).toBe(select.options.first, 'Expected first option to be selected.');
-
-      fixture.componentInstance.foods = [];
-      fixture.detectChanges();
-
-      fixture.whenStable().then(() => {
-        expect(select.selected)
-          .toBe(null, 'Expected selection to be removed when option no longer exists.');
-      });
-    }));
-
     it('should display the selected option in the trigger', () => {
       trigger.click();
       fixture.detectChanges();
@@ -225,19 +193,19 @@ describe('MdSelect', () => {
     });
 
     it('should focus the selected option if an option is selected', async(() => {
-      // must wait for initial writeValue promise to finish
+      trigger.click();
+      fixture.detectChanges();
+
+      const options =
+        overlayContainerElement.querySelectorAll('md-option') as NodeListOf<HTMLElement>;
+      options[1].click();
+      fixture.detectChanges();
+
+      trigger.click();
+      fixture.detectChanges();
+
       fixture.whenStable().then(() => {
-        fixture.componentInstance.control.setValue('pizza-1');
-        fixture.detectChanges();
-
-        trigger.click();
-        fixture.detectChanges();
-
-        // must wait for animation to finish
-        fixture.whenStable().then(() => {
-          fixture.detectChanges();
-          expect(fixture.componentInstance.select._keyManager.activeItemIndex).toEqual(1);
-        });
+        expect(fixture.componentInstance.select._keyManager.focusedItemIndex).toEqual(1);
       });
     }));
 
@@ -271,27 +239,6 @@ describe('MdSelect', () => {
     });
 
   });
-
-  it('should select the proper option when the list of options is initialized at a later point',
-    async(() => {
-      let fixture = TestBed.createComponent(SelectInitWithoutOptions);
-      let instance = fixture.componentInstance;
-
-      fixture.detectChanges();
-
-      // Wait for the initial writeValue promise.
-      fixture.whenStable().then(() => {
-        expect(instance.select.selected).toBeFalsy();
-
-        instance.addOptions();
-        fixture.detectChanges();
-
-        // Wait for the next writeValue promise.
-        fixture.whenStable().then(() => {
-          expect(instance.select.selected).toBe(instance.options.toArray()[1]);
-        });
-      });
-    }));
 
   describe('forms integration', () => {
     let fixture: ComponentFixture<BasicSelect>;
@@ -360,49 +307,6 @@ describe('MdSelect', () => {
         .toEqual('steak-0', `Expected control's value to be set to the new option.`);
     });
 
-    it('should clear the selection when a nonexistent option value is selected', () => {
-      fixture.componentInstance.control.setValue('pizza-1');
-      fixture.detectChanges();
-
-      fixture.componentInstance.control.setValue('gibberish');
-      fixture.detectChanges();
-
-      const value = fixture.debugElement.query(By.css('.md-select-value'));
-      expect(value).toBe(null, `Expected trigger to be cleared when option value is not found.`);
-      expect(trigger.textContent)
-          .not.toContain('Pizza', `Expected trigger to be cleared when option value is not found.`);
-
-      trigger.click();
-      fixture.detectChanges();
-
-      const options =
-          overlayContainerElement.querySelectorAll('md-option') as NodeListOf<HTMLElement>;
-      expect(options[1].classList)
-          .not.toContain('md-selected', `Expected option with the old value not to be selected.`);
-    });
-
-
-    it('should clear the selection when the control is reset', () => {
-      fixture.componentInstance.control.setValue('pizza-1');
-      fixture.detectChanges();
-
-      fixture.componentInstance.control.reset();
-      fixture.detectChanges();
-
-      const value = fixture.debugElement.query(By.css('.md-select-value'));
-      expect(value).toBe(null, `Expected trigger to be cleared when option value is not found.`);
-      expect(trigger.textContent)
-          .not.toContain('Pizza', `Expected trigger to be cleared when option value is not found.`);
-
-      trigger.click();
-      fixture.detectChanges();
-
-      const options =
-          overlayContainerElement.querySelectorAll('md-option') as NodeListOf<HTMLElement>;
-      expect(options[1].classList)
-          .not.toContain('md-selected', `Expected option with the old value not to be selected.`);
-    });
-
     it('should set the control to touched when the select is touched', () => {
       expect(fixture.componentInstance.control.touched)
         .toEqual(false, `Expected the control to start off as untouched.`);
@@ -414,7 +318,7 @@ describe('MdSelect', () => {
         .toEqual(false, `Expected the control to stay untouched when menu opened.`);
 
       const backdrop =
-        overlayContainerElement.querySelector('.cdk-overlay-backdrop') as HTMLElement;
+        overlayContainerElement.querySelector('.md-overlay-backdrop') as HTMLElement;
       backdrop.click();
       dispatchEvent('blur', trigger);
       fixture.detectChanges();
@@ -543,20 +447,6 @@ describe('MdSelect', () => {
 
   });
 
-  describe('misc forms', () => {
-    it('should support use inside a custom value accessor', () => {
-      const fixture = TestBed.createComponent(CompWithCustomSelect);
-      spyOn(fixture.componentInstance.customAccessor, 'writeValue');
-      fixture.detectChanges();
-
-      expect(fixture.componentInstance.customAccessor.select._control)
-          .toBe(null, 'Expected md-select NOT to inherit control from parent value accessor.');
-      expect(fixture.componentInstance.customAccessor.writeValue).toHaveBeenCalled();
-    });
-
-  });
-
-
   describe('animations', () => {
     let fixture: ComponentFixture<BasicSelect>;
     let trigger: HTMLElement;
@@ -578,7 +468,7 @@ describe('MdSelect', () => {
             .toEqual('floating-ltr', 'Expected placeholder to animate up to floating position.');
 
         const backdrop =
-          overlayContainerElement.querySelector('.cdk-overlay-backdrop') as HTMLElement;
+          overlayContainerElement.querySelector('.md-overlay-backdrop') as HTMLElement;
         backdrop.click();
         fixture.detectChanges();
 
@@ -607,20 +497,6 @@ describe('MdSelect', () => {
         expect(fixture.componentInstance.select._placeholderState).toEqual('floating-rtl');
       });
 
-
-      it('should add a class to the panel when the menu is done animating', fakeAsync(() => {
-        trigger.click();
-        fixture.detectChanges();
-
-        const panel = overlayContainerElement.querySelector('.md-select-panel');
-
-        expect(panel.classList).not.toContain('md-select-panel-done-animating');
-
-        tick(250);
-        fixture.detectChanges();
-
-        expect(panel.classList).toContain('md-select-panel-done-animating');
-      }));
   });
 
   describe('positioning', () => {
@@ -640,7 +516,12 @@ describe('MdSelect', () => {
      * @param index The index of the option.
      */
     function checkTriggerAlignedWithOption(index: number): void {
-      const overlayPane = overlayContainerElement.querySelector('.cdk-overlay-pane');
+      const overlayPane = overlayContainerElement.children[0] as HTMLElement;
+
+      // We need to set the position to absolute, because the top/left positioning won't work
+      // since the component CSS isn't included in the tests.
+      overlayPane.style.position = 'absolute';
+
       const triggerTop = trigger.getBoundingClientRect().top;
       const overlayTop = overlayPane.getBoundingClientRect().top;
       const options = overlayPane.querySelectorAll('md-option');
@@ -669,12 +550,12 @@ describe('MdSelect', () => {
         select.style.marginRight = '20px';
       });
 
-
       it('should align the first option with the trigger text if no option is selected', () => {
         trigger.click();
         fixture.detectChanges();
 
-        const scrollContainer = document.querySelector('.cdk-overlay-pane .md-select-panel');
+        const overlayPane = overlayContainerElement.children[0] as HTMLElement;
+        const scrollContainer = overlayPane.querySelector('.md-select-panel');
 
         // The panel should be scrolled to 0 because centering the option is not possible.
         expect(scrollContainer.scrollTop).toEqual(0, `Expected panel not to be scrolled.`);
@@ -690,7 +571,8 @@ describe('MdSelect', () => {
         trigger.click();
         fixture.detectChanges();
 
-        const scrollContainer = document.querySelector('.cdk-overlay-pane .md-select-panel');
+        const overlayPane = overlayContainerElement.children[0] as HTMLElement;
+        const scrollContainer = overlayPane.querySelector('.md-select-panel');
 
         // The panel should be scrolled to 0 because centering the option is not possible.
         expect(scrollContainer.scrollTop).toEqual(0, `Expected panel not to be scrolled.`);
@@ -706,7 +588,8 @@ describe('MdSelect', () => {
         trigger.click();
         fixture.detectChanges();
 
-        const scrollContainer = document.querySelector('.cdk-overlay-pane .md-select-panel');
+        const overlayPane = overlayContainerElement.children[0] as HTMLElement;
+        const scrollContainer = overlayPane.querySelector('.md-select-panel');
 
         // The selected option should be scrolled to the center of the panel.
         // This will be its original offset from the scrollTop - half the panel height + half the
@@ -726,7 +609,8 @@ describe('MdSelect', () => {
         trigger.click();
         fixture.detectChanges();
 
-        const scrollContainer = document.querySelector('.cdk-overlay-pane .md-select-panel');
+        const overlayPane = overlayContainerElement.children[0] as HTMLElement;
+        const scrollContainer = overlayPane.querySelector('.md-select-panel');
 
         // The selected option should be scrolled to the max scroll position.
         // This will be the height of the scrollContainer - the panel height.
@@ -758,7 +642,8 @@ describe('MdSelect', () => {
         trigger.click();
         fixture.detectChanges();
 
-        const scrollContainer = document.querySelector('.cdk-overlay-pane .md-select-panel');
+        const overlayPane = overlayContainerElement.children[0] as HTMLElement;
+        const scrollContainer = overlayPane.querySelector('.md-select-panel');
 
         // Scroll should adjust by the difference between the top space available (85px + 8px
         // viewport padding = 77px) and the height of the panel above the option (113px).
@@ -781,7 +666,8 @@ describe('MdSelect', () => {
         trigger.click();
         fixture.detectChanges();
 
-        const scrollContainer = document.querySelector('.cdk-overlay-pane .md-select-panel');
+        const overlayPane = overlayContainerElement.children[0] as HTMLElement;
+        const scrollContainer = overlayPane.querySelector('.md-select-panel');
 
         // Scroll should adjust by the difference between the bottom space available
         // (686px - 600px margin - 30px trigger height = 56px - 8px padding = 48px)
@@ -805,7 +691,12 @@ describe('MdSelect', () => {
         trigger.click();
         fixture.detectChanges();
 
-        const overlayPane = document.querySelector('.cdk-overlay-pane');
+        const overlayPane = overlayContainerElement.children[0] as HTMLElement;
+
+        // We need to set the position to absolute, because the top/left positioning won't work
+        // since the component CSS isn't included in the tests.
+        overlayPane.style.position = 'absolute';
+
         const triggerBottom = trigger.getBoundingClientRect().bottom;
         const overlayBottom = overlayPane.getBoundingClientRect().bottom;
         const scrollContainer = overlayPane.querySelector('.md-select-panel');
@@ -832,7 +723,12 @@ describe('MdSelect', () => {
         trigger.click();
         fixture.detectChanges();
 
-        const overlayPane = document.querySelector('.cdk-overlay-pane');
+        const overlayPane = overlayContainerElement.children[0] as HTMLElement;
+
+        // We need to set the position to absolute, because the top/left positioning won't work
+        // since the component CSS isn't included in the tests.
+        overlayPane.style.position = 'absolute';
+
         const triggerTop = trigger.getBoundingClientRect().top;
         const overlayTop = overlayPane.getBoundingClientRect().top;
         const scrollContainer = overlayPane.querySelector('.md-select-panel');
@@ -849,105 +745,6 @@ describe('MdSelect', () => {
 
     });
 
-    describe('when scrolled', () => {
-
-      // Need to set the scrollTop two different ways to support
-      // both Chrome and Firefox.
-      function setScrollTop(num: number) {
-        document.body.scrollTop = num;
-        document.documentElement.scrollTop = num;
-      }
-
-      beforeEach(() => {
-        // Make the div above the select very tall, so the page will scroll
-        fixture.componentInstance.heightAbove = 2000;
-
-        // Give the select enough horizontal space to open
-        select.style.marginLeft = '20px';
-        select.style.marginRight = '20px';
-      });
-
-      afterEach(() => {
-        document.body.scrollTop = 0;
-        document.documentElement.scrollTop = 0;
-      });
-
-      it('should align the first option properly when scrolled', () => {
-        // Give the select enough space to open
-        fixture.componentInstance.heightBelow = 400;
-        fixture.detectChanges();
-
-        // Scroll the select into view
-        setScrollTop(1700);
-
-        trigger.click();
-        fixture.detectChanges();
-
-        checkTriggerAlignedWithOption(0);
-      });
-
-
-      it('should align a centered option properly when scrolled', () => {
-        // Give the select enough space to open
-        fixture.componentInstance.heightBelow = 400;
-        fixture.detectChanges();
-
-        fixture.componentInstance.control.setValue('chips-4');
-        fixture.detectChanges();
-
-        // Scroll the select into view
-        setScrollTop(1700);
-
-        trigger.click();
-        fixture.detectChanges();
-
-        checkTriggerAlignedWithOption(4);
-      });
-
-      it('should fall back to "above" positioning properly when scrolled', () => {
-        // Give the select insufficient space to open below the trigger
-        fixture.componentInstance.heightBelow = 100;
-        fixture.detectChanges();
-
-        // Scroll the select into view
-        setScrollTop(1400);
-
-        trigger.click();
-        fixture.detectChanges();
-
-        const overlayPane = overlayContainerElement.querySelector('.cdk-overlay-pane');
-        const triggerBottom = trigger.getBoundingClientRect().bottom;
-        const overlayBottom = overlayPane.getBoundingClientRect().bottom;
-
-        expect(overlayBottom.toFixed(2))
-            .toEqual(triggerBottom.toFixed(2),
-                `Expected trigger bottom to align with overlay bottom.`);
-      });
-
-      it('should fall back to "below" positioning properly when scrolled', () => {
-        // Give plenty of space for the select to open below the trigger
-        fixture.componentInstance.heightBelow = 650;
-        fixture.detectChanges();
-
-        // Select an option too low in the list to fit in limited space above
-        fixture.componentInstance.control.setValue('sushi-7');
-        fixture.detectChanges();
-
-        // Scroll the select so that it has insufficient space to open above the trigger
-        setScrollTop(1950);
-
-        trigger.click();
-        fixture.detectChanges();
-
-        const overlayPane = overlayContainerElement.querySelector('.cdk-overlay-pane');
-        const triggerTop = trigger.getBoundingClientRect().top;
-        const overlayTop = overlayPane.getBoundingClientRect().top;
-
-        expect(overlayTop.toFixed(2))
-            .toEqual(triggerTop.toFixed(2), `Expected trigger top to align with overlay top.`);
-      });
-    });
-
     describe('x-axis positioning', () => {
 
       beforeEach(() => {
@@ -959,9 +756,15 @@ describe('MdSelect', () => {
         trigger.click();
         fixture.detectChanges();
 
+        const overlayPane = overlayContainerElement.children[0] as HTMLElement;
+
+        // We need to set the position to absolute, because the top/left positioning won't work
+        // since the component CSS isn't included in the tests.
+        overlayPane.style.position = 'absolute';
+
         const triggerLeft = trigger.getBoundingClientRect().left;
         const firstOptionLeft =
-            document.querySelector('.cdk-overlay-pane md-option').getBoundingClientRect().left;
+            overlayPane.querySelector('md-option').getBoundingClientRect().left;
 
         // Each option is 32px wider than the trigger, so it must be adjusted 16px
         // to ensure the text overlaps correctly.
@@ -976,9 +779,15 @@ describe('MdSelect', () => {
         trigger.click();
         fixture.detectChanges();
 
+        const overlayPane = overlayContainerElement.children[0] as HTMLElement;
+
+        // We need to set the position to absolute, because the top/left positioning won't work
+        // since the component CSS isn't included in the tests.
+        overlayPane.style.position = 'absolute';
+
         const triggerRight = trigger.getBoundingClientRect().right;
         const firstOptionRight =
-            document.querySelector('.cdk-overlay-pane md-option').getBoundingClientRect().right;
+            overlayPane.querySelector('md-option').getBoundingClientRect().right;
 
         // Each option is 32px wider than the trigger, so it must be adjusted 16px
         // to ensure the text overlaps correctly.
@@ -1142,7 +951,7 @@ describe('MdSelect', () => {
             .toContain(options[1].id, `Expected aria-owns to contain IDs of its child options.`);
 
         const backdrop =
-            overlayContainerElement.querySelector('.cdk-overlay-backdrop') as HTMLElement;
+            overlayContainerElement.querySelector('.md-overlay-backdrop') as HTMLElement;
         backdrop.click();
         fixture.detectChanges();
 
@@ -1164,11 +973,11 @@ describe('MdSelect', () => {
         let firstOptionID = options[0].id;
 
         expect(options[0].id)
-            .toContain('md-option', `Expected option ID to have the correct prefix.`);
+            .toContain('md-select-option', `Expected option ID to have the correct prefix.`);
         expect(options[0].id).not.toEqual(options[1].id, `Expected option IDs to be unique.`);
 
         const backdrop =
-            overlayContainerElement.querySelector('.cdk-overlay-backdrop') as HTMLElement;
+            overlayContainerElement.querySelector('.md-overlay-backdrop') as HTMLElement;
         backdrop.click();
         fixture.detectChanges();
 
@@ -1179,7 +988,7 @@ describe('MdSelect', () => {
           options =
               overlayContainerElement.querySelectorAll('md-option') as NodeListOf<HTMLElement>;
           expect(options[0].id)
-              .toContain('md-option', `Expected option ID to have the correct prefix.`);
+              .toContain('md-select-option', `Expected option ID to have the correct prefix.`);
           expect(options[0].id).not.toEqual(firstOptionID, `Expected option IDs to be unique.`);
           expect(options[0].id).not.toEqual(options[1].id, `Expected option IDs to be unique.`);
         });
@@ -1211,7 +1020,7 @@ describe('MdSelect', () => {
         trigger.click();
         fixture.detectChanges();
 
-        const pane = overlayContainerElement.querySelector('.cdk-overlay-pane') as HTMLElement;
+        const pane = overlayContainerElement.children[0] as HTMLElement;
         expect(pane.style.minWidth).toEqual('300px');
 
         expect(fixture.componentInstance.select.panelOpen).toBe(true);
@@ -1223,50 +1032,16 @@ describe('MdSelect', () => {
 
   });
 
-  describe('change event', () => {
-    let fixture: ComponentFixture<SelectWithChangeEvent>;
-    let trigger: HTMLElement;
-
-    beforeEach(() => {
-      fixture = TestBed.createComponent(SelectWithChangeEvent);
-      fixture.detectChanges();
-
-      trigger = fixture.debugElement.query(By.css('.md-select-trigger')).nativeElement;
-    });
-
-    it('should emit an event when the selected option has changed', () => {
-      trigger.click();
-      fixture.detectChanges();
-
-      (overlayContainerElement.querySelector('md-option') as HTMLElement).click();
-
-      expect(fixture.componentInstance.changeListener).toHaveBeenCalled();
-    });
-
-    it('should not emit multiple change events for the same option', () => {
-      trigger.click();
-      fixture.detectChanges();
-
-      let option = overlayContainerElement.querySelector('md-option') as HTMLElement;
-
-      option.click();
-      option.click();
-
-      expect(fixture.componentInstance.changeListener).toHaveBeenCalledTimes(1);
-    });
-  });
 });
 
 @Component({
   selector: 'basic-select',
   template: `
-    <div [style.height.px]="heightAbove"></div>
     <md-select placeholder="Food" [formControl]="control" [required]="isRequired">
       <md-option *ngFor="let food of foods" [value]="food.value" [disabled]="food.disabled">
         {{ food.viewValue }}
       </md-option>
     </md-select>
-    <div [style.height.px]="heightBelow"></div>
   `
 })
 class BasicSelect {
@@ -1282,8 +1057,6 @@ class BasicSelect {
   ];
   control = new FormControl();
   isRequired: boolean;
-  heightAbove = 0;
-  heightBelow = 0;
 
   @ViewChild(MdSelect) select: MdSelect;
   @ViewChildren(MdOption) options: QueryList<MdOption>;
@@ -1334,7 +1107,8 @@ class ManySelects {}
         </md-option>
       </md-select>
     </div>
-  `,
+  `
+
 })
 class NgIfSelect {
   isShowing = false;
@@ -1348,90 +1122,6 @@ class NgIfSelect {
   @ViewChild(MdSelect) select: MdSelect;
 }
 
-@Component({
-  selector: 'select-with-change-event',
-  template: `
-    <md-select (change)="changeListener($event)">
-      <md-option *ngFor="let food of foods" [value]="food">{{ food }}</md-option>
-    </md-select>
-  `
-})
-class SelectWithChangeEvent {
-  foods: string[] = [
-    'steak-0',
-    'pizza-1',
-    'tacos-2',
-    'sandwich-3',
-    'chips-4',
-    'eggs-5',
-    'pasta-6',
-    'sushi-7'
-  ];
-
-  changeListener = jasmine.createSpy('MdSelect change listener');
-}
-
-@Component({
-  selector: 'select-init-without-options',
-  template: `
-    <md-select placeholder="Food I want to eat right now" [formControl]="control">
-      <md-option *ngFor="let food of foods" [value]="food.value">
-        {{ food.viewValue }}
-      </md-option>
-    </md-select>
-  `
-})
-class SelectInitWithoutOptions {
-  foods: any[];
-  control = new FormControl('pizza-1');
-
-  @ViewChild(MdSelect) select: MdSelect;
-  @ViewChildren(MdOption) options: QueryList<MdOption>;
-
-  addOptions() {
-    this.foods = [
-      { value: 'steak-0', viewValue: 'Steak' },
-      { value: 'pizza-1', viewValue: 'Pizza' },
-      { value: 'tacos-2', viewValue: 'Tacos'}
-    ];
-  }
-}
-
-@Component({
-  selector: 'custom-select-accessor',
-  template: `
-    <md-select></md-select>
-  `,
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: CustomSelectAccessor,
-    multi: true
-  }]
-})
-class CustomSelectAccessor implements ControlValueAccessor {
-  @ViewChild(MdSelect) select: MdSelect;
-
-  writeValue(val: any): void {}
-  registerOnChange(fn: (val: any) => void): void {}
-  registerOnTouched(fn: Function): void {}
-}
-
-@Component({
-  selector: 'comp-with-custom-select',
-  template: `
-    <custom-select-accessor [formControl]="ctrl">
-    </custom-select-accessor>
-  `,
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    useExisting: CustomSelectAccessor,
-    multi: true
-  }]
-})
-class CompWithCustomSelect {
-  ctrl = new FormControl('initial value');
-  @ViewChild(CustomSelectAccessor) customAccessor: CustomSelectAccessor;
-}
 
 
 /**

@@ -13,12 +13,12 @@ import {
 import {NG_VALUE_ACCESSOR, ControlValueAccessor, FormsModule} from '@angular/forms';
 import {HAMMER_GESTURE_CONFIG} from '@angular/platform-browser';
 import {
-  GestureConfig,
-  HammerInput,
+  MdGestureConfig,
   coerceBooleanProperty,
   coerceNumberProperty,
-  CompatibilityModule,
+  DefaultStyleCompatibilityModeModule,
 } from '../core';
+import {Input as HammerInput} from 'hammerjs';
 import {Dir} from '../core/rtl/dir';
 import {CommonModule} from '@angular/common';
 import {
@@ -29,23 +29,15 @@ import {
   LEFT_ARROW,
   UP_ARROW,
   RIGHT_ARROW,
-  DOWN_ARROW
+  DOWN_ARROW,
 } from '../core/keyboard/keycodes';
+
 
 /**
  * Visually, a 30px separation between tick marks looks best. This is very subjective but it is
  * the default separation we chose.
  */
 const MIN_AUTO_TICK_SEPARATION = 30;
-
-/** The thumb gap size for a disabled slider. */
-const DISABLED_THUMB_GAP = 7;
-
-/** The thumb gap size for a non-active slider at its minimum value. */
-const MIN_VALUE_NONACTIVE_THUMB_GAP = 7;
-
-/** The thumb gap size for an active slider at its minimum value. */
-const MIN_VALUE_ACTIVE_THUMB_GAP = 10;
 
 /**
  * Provider Expression that allows md-slider to register as a ControlValueAccessor.
@@ -63,10 +55,6 @@ export class MdSliderChange {
   value: number;
 }
 
-/**
- * Allows users to select from a range of values by moving the slider thumb. It is similar in
- * behavior to the native `<input type="range">` element.
- */
 @Component({
   moduleId: module.id,
   selector: 'md-slider, mat-slider',
@@ -75,7 +63,6 @@ export class MdSliderChange {
     '(blur)': '_onBlur()',
     '(click)': '_onClick($event)',
     '(keydown)': '_onKeydown($event)',
-    '(keyup)': '_onKeyup()',
     '(mouseenter)': '_onMouseenter()',
     '(slide)': '_onSlide($event)',
     '(slideend)': '_onSlideEnd()',
@@ -94,8 +81,6 @@ export class MdSliderChange {
     '[class.md-slider-sliding]': '_isSliding',
     '[class.md-slider-thumb-label-showing]': 'thumbLabel',
     '[class.md-slider-vertical]': 'vertical',
-    '[class.md-slider-min-value]': '_isMinValue',
-    '[class.md-slider-hide-last-tick]': '_isMinValue && _thumbGap && invertAxis || disabled',
   },
   templateUrl: 'slider.html',
   styleUrls: ['slider.css'],
@@ -108,30 +93,24 @@ export class MdSlider implements ControlValueAccessor {
   /** The dimensions of the slider. */
   private _sliderDimensions: ClientRect = null;
 
+  /** Whether or not the slider is disabled. */
   private _disabled: boolean = false;
 
-  /** Whether or not the slider is disabled. */
   @Input()
   get disabled(): boolean { return this._disabled; }
   set disabled(value) { this._disabled = coerceBooleanProperty(value); }
 
+  /** Whether or not to show the thumb label. */
   private _thumbLabel: boolean = false;
 
-  /** Whether or not to show the thumb label. */
-  @Input('thumbLabel')
+  @Input('thumb-label')
   get thumbLabel(): boolean { return this._thumbLabel; }
   set thumbLabel(value) { this._thumbLabel = coerceBooleanProperty(value); }
 
-  /** @deprecated */
-  @Input('thumb-label')
-  get _thumbLabelDeprecated(): boolean { return this._thumbLabel; }
-  set _thumbLabelDeprecated(value) { this._thumbLabel = value; }
-
   private _controlValueAccessorChangeFn: (value: any) => void = () => {};
 
-  /** The last values for which a change or input event was emitted. */
-  private _lastChangeValue: number = null;
-  private _lastInputValue: number = null;
+  /** The last value for which a change event was emitted. */
+  private _lastEmittedValue: number = null;
 
   /** onTouch function registered via registerOnTouch (ControlValueAccessor). */
   onTouched: () => any = () => {};
@@ -148,52 +127,38 @@ export class MdSlider implements ControlValueAccessor {
    */
   _isActive: boolean = false;
 
-  /** Decimal places to round to, based on the step amount. */
-  private _roundLabelTo: number;
-
+  /** The values at which the thumb will snap. */
   private _step: number = 1;
 
-  /** The values at which the thumb will snap. */
   @Input()
   get step() { return this._step; }
-  set step(v) {
-    this._step = coerceNumberProperty(v, this._step);
-
-    if (this._step % 1 !== 0) {
-      this._roundLabelTo = this._step.toString().split('.').pop().length;
-    }
-  }
-
-  private _tickInterval: 'auto' | number = 0;
+  set step(v) { this._step = coerceNumberProperty(v, this._step); }
 
   /**
    * How often to show ticks. Relative to the step so that a tick always appears on a step.
    * Ex: Tick interval of 4 with a step of 3 will draw a tick every 4 steps (every 12 values).
    */
-  @Input()
+  private _tickInterval: 'auto' | number = 0;
+
+  @Input('tick-interval')
   get tickInterval() { return this._tickInterval; }
   set tickInterval(v) {
     this._tickInterval = (v == 'auto') ? v : coerceNumberProperty(v, <number>this._tickInterval);
   }
 
-  /** @deprecated */
-  @Input('tick-interval')
-  get _tickIntervalDeprecated() { return this.tickInterval; }
-  set _tickIntervalDeprecated(v) { this.tickInterval = v; }
-
+  /** The size of a tick interval as a percentage of the size of the track. */
   private _tickIntervalPercent: number = 0;
 
-  /** The size of a tick interval as a percentage of the size of the track. */
   get tickIntervalPercent() { return this._tickIntervalPercent; }
 
+  /** The percentage of the slider that coincides with the value. */
   private _percent: number = 0;
 
-  /** The percentage of the slider that coincides with the value. */
   get percent() { return this._clamp(this._percent); }
 
+  /** Value of the slider. */
   private _value: number = null;
 
-  /** Value of the slider. */
   @Input()
   get value() {
     // If the value needs to be read and it is still uninitialized, initialize it to the min.
@@ -207,9 +172,9 @@ export class MdSlider implements ControlValueAccessor {
     this._percent = this._calculatePercentage(this._value);
   }
 
+  /** The miniumum value that the slider can have. */
   private _min: number = 0;
 
-  /** The minimum value that the slider can have. */
   @Input()
   get min() {
     return this._min;
@@ -224,9 +189,9 @@ export class MdSlider implements ControlValueAccessor {
     this._percent = this._calculatePercentage(this.value);
   }
 
+  /** The maximum value that the slider can have. */
   private _max: number = 100;
 
-  /** The maximum value that the slider can have. */
   @Input()
   get max() {
     return this._max;
@@ -248,18 +213,6 @@ export class MdSlider implements ControlValueAccessor {
   set vertical(value: any) { this._vertical = coerceBooleanProperty(value); }
   private _vertical = false;
 
-  /** The value to be used for display purposes. */
-  get displayValue(): string|number {
-    // Note that this could be improved further by rounding something like 0.999 to 1 or
-    // 0.899 to 0.9, however it is very performance sensitive, because it gets called on
-    // every change detection cycle.
-    if (this._roundLabelTo && this.value % 1 !== 0) {
-      return this.value.toFixed(this._roundLabelTo);
-    }
-
-    return this.value;
-  }
-
   /**
    * Whether the axis of the slider is inverted.
    * (i.e. whether moving the thumb in the positive x or y direction decreases the slider's value).
@@ -278,40 +231,11 @@ export class MdSlider implements ControlValueAccessor {
     return (this.direction == 'rtl' && !this.vertical) ? !this.invertAxis : this.invertAxis;
   }
 
-  /** Whether the slider is at its minimum value. */
-  get _isMinValue() {
-    return this.percent === 0;
-  }
-
-  /**
-   * The amount of space to leave between the slider thumb and the track fill & track background
-   * elements.
-   */
-  get _thumbGap() {
-    if (this.disabled) {
-      return DISABLED_THUMB_GAP;
-    }
-    if (this._isMinValue && !this.thumbLabel) {
-      return this._isActive ? MIN_VALUE_ACTIVE_THUMB_GAP : MIN_VALUE_NONACTIVE_THUMB_GAP;
-    }
-    return 0;
-  }
-
-  /** CSS styles for the track background element. */
-  get trackBackgroundStyles(): { [key: string]: string } {
-    let axis = this.vertical ? 'Y' : 'X';
-    let sign = this.invertMouseCoords ? '-' : '';
-    return {
-      'transform': `translate${axis}(${sign}${this._thumbGap}px) scale${axis}(${1 - this.percent})`
-    };
-  }
-
   /** CSS styles for the track fill element. */
   get trackFillStyles(): { [key: string]: string } {
     let axis = this.vertical ? 'Y' : 'X';
-    let sign = this.invertMouseCoords ? '' : '-';
     return {
-      'transform': `translate${axis}(${sign}${this._thumbGap}px) scale${axis}(${this.percent})`
+      'transform': `scale${axis}(${this.percent})`
     };
   }
 
@@ -337,20 +261,11 @@ export class MdSlider implements ControlValueAccessor {
     // ticks 180 degrees so we're really cutting off the end edge abd not the start.
     let sign = !this.vertical && this.direction == 'rtl' ? '-' : '';
     let rotate = !this.vertical && this.direction == 'rtl' ? ' rotate(180deg)' : '';
-    let styles: { [key: string]: string } = {
+    return {
       'backgroundSize': backgroundSize,
       // Without translateZ ticks sometimes jitter as the slider moves on Chrome & Firefox.
       'transform': `translateZ(0) translate${axis}(${sign}${tickSize / 2}%)${rotate}`
     };
-
-    if (this._isMinValue && this._thumbGap) {
-      let side = this.vertical ?
-          (this.invertAxis ? 'Bottom' : 'Top') :
-          (this.invertAxis ? 'Right' : 'Left');
-      styles[`padding${side}`] = `${this._thumbGap}px`;
-    }
-
-    return styles;
   }
 
   get thumbContainerStyles(): { [key: string]: string } {
@@ -370,11 +285,7 @@ export class MdSlider implements ControlValueAccessor {
     return (this._dir && this._dir.value == 'rtl') ? 'rtl' : 'ltr';
   }
 
-  /** Event emitted when the slider value has changed. */
   @Output() change = new EventEmitter<MdSliderChange>();
-
-  /** Event emitted when the slider thumb moves. */
-  @Output() input = new EventEmitter<MdSliderChange>();
 
   constructor(@Optional() private _dir: Dir, elementRef: ElementRef) {
     this._renderer = new SliderRenderer(elementRef);
@@ -400,9 +311,6 @@ export class MdSlider implements ControlValueAccessor {
     this._isSliding = false;
     this._renderer.addFocus();
     this._updateValueFromPosition({x: event.clientX, y: event.clientY});
-
-    /* Emits a change and input event if the value changed. */
-    this._emitInputEvent();
     this._emitValueIfChanged();
   }
 
@@ -414,9 +322,6 @@ export class MdSlider implements ControlValueAccessor {
     // Prevent the slide from selecting anything else.
     event.preventDefault();
     this._updateValueFromPosition({x: event.center.x, y: event.center.y});
-
-    // Native range elements always emit `input` events when the value changed while sliding.
-    this._emitInputEvent();
   }
 
   _onSlideStart(event: HammerInput) {
@@ -486,22 +391,17 @@ export class MdSlider implements ControlValueAccessor {
         return;
     }
 
-    this._isSliding = true;
     event.preventDefault();
-  }
-
-  _onKeyup() {
-    this._isSliding = false;
   }
 
   /** Increments the slider by the given number of steps (negative number decrements). */
   private _increment(numSteps: number) {
     this.value = this._clamp(this.value + this.step * numSteps, this.min, this.max);
-    this._emitInputEvent();
-    this._emitValueIfChanged();
   }
 
-  /** Calculate the new value from the new physical location. The value will always be snapped. */
+  /**
+   * Calculate the new value from the new physical location. The value will always be snapped.
+   */
   private _updateValueFromPosition(pos: {x: number, y: number}) {
     if (!this._sliderDimensions) {
       return;
@@ -527,24 +427,19 @@ export class MdSlider implements ControlValueAccessor {
 
   /** Emits a change event if the current value is different from the last emitted value. */
   private _emitValueIfChanged() {
-    if (this.value != this._lastChangeValue) {
-      let event = this._createChangeEvent();
-      this._lastChangeValue = this.value;
+    if (this.value != this._lastEmittedValue) {
+      let event = new MdSliderChange();
+      event.source = this;
+      event.value = this.value;
+      this._lastEmittedValue = this.value;
       this._controlValueAccessorChangeFn(this.value);
       this.change.emit(event);
     }
   }
 
-  /** Emits an input event when the current value is different from the last emitted value. */
-  private _emitInputEvent() {
-    if (this.value != this._lastInputValue) {
-      let event = this._createChangeEvent();
-      this._lastInputValue = this.value;
-      this.input.emit(event);
-    }
-  }
-
-  /** Updates the amount of space between ticks as a percentage of the width of the slider. */
+  /**
+   * Updates the amount of space between ticks as a percentage of the width of the slider.
+   */
   private _updateTickIntervalPercent() {
     if (!this.tickInterval) {
       return;
@@ -561,61 +456,50 @@ export class MdSlider implements ControlValueAccessor {
     }
   }
 
-  /** Creates a slider change object from the specified value. */
-  private _createChangeEvent(value = this.value): MdSliderChange {
-    let event = new MdSliderChange();
-
-    event.source = this;
-    event.value = value;
-
-    return event;
-  }
-
-  /** Calculates the percentage of the slider that a value is. */
+  /**
+   * Calculates the percentage of the slider that a value is.
+   */
   private _calculatePercentage(value: number) {
     return (value - this.min) / (this.max - this.min);
   }
 
-  /** Calculates the value a percentage of the slider corresponds to. */
+  /**
+   * Calculates the value a percentage of the slider corresponds to.
+   */
   private _calculateValue(percentage: number) {
     return this.min + percentage * (this.max - this.min);
   }
 
-  /** Return a number between two numbers. */
+  /**
+   * Return a number between two numbers.
+   */
   private _clamp(value: number, min = 0, max = 1) {
     return Math.max(min, Math.min(value, max));
   }
 
   /**
-   * Sets the model value. Implemented as part of ControlValueAccessor.
-   * @param value
+   * Implemented as part of ControlValueAccessor.
    */
   writeValue(value: any) {
     this.value = value;
   }
 
   /**
-   * Registers a callback to eb triggered when the value has changed.
    * Implemented as part of ControlValueAccessor.
-   * @param fn Callback to be registered.
    */
   registerOnChange(fn: (value: any) => void) {
     this._controlValueAccessorChangeFn = fn;
   }
 
   /**
-   * Registers a callback to be triggered when the component is touched.
    * Implemented as part of ControlValueAccessor.
-   * @param fn Callback to be registered.
    */
   registerOnTouched(fn: any) {
     this.onTouched = fn;
   }
 
   /**
-   * Sets whether the component should be disabled.
    * Implemented as part of ControlValueAccessor.
-   * @param isDisabled
    */
   setDisabledState(isDisabled: boolean) {
     this.disabled = isDisabled;
@@ -624,7 +508,6 @@ export class MdSlider implements ControlValueAccessor {
 
 /**
  * Renderer class in order to keep all dom manipulation in one place and outside of the main class.
- * @docs-private
  */
 export class SliderRenderer {
   private _sliderElement: HTMLElement;
@@ -639,8 +522,8 @@ export class SliderRenderer {
    * take up.
    */
   getSliderDimensions() {
-    let wrapperElement = this._sliderElement.querySelector('.md-slider-wrapper');
-    return wrapperElement.getBoundingClientRect();
+    let trackElement = this._sliderElement.querySelector('.md-slider-track');
+    return trackElement.getBoundingClientRect();
   }
 
   /**
@@ -654,17 +537,18 @@ export class SliderRenderer {
 
 
 @NgModule({
-  imports: [CommonModule, FormsModule, CompatibilityModule],
-  exports: [MdSlider, CompatibilityModule],
+  imports: [CommonModule, FormsModule, DefaultStyleCompatibilityModeModule],
+  exports: [MdSlider, DefaultStyleCompatibilityModeModule],
   declarations: [MdSlider],
-  providers: [{provide: HAMMER_GESTURE_CONFIG, useClass: GestureConfig}]
+  providers: [
+    {provide: HAMMER_GESTURE_CONFIG, useClass: MdGestureConfig},
+  ],
 })
 export class MdSliderModule {
-  /** @deprecated */
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: MdSliderModule,
-      providers: []
+      providers: [{provide: HAMMER_GESTURE_CONFIG, useClass: MdGestureConfig}]
     };
   }
 }

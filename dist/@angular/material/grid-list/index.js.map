@@ -1,1 +1,1 @@
-{"version":3,"file":"index.js","sourceRoot":"","sources":["../../../../src/lib/grid-list/index.ts"],"names":[],"mappings":"AAAA,cAAc,aAAa,CAAC","sourcesContent":["export * from './grid-list';\n"]}
+{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;;;AAAA,iCAA4B","sourcesContent":["export * from './grid-list';\n\ninterface DecoratorInvocation {\n  type: Function;\n  args?: any[];\n}\n"]}

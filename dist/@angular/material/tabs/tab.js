@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,11 +8,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { TemplatePortal } from '../core/portal/portal';
-import { ViewContainerRef, Input, TemplateRef, ViewChild, ContentChild, Component } from '@angular/core';
-import { coerceBooleanProperty } from '../core/coercion/boolean-property';
-import { MdTabLabel } from './tab-label';
-export var MdTab = (function () {
+Object.defineProperty(exports, "__esModule", { value: true });
+var portal_1 = require("../core/portal/portal");
+var core_1 = require("@angular/core");
+var boolean_property_1 = require("../core/coersion/boolean-property");
+var tab_label_1 = require("./tab-label");
+var MdTab = (function () {
     function MdTab(_viewContainerRef) {
         this._viewContainerRef = _viewContainerRef;
         /** The plain text label for the tab, used when there is no template label. */
@@ -37,37 +39,39 @@ export var MdTab = (function () {
     });
     Object.defineProperty(MdTab.prototype, "disabled", {
         get: function () { return this._disabled; },
-        /** Whether the tab is disabled */
-        set: function (value) { this._disabled = coerceBooleanProperty(value); },
+        set: function (value) { this._disabled = boolean_property_1.coerceBooleanProperty(value); },
         enumerable: true,
         configurable: true
     });
     MdTab.prototype.ngOnInit = function () {
-        this._contentPortal = new TemplatePortal(this._content, this._viewContainerRef);
+        this._contentPortal = new portal_1.TemplatePortal(this._content, this._viewContainerRef);
     };
-    __decorate([
-        ContentChild(MdTabLabel), 
-        __metadata('design:type', MdTabLabel)
-    ], MdTab.prototype, "templateLabel", void 0);
-    __decorate([
-        ViewChild(TemplateRef), 
-        __metadata('design:type', TemplateRef)
-    ], MdTab.prototype, "_content", void 0);
-    __decorate([
-        Input('label'), 
-        __metadata('design:type', String)
-    ], MdTab.prototype, "textLabel", void 0);
-    __decorate([
-        Input(), 
-        __metadata('design:type', Boolean), 
-        __metadata('design:paramtypes', [Boolean])
-    ], MdTab.prototype, "disabled", null);
-    MdTab = __decorate([
-        Component({selector: 'md-tab, mat-tab',
-            template: "<!-- Create a template for the content of the <md-tab> so that we can grab a reference to this TemplateRef and use it in a Portal to render the tab content in the appropriate place in the tab-group. --> <template><ng-content></ng-content></template> ",
-        }), 
-        __metadata('design:paramtypes', [ViewContainerRef])
-    ], MdTab);
     return MdTab;
 }());
-//# sourceMappingURL=tab.js.map
+__decorate([
+    core_1.ContentChild(tab_label_1.MdTabLabel),
+    __metadata("design:type", tab_label_1.MdTabLabel)
+], MdTab.prototype, "templateLabel", void 0);
+__decorate([
+    core_1.ViewChild(core_1.TemplateRef),
+    __metadata("design:type", core_1.TemplateRef)
+], MdTab.prototype, "_content", void 0);
+__decorate([
+    core_1.Input('label'),
+    __metadata("design:type", String)
+], MdTab.prototype, "textLabel", void 0);
+__decorate([
+    core_1.Input(),
+    __metadata("design:type", Boolean),
+    __metadata("design:paramtypes", [Boolean])
+], MdTab.prototype, "disabled", null);
+MdTab = __decorate([
+    core_1.Component({
+        moduleId: module.id,
+        selector: 'md-tab',
+        templateUrl: 'tab.html',
+    }),
+    __metadata("design:paramtypes", [core_1.ViewContainerRef])
+], MdTab);
+exports.MdTab = MdTab;
+//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/tabs/tab.js.map

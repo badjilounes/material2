@@ -11,12 +11,9 @@ import {
   SimpleChange,
   ViewEncapsulation,
   AfterViewChecked,
-  Optional,
-  SkipSelf,
 } from '@angular/core';
-import {HttpModule, Http} from '@angular/http';
-import {DomSanitizer} from '@angular/platform-browser';
-import {MdError, CompatibilityModule} from '../core';
+import {HttpModule} from '@angular/http';
+import {MdError, DefaultStyleCompatibilityModeModule} from '../core';
 import {MdIconRegistry} from './icon-registry';
 export {MdIconRegistry} from './icon-registry';
 
@@ -74,29 +71,25 @@ export class MdIconInvalidNameError extends MdError {
 export class MdIcon implements OnChanges, OnInit, AfterViewChecked {
   private _color: string;
 
-  /** Name of the icon in the SVG icon set. */
+  @Input() svgSrc: string;
   @Input() svgIcon: string;
-
-  /** Font set that the icon is a part of. */
   @Input() fontSet: string;
-
-  /** Name of an icon within a font set. */
   @Input() fontIcon: string;
-
-  /** Alt label to be used for accessibility. */
   @Input() alt: string;
 
-  /** Screenreader label for the icon. */
   @Input('aria-label') hostAriaLabel: string = '';
 
-  /** Color of the icon. */
   @Input()
-  get color(): string { return this._color; }
-  set color(value: string) { this._updateColor(value); }
+  get color(): string {
+    return this._color;
+  }
+
+  set color(value: string) {
+    this._updateColor(value);
+  }
 
   private _previousFontSetClass: string;
   private _previousFontIconClass: string;
-  private _previousAriaLabel: string;
 
   constructor(
       private _elementRef: ElementRef,
@@ -144,6 +137,7 @@ export class MdIcon implements OnChanges, OnInit, AfterViewChecked {
     }
   }
 
+  /** TODO: internal */
   ngOnChanges(changes: { [propertyName: string]: SimpleChange }) {
     const changedInputs = Object.keys(changes);
     // Only update the inline SVG icon if the inputs changed, to avoid unnecessary DOM operations.
@@ -151,6 +145,10 @@ export class MdIcon implements OnChanges, OnInit, AfterViewChecked {
       if (this.svgIcon) {
         const [namespace, iconName] = this._splitIconName(this.svgIcon);
         this._mdIconRegistry.getNamedSvgIcon(iconName, namespace).first().subscribe(
+            svg => this._setSvgElement(svg),
+            (err: any) => console.log(`Error retrieving icon: ${err}`));
+      } else if (this.svgSrc) {
+        this._mdIconRegistry.getSvgIconFromUrl(this.svgSrc).first().subscribe(
             svg => this._setSvgElement(svg),
             (err: any) => console.log(`Error retrieving icon: ${err}`));
       }
@@ -161,6 +159,7 @@ export class MdIcon implements OnChanges, OnInit, AfterViewChecked {
     this._updateAriaLabel();
   }
 
+  /** TODO: internal */
   ngOnInit() {
     // Update font classes because ngOnChanges won't be called if none of the inputs are present,
     // e.g. <md-icon>arrow</md-icon>. In this case we need to add a CSS class for the default font.
@@ -169,6 +168,7 @@ export class MdIcon implements OnChanges, OnInit, AfterViewChecked {
     }
   }
 
+  /** TODO: internal */
   ngAfterViewChecked() {
     // Update aria label here because it may depend on the projected text content.
     // (e.g. <md-icon>home</md-icon> should use 'home').
@@ -177,8 +177,7 @@ export class MdIcon implements OnChanges, OnInit, AfterViewChecked {
 
   private _updateAriaLabel() {
       const ariaLabel = this._getAriaLabel();
-      if (ariaLabel && ariaLabel !== this._previousAriaLabel) {
-        this._previousAriaLabel = ariaLabel;
+      if (ariaLabel) {
         this._renderer.setElementAttribute(this._elementRef.nativeElement, 'aria-label', ariaLabel);
       }
   }
@@ -207,7 +206,7 @@ export class MdIcon implements OnChanges, OnInit, AfterViewChecked {
   }
 
   private _usingFontIcon(): boolean {
-    return !this.svgIcon;
+    return !(this.svgIcon || this.svgSrc);
   }
 
   private _setSvgElement(svg: SVGElement) {
@@ -249,30 +248,17 @@ export class MdIcon implements OnChanges, OnInit, AfterViewChecked {
   }
 }
 
-export function ICON_REGISTRY_PROVIDER_FACTORY(
-    parentRegistry: MdIconRegistry, http: Http, sanitizer: DomSanitizer) {
-  return parentRegistry || new MdIconRegistry(http, sanitizer);
-};
-
-export const ICON_REGISTRY_PROVIDER = {
-  // If there is already an MdIconRegistry available, use that. Otherwise, provide a new one.
-  provide: MdIconRegistry,
-  deps: [[new Optional(), new SkipSelf(), MdIconRegistry], Http, DomSanitizer],
-  useFactory: ICON_REGISTRY_PROVIDER_FACTORY,
-};
 
 @NgModule({
-  imports: [HttpModule, CompatibilityModule],
-  exports: [MdIcon, CompatibilityModule],
+  imports: [HttpModule, DefaultStyleCompatibilityModeModule],
+  exports: [MdIcon, DefaultStyleCompatibilityModeModule],
   declarations: [MdIcon],
-  providers: [ICON_REGISTRY_PROVIDER],
 })
 export class MdIconModule {
-  /** @deprecated */
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: MdIconModule,
-      providers: [],
+      providers: [MdIconRegistry],
     };
   }
 }

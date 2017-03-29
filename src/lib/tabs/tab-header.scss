@@ -1,94 +1,86 @@
 @import '../core/style/variables';
+@import '../core/style/layout-common';
+@import 'tabs-common';
 
-
-$md-tab-bar-height: 48px !default;
-
-:host {
-  display: flex;
-  flex-direction: column;
-  font-family: $md-font-family;
-}
-
-// The top section of the view; contains the tab labels
 .md-tab-header {
-  overflow: hidden;
-  position: fixed !important;
-  display: flex;
-  flex-direction: row;
-  flex-shrink: 0;
-  align-items: center;
-  z-index: 1000;
-  height: 40px;
-  width: 500px;
-  margin: 0 auto;
+  @include tab-header;
 }
 
 // Wraps each tab label
 .md-tab-label {
-  line-height: $md-tab-bar-height;
-  height: $md-tab-bar-height;
-  padding: 0 12px;
-  font-size: 13px !important;
-  font-family: $md-font-family !important;
-  font-weight: bold !important;
-  cursor: pointer;
-  box-sizing: border-box;
-  color: currentColor;
-  opacity: 1 !important;
-  min-width: 160px;
-  text-align: center;
-  &:focus {
-    background-color: #ffffff;
-    outline: none;
-    opacity: 1;
+  @include tab-label;
+  display: inline-block;
+  position: relative;
+}
+
+@media ($md-xsmall) {
+  .md-tab-label {
+    min-width: 72px;
   }
 }
 
-.md-tab-disabled {
-  cursor: default;
-  pointer-events: none;
-}
-
-// The bottom section of the view; contains the tab bodies
-.md-tab-body-wrapper {
-  height: inherit;
-  top: 39px;
-  width: 100%;
-  padding: 0px 108px 89px 108px;
-  flex-grow: 1;
-  display: flex;
-}
-
-// Wraps each tab body
-.md-tab-body {
-  display: none;
-  overflow: auto;
-  box-sizing: border-box;
-  flex-grow: 1;
-  flex-shrink: 1;
-  padding: 40px 0px 40px 0px;
-  &.md-tab-active {
-    display: block;
-  }
-}
-
-// The colored bar that underlines the active tab
+// The ink bar that displays under the active tab label
 md-ink-bar {
-  position: absolute;
-  bottom: 0;
-  height: 2px;
-  transition: 350ms ease-out;
+  @include ink-bar;
 }
 
-md-tab-group{
-  width: 100%;
+.md-tab-header-pagination {
+  position: relative;
+  display: none;
+  justify-content: center;
+  align-items: center;
+  min-width: 32px;
+  cursor: pointer;
+  z-index: 2;
+
+  .md-tab-header-pagination-controls-enabled & {
+    display: flex;
+  }
 }
 
-.md-tab-header{
-  width: 80%;
-  min-width: 900px;
-  max-width: 1200px;
-  top: 255px;
-  background-color: #ffffff;
-  border-bottom: 1px solid #dadada !important;
+// The pagination control that is displayed on the left side of the tab header.
+.md-tab-header-pagination-before, .md-tab-header-rtl .md-tab-header-pagination-after {
+  padding-left: 4px;
+  .md-tab-header-pagination-chevron {
+    transform: rotate(-135deg);
+  }
+}
+
+// The pagination control that is displayed on the right side of the tab header.
+.md-tab-header-rtl .md-tab-header-pagination-before, .md-tab-header-pagination-after {
+  padding-right: 4px;
+  .md-tab-header-pagination-chevron {
+    transform: rotate(45deg);
+  }
+}
+
+.md-tab-header-pagination-chevron {
+  border-style: solid;
+  border-width: 2px 2px 0 0;
+  content: '';
+  height: 8px;
+  width: 8px;
+}
+
+.md-tab-header-pagination-disabled {
+  box-shadow: none;
+  cursor: default;
+
+  .md-tab-header-pagination-chevron {
+    border-color: #ccc;
+  }
+}
+
+.md-tab-label-container {
+  display: flex;
+  flex-grow: 1;
+  overflow: hidden;
+  z-index: 1;
+}
+
+.md-tab-list {
+  display: flex;
+  flex-grow: 1;
+  position: relative;
+  transition: transform 500ms cubic-bezier(0.35, 0, 0.25, 1);
 }

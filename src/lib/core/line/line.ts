@@ -5,7 +5,7 @@ import {
     ElementRef,
     QueryList
 } from '@angular/core';
-import {CompatibilityModule} from '../compatibility/compatibility';
+import {DefaultStyleCompatibilityModeModule} from '../compatibility/default-mode';
 
 
 /**
@@ -16,10 +16,7 @@ import {CompatibilityModule} from '../compatibility/compatibility';
 @Directive({ selector: '[md-line], [mat-line]' })
 export class MdLine {}
 
-/**
- * Helper that takes a query list of lines and sets the correct class on the host.
- * @docs-private
- */
+/* Helper that takes a query list of lines and sets the correct class on the host */
 export class MdLineSetter {
   constructor(private _lines: QueryList<MdLine>, private _renderer: Renderer,
               private _element: ElementRef) {
@@ -52,8 +49,8 @@ export class MdLineSetter {
 }
 
 @NgModule({
-  imports: [CompatibilityModule],
-  exports: [MdLine, CompatibilityModule],
+  imports: [DefaultStyleCompatibilityModeModule],
+  exports: [MdLine, DefaultStyleCompatibilityModeModule],
   declarations: [MdLine],
 })
 export class MdLineModule { }

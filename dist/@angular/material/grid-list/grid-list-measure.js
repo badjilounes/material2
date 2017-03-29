@@ -1,15 +1,19 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Converts values into strings. Falsy values become empty strings.
- * @docs-private
+ * TODO: internal
  */
-export function coerceToString(value) {
+function coerceToString(value) {
     return "" + (value || '');
 }
+exports.coerceToString = coerceToString;
 /**
  * Converts a value that might be a string into a number.
- * @docs-private
+ * TODO: internal
  */
-export function coerceToNumber(value) {
+function coerceToNumber(value) {
     return typeof value === 'string' ? parseInt(value, 10) : value;
 }
-//# sourceMappingURL=grid-list-measure.js.map
+exports.coerceToNumber = coerceToNumber;
+//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/grid-list/grid-list-measure.js.map

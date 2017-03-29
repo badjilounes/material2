@@ -15,17 +15,19 @@ import {
 } from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {NG_VALUE_ACCESSOR, ControlValueAccessor} from '@angular/forms';
-import {coerceBooleanProperty} from '../core/coercion/boolean-property';
-import {MdRippleModule, CompatibilityModule} from '../core';
+import {coerceBooleanProperty} from '../core/coersion/boolean-property';
+import {MdRippleModule, DefaultStyleCompatibilityModeModule} from '../core';
+import {ViewportRuler} from '../core/overlay/position/viewport-ruler';
 
 
-/** Monotonically increasing integer used to auto-generate unique ids for checkbox components. */
+/**
+ * Monotonically increasing integer used to auto-generate unique ids for checkbox components.
+ */
 let nextId = 0;
 
 /**
- * Provider Expression that allows md-checkbox to register as a ControlValueAccessor.
- * This allows it to support [(ngModel)].
- * @docs-private
+ * Provider Expression that allows md-checkbox to register as a ControlValueAccessor. This allows it
+ * to support [(ngModel)].
  */
 export const MD_CHECKBOX_CONTROL_VALUE_ACCESSOR: any = {
   provide: NG_VALUE_ACCESSOR,
@@ -35,7 +37,6 @@ export const MD_CHECKBOX_CONTROL_VALUE_ACCESSOR: any = {
 
 /**
  * Represents the different states that require custom transitions between them.
- * @docs-private
  */
 export enum TransitionCheckState {
   /** The initial state of the component before any user interaction. */
@@ -48,7 +49,7 @@ export enum TransitionCheckState {
   Indeterminate
 }
 
-/** Change event object emitted by MdCheckbox. */
+// A simple change event emitted by the MdCheckbox component.
 export class MdCheckboxChange {
   source: MdCheckbox;
   checked: boolean;
@@ -56,7 +57,7 @@ export class MdCheckboxChange {
 
 /**
  * A material design checkbox component. Supports all of the functionality of an HTML5 checkbox,
- * and exposes a similar API. A MdCheckbox can be either checked, unchecked, indeterminate, or
+ * and exposes a similar API. An MdCheckbox can be either checked, unchecked, indeterminate, or
  * disabled. Note that all additional accessibility attributes are taken care of by the component,
  * so there is no need to provide them yourself. However, if you want to omit a label and still
  * have the checkbox be accessible, you may supply an [aria-label] input.
@@ -71,8 +72,8 @@ export class MdCheckboxChange {
     '[class.md-checkbox-indeterminate]': 'indeterminate',
     '[class.md-checkbox-checked]': 'checked',
     '[class.md-checkbox-disabled]': 'disabled',
-    '[class.md-checkbox-label-before]': 'labelPosition == "before"',
-    '[class.md-checkbox-focused]': '_hasFocus',
+    '[class.md-checkbox-align-end]': 'align == "end"',
+    '[class.md-checkbox-focused]': 'hasFocus',
   },
   providers: [MD_CHECKBOX_CONTROL_VALUE_ACCESSOR],
   encapsulation: ViewEncapsulation.None,
@@ -96,49 +97,39 @@ export class MdCheckbox implements ControlValueAccessor {
   /** Whether the ripple effect on click should be disabled. */
   private _disableRipple: boolean;
 
-  /** Whether the ripple effect for this checkbox is disabled. */
   @Input()
   get disableRipple(): boolean { return this._disableRipple; }
   set disableRipple(value) { this._disableRipple = coerceBooleanProperty(value); }
 
-  /** ID of the native input element inside `<md-checkbox>` */
+  /** ID to be applied to the `input` element */
   get inputId(): string {
     return `input-${this.id}`;
   }
 
   private _required: boolean;
 
-  /** Whether the checkbox is required. */
+  /** Whether the checkbox is required or not. */
   @Input()
   get required(): boolean { return this._required; }
   set required(value) { this._required = coerceBooleanProperty(value); }
 
-  /**
-   * Whether or not the checkbox should appear before or after the label.
-   * @deprecated
-   */
-  @Input()
-  get align(): 'start' | 'end' {
-    // align refers to the checkbox relative to the label, while labelPosition refers to the
-    // label relative to the checkbox. As such, they are inverted.
-    return this.labelPosition == 'after' ? 'start' : 'end';
-  }
-
-  set align(v) {
-    this.labelPosition = (v == 'start') ? 'after' : 'before';
-  }
-
-  /** Whether the label should appear after or before the checkbox. Defaults to 'after' */
-  @Input() labelPosition: 'before' | 'after' = 'after';
+  /** Whether or not the checkbox should come before or after the label. */
+  @Input() align: 'start' | 'end' = 'start';
 
   private _disabled: boolean = false;
 
-  /** Whether the checkbox is disabled. */
+  /**
+   * Whether the checkbox is disabled. When the checkbox is disabled it cannot be interacted with.
+   * The correct ARIA attributes are applied to denote this to assistive technology.
+   */
   @Input()
   get disabled(): boolean { return this._disabled; }
   set disabled(value) { this._disabled = coerceBooleanProperty(value); }
 
-  /** @docs-private */
+  /**
+   * The tabindex attribute for the checkbox. Note that when the checkbox is disabled, the attribute
+   * on the host element will be removed. It will be placed back when the checkbox is re-enabled.
+   */
   @Input() tabindex: number = 0;
 
   /** Name value will be applied to the input element if present */
@@ -147,16 +138,10 @@ export class MdCheckbox implements ControlValueAccessor {
   /** Event emitted when the checkbox's `checked` value changes. */
   @Output() change: EventEmitter<MdCheckboxChange> = new EventEmitter<MdCheckboxChange>();
 
-  /** Event emitted when the checkbox's `indeterminate` value changes. */
-  @Output() indeterminateChange: EventEmitter<boolean> = new EventEmitter<boolean>();
-
-  /** The native `<input type="checkbox"> element */
+  /** The native `<input type=checkbox> element */
   @ViewChild('input') _inputElement: ElementRef;
 
-  /**
-   * Called when the checkbox is blurred. Needed to properly implement ControlValueAccessor.
-   * @docs-private
-   */
+  /** Called when the checkbox is blurred. Needed to properly implement ControlValueAccessor. */
   onTouched: () => any = () => {};
 
   private _currentAnimationClass: string = '';
@@ -171,7 +156,7 @@ export class MdCheckbox implements ControlValueAccessor {
 
   private _controlValueAccessorChangeFn: (value: any) => void = (value) => {};
 
-  _hasFocus: boolean = false;
+  hasFocus: boolean = false;
 
   constructor(private _renderer: Renderer,
               private _elementRef: ElementRef,
@@ -189,10 +174,7 @@ export class MdCheckbox implements ControlValueAccessor {
 
   set checked(checked: boolean) {
     if (checked != this.checked) {
-      if (this._indeterminate) {
-        this._indeterminate = false;
-        this.indeterminateChange.emit(this._indeterminate);
-      }
+      this._indeterminate = false;
       this._checked = checked;
       this._transitionCheckState(
           this._checked ? TransitionCheckState.Checked : TransitionCheckState.Unchecked);
@@ -214,7 +196,6 @@ export class MdCheckbox implements ControlValueAccessor {
   }
 
   set indeterminate(indeterminate: boolean) {
-    let changed =  indeterminate != this._indeterminate;
     this._indeterminate = indeterminate;
     if (this._indeterminate) {
       this._transitionCheckState(TransitionCheckState.Indeterminate);
@@ -222,15 +203,17 @@ export class MdCheckbox implements ControlValueAccessor {
       this._transitionCheckState(
           this.checked ? TransitionCheckState.Checked : TransitionCheckState.Unchecked);
     }
-    if (changed) {
-      this.indeterminateChange.emit(this._indeterminate);
-    }
   }
 
-  /** The color of the button. Can be `primary`, `accent`, or `warn`. */
+  /** Sets the color of the checkbox */
   @Input()
-  get color(): string { return this._color; }
-  set color(value: string) { this._updateColor(value); }
+  get color(): string {
+    return this._color;
+  }
+
+  set color(value: string) {
+    this._updateColor(value);
+  }
 
   _updateColor(newColor: string) {
     this._setElementColor(this._color, false);
@@ -249,34 +232,31 @@ export class MdCheckbox implements ControlValueAccessor {
   }
 
   /**
-   * Sets the model value. Implemented as part of ControlValueAccessor.
-   * @param value Value to be set to the model.
+   * Implemented as part of ControlValueAccessor.
+   * TODO: internal
    */
   writeValue(value: any) {
     this.checked = !!value;
   }
 
   /**
-   * Registers a callback to be triggered when the value has changed.
    * Implemented as part of ControlValueAccessor.
-   * @param fn Function to be called on change.
+   * TODO: internal
    */
   registerOnChange(fn: (value: any) => void) {
     this._controlValueAccessorChangeFn = fn;
   }
 
   /**
-   * Registers a callback to be triggered when the control has been touched.
    * Implemented as part of ControlValueAccessor.
-   * @param fn Callback to be triggered when the checkbox is touched.
+   * TODO: internal
    */
   registerOnTouched(fn: any) {
     this.onTouched = fn;
   }
 
   /**
-   * Sets the checkbox's disabled state. Implemented as a part of ControlValueAccessor.
-   * @param isDisabled Whether the checkbox should be disabled.
+   * Implemented as a part of ControlValueAccessor.
    */
   setDisabledState(isDisabled: boolean) {
     this.disabled = isDisabled;
@@ -314,17 +294,19 @@ export class MdCheckbox implements ControlValueAccessor {
 
   /** Informs the component when the input has focus so that we can style accordingly */
   _onInputFocus() {
-    this._hasFocus = true;
+    this.hasFocus = true;
   }
 
   /** Informs the component when we lose focus in order to style accordingly */
   _onInputBlur() {
-    this._hasFocus = false;
+    this.hasFocus = false;
     this.onTouched();
   }
 
-  /** Toggles the `checked` state of the checkbox. */
-  toggle(): void {
+  /**
+   * Toggles the `checked` value between true and false
+   */
+  toggle() {
     this.checked = !this.checked;
   }
 
@@ -349,8 +331,7 @@ export class MdCheckbox implements ControlValueAccessor {
     }
   }
 
-  /** Focuses the checkbox. */
-  focus(): void {
+  focus() {
     this._renderer.invokeElementMethod(this._inputElement.nativeElement, 'focus');
     this._onInputFocus();
   }
@@ -396,23 +377,22 @@ export class MdCheckbox implements ControlValueAccessor {
     return `md-checkbox-anim-${animSuffix}`;
   }
 
-  _getHostElement() {
+  getHostElement() {
     return this._elementRef.nativeElement;
   }
 }
 
 
 @NgModule({
-  imports: [CommonModule, MdRippleModule, CompatibilityModule],
-  exports: [MdCheckbox, CompatibilityModule],
+  imports: [CommonModule, MdRippleModule, DefaultStyleCompatibilityModeModule],
+  exports: [MdCheckbox, DefaultStyleCompatibilityModeModule],
   declarations: [MdCheckbox],
 })
 export class MdCheckboxModule {
-  /** @deprecated */
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: MdCheckboxModule,
-      providers: []
+      providers: [ViewportRuler]
     };
   }
 }

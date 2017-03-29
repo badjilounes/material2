@@ -4,64 +4,54 @@ import {Observable} from 'rxjs/Observable';
 import {Subject} from 'rxjs/Subject';
 
 /**
- * This interface is for items that can be disabled. The type passed into
- * ListKeyManager must extend this interface.
+ * This is the interface for focusable items (used by the ListKeyManager).
+ * Each item must know how to focus itself and whether or not it is currently disabled.
  */
-export interface CanDisable {
+export interface MdFocusable {
+  focus(): void;
   disabled?: boolean;
 }
 
 /**
  * This class manages keyboard events for selectable lists. If you pass it a query list
- * of items, it will set the active item correctly when arrow events occur.
+ * of focusable items, it will focus the correct item when arrow events occur.
  */
-export class ListKeyManager<T extends CanDisable> {
-  private _activeItemIndex: number;
-  private _activeItem: T;
+export class ListKeyManager {
+  private _focusedItemIndex: number;
   private _tabOut: Subject<any> = new Subject();
   private _wrap: boolean = false;
 
-  constructor(private _items: QueryList<T>) {
-  }
+  constructor(private _items: QueryList<MdFocusable>) {}
 
   /**
-   * Turns on wrapping mode, which ensures that the active item will wrap to
+   * Turns on focus wrapping mode, which ensures that the focus will wrap to
    * the other end of list when there are no more items in the given direction.
-   *
-   * @returns The ListKeyManager that the method was called on.
    */
-  withWrap(): this {
+  withFocusWrap(): this {
     this._wrap = true;
     return this;
   }
 
-  /**
-   * Sets the active item to the item at the index specified.
-   *
-   * @param index The index of the item to be set as active.
-   */
-  setActiveItem(index: number): void {
-    this._activeItemIndex = index;
-    this._activeItem = this._items.toArray()[index];
+  /** Sets the focus of the list to the item at the index specified. */
+  setFocus(index: number): void {
+    this._focusedItemIndex = index;
+    this._items.toArray()[index].focus();
   }
 
-  /**
-   * Sets the active item depending on the key event passed in.
-   * @param event Keyboard event to be used for determining which element should be active.
-   */
+  /** Sets the focus properly depending on the key event passed in. */
   onKeydown(event: KeyboardEvent): void {
     switch (event.keyCode) {
       case DOWN_ARROW:
-        this.setNextItemActive();
+        this.focusNextItem();
         break;
       case UP_ARROW:
-        this.setPreviousItemActive();
+        this.focusPreviousItem();
         break;
       case HOME:
-        this.setFirstItemActive();
+        this.focusFirstItem();
         break;
       case END:
-        this.setLastItemActive();
+        this.focusLastItem();
         break;
       case TAB:
         // Note that we shouldn't prevent the default action on tab.
@@ -74,43 +64,29 @@ export class ListKeyManager<T extends CanDisable> {
     event.preventDefault();
   }
 
-  /** Returns the index of the currently active item. */
-  get activeItemIndex(): number {
-    return this._activeItemIndex;
+  /** Focuses the first enabled item in the list. */
+  focusFirstItem(): void {
+    this._setFocusByIndex(0, 1);
   }
 
-  /** Returns the currently active item. */
-  get activeItem(): T {
-    return this._activeItem;
+  /** Focuses the last enabled item in the list. */
+  focusLastItem(): void {
+    this._setFocusByIndex(this._items.length - 1, -1);
   }
 
-  /** Sets the active item to the first enabled item in the list. */
-  setFirstItemActive(): void {
-    this._setActiveItemByIndex(0, 1);
+  /** Focuses the next enabled item in the list. */
+  focusNextItem(): void {
+    this._setFocusByDelta(1);
   }
 
-  /** Sets the active item to the last enabled item in the list. */
-  setLastItemActive(): void {
-    this._setActiveItemByIndex(this._items.length - 1, -1);
+  /** Focuses a previous enabled item in the list. */
+  focusPreviousItem(): void {
+    this._setFocusByDelta(-1);
   }
 
-  /** Sets the active item to the next enabled item in the list. */
-  setNextItemActive(): void {
-    this._activeItemIndex === null ? this.setFirstItemActive() : this._setActiveItemByDelta(1);
-  }
-
-  /** Sets the active item to a previous enabled item in the list. */
-  setPreviousItemActive(): void {
-    this._activeItemIndex === null && this._wrap ? this.setLastItemActive()
-                                                 : this._setActiveItemByDelta(-1);
-  }
-
-  /**
-   * Allows setting of the activeItemIndex without any other effects.
-   * @param index The new activeItemIndex.
-   */
-  updateActiveItemIndex(index: number) {
-    this._activeItemIndex = index;
+  /** Returns the index of the currently focused item. */
+  get focusedItemIndex(): number {
+    return this._focusedItemIndex;
   }
 
   /**
@@ -122,56 +98,56 @@ export class ListKeyManager<T extends CanDisable> {
   }
 
   /**
-   * This method sets the active item, given a list of items and the delta between the
-   * currently active item and the new active item. It will calculate differently
-   * depending on whether wrap mode is turned on.
+   * This method sets focus to the correct item, given a list of items and the delta
+   * between the currently focused item and the new item to be focused. It will calculate
+   * the proper focus differently depending on whether wrap mode is turned on.
    */
-  private _setActiveItemByDelta(delta: number, items = this._items.toArray()): void {
-    this._wrap ? this._setActiveInWrapMode(delta, items)
-               : this._setActiveInDefaultMode(delta, items);
+  private _setFocusByDelta(delta: number, items = this._items.toArray()): void {
+    this._wrap ? this._setWrapModeFocus(delta, items)
+               : this._setDefaultModeFocus(delta, items);
   }
 
   /**
-   * Sets the active item properly given "wrap" mode. In other words, it will continue to move
+   * Sets the focus properly given "wrap" mode. In other words, it will continue to move
    * down the list until it finds an item that is not disabled, and it will wrap if it
    * encounters either end of the list.
    */
-  private _setActiveInWrapMode(delta: number, items: T[]): void {
-    // when active item would leave menu, wrap to beginning or end
-    this._activeItemIndex =
-      (this._activeItemIndex + delta + items.length) % items.length;
+  private _setWrapModeFocus(delta: number, items: MdFocusable[]): void {
+    // when focus would leave menu, wrap to beginning or end
+    this._focusedItemIndex =
+      (this._focusedItemIndex + delta + items.length) % items.length;
 
-    // skip all disabled menu items recursively until an enabled one is reached
-    if (items[this._activeItemIndex].disabled) {
-      this._setActiveInWrapMode(delta, items);
+    // skip all disabled menu items recursively until an active one is reached
+    if (items[this._focusedItemIndex].disabled) {
+      this._setWrapModeFocus(delta, items);
     } else {
-      this.setActiveItem(this._activeItemIndex);
+      items[this._focusedItemIndex].focus();
     }
   }
 
   /**
-   * Sets the active item properly given the default mode. In other words, it will
+   * Sets the focus properly given the default mode. In other words, it will
    * continue to move down the list until it finds an item that is not disabled. If
    * it encounters either end of the list, it will stop and not wrap.
    */
-  private _setActiveInDefaultMode(delta: number, items: T[]): void {
-    this._setActiveItemByIndex(this._activeItemIndex + delta, delta, items);
+  private _setDefaultModeFocus(delta: number, items: MdFocusable[]): void {
+    this._setFocusByIndex(this._focusedItemIndex + delta, delta, items);
   }
 
   /**
-   * Sets the active item to the first enabled item starting at the index specified. If the
+   * Sets the focus to the first enabled item starting at the index specified. If the
    * item is disabled, it will move in the fallbackDelta direction until it either
    * finds an enabled item or encounters the end of the list.
    */
-  private _setActiveItemByIndex(index: number, fallbackDelta: number,
-                                  items = this._items.toArray()): void {
+  private _setFocusByIndex(index: number, fallbackDelta: number,
+                           items = this._items.toArray()): void {
     if (!items[index]) { return; }
     while (items[index].disabled) {
       index += fallbackDelta;
       if (!items[index]) { return; }
     }
-    this.setActiveItem(index);
+
+    this.setFocus(index);
   }
 
 }
-

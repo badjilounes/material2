@@ -7,7 +7,7 @@ import {
     Input,
 } from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {CompatibilityModule} from '../core/compatibility/compatibility';
+import {DefaultStyleCompatibilityModeModule} from '../core/compatibility/default-mode';
 
 // TODO(josephperrott): Benchpress tests.
 // TODO(josephperrott): Add ARIA attributes for progressbar "for".
@@ -23,32 +23,36 @@ import {CompatibilityModule} from '../core/compatibility/compatibility';
     'role': 'progressbar',
     'aria-valuemin': '0',
     'aria-valuemax': '100',
-    '[class.md-primary]': 'color == "primary"',
-    '[class.md-accent]': 'color == "accent"',
-    '[class.md-warn]': 'color == "warn"',
   },
   templateUrl: 'progress-bar.html',
   styleUrls: ['progress-bar.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MdProgressBar {
-  /** Color of the progress bar. */
-  @Input() color: 'primary' | 'accent' | 'warn' = 'primary';
-
+  /** Value of the progressbar. Defaults to zero. Mirrored to aria-valuenow. */
   private _value: number = 0;
 
-  /** Value of the progressbar. Defaults to zero. Mirrored to aria-valuenow. */
   @Input()
   @HostBinding('attr.aria-valuenow')
-  get value() { return this._value; }
-  set value(v: number) { this._value = clamp(v || 0); }
+  get value() {
+    return this._value;
+  }
 
-  private _bufferValue: number = 0;
+  set value(v: number) {
+    this._value = clamp(v || 0);
+  }
 
   /** Buffer value of the progress bar. Defaults to zero. */
+  private _bufferValue: number = 0;
+
   @Input()
-  get bufferValue() { return this._bufferValue; }
-  set bufferValue(v: number) { this._bufferValue = clamp(v || 0); }
+  get bufferValue() {
+    return this._bufferValue;
+  }
+
+  set bufferValue(v: number) {
+    this._bufferValue = clamp(v || 0);
+  }
 
   /**
    * Mode of the progress bar.
@@ -86,12 +90,11 @@ function clamp(v: number, min = 0, max = 100) {
 
 
 @NgModule({
-  imports: [CommonModule, CompatibilityModule],
-  exports: [MdProgressBar, CompatibilityModule],
+  imports: [CommonModule, DefaultStyleCompatibilityModeModule],
+  exports: [MdProgressBar, DefaultStyleCompatibilityModeModule],
   declarations: [MdProgressBar],
 })
 export class MdProgressBarModule {
-  /** @deprecated */
   static forRoot(): ModuleWithProviders {
     return {
       ngModule: MdProgressBarModule,

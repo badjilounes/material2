@@ -2,14 +2,11 @@
 // TODO(jelbourn): Figure out if anchor hover underline actually happens in any browser.
 
 @import 'button-base';
-@import '../core/a11y/a11y';
+@import '../a11y/_a11y';
 
 // TODO(kara): Replace attribute selectors with class selectors when possible
 [md-button], [md-icon-button] {
   @extend %md-button-base;
-
-  // Only flat button and icon buttons should inherit the color
-  color: currentColor;
 
   // Only flat buttons and icon buttons (not raised or fabs) have a hover style.
   &:hover {
@@ -84,7 +81,7 @@
   pointer-events: none;
   opacity: 0;
 
-  @include cdk-high-contrast {
+  @include md-high-contrast {
     // Note that IE will render this in the same way, no
     // matter whether the theme is light or dark. This helps
     // with the readability of focused buttons.
@@ -101,7 +98,7 @@
 }
 
 // Add an outline to make it more visible in high contrast mode.
-@include cdk-high-contrast {
+@include md-high-contrast {
   [md-button], [md-raised-button], [md-icon-button], [md-fab], [md-mini-fab] {
     outline: solid 1px;
   }

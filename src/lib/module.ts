@@ -3,12 +3,11 @@ import {NgModule, ModuleWithProviders} from '@angular/core';
 import {
   MdRippleModule,
   RtlModule,
-  ObserveContentModule,
   PortalModule,
   OverlayModule,
   A11yModule,
   ProjectionModule,
-  CompatibilityModule,
+  DefaultStyleCompatibilityModeModule,
 } from './core/index';
 
 import {MdButtonToggleModule} from './button-toggle/index';
@@ -24,7 +23,7 @@ import {MdGridListModule} from './grid-list/index';
 import {MdCardModule} from './card/index';
 import {MdChipsModule} from './chips/index';
 import {MdIconModule} from './icon/index';
-import {MdProgressSpinnerModule} from './progress-spinner/index';
+import {MdProgressCircleModule} from './progress-circle/index';
 import {MdProgressBarModule} from './progress-bar/index';
 import {MdInputModule} from './input/index';
 import {MdSnackBarModule} from './snack-bar/snack-bar';
@@ -33,9 +32,8 @@ import {MdToolbarModule} from './toolbar/index';
 import {MdTooltipModule} from './tooltip/index';
 import {MdMenuModule} from './menu/index';
 import {MdDialogModule} from './dialog/index';
-import {PlatformModule} from './core/platform/index';
+import {PlatformModule} from './core/platform/platform';
 import {MdAutocompleteModule} from './autocomplete/index';
-import {StyleModule} from './core/style/index';
 
 const MATERIAL_MODULES = [
   MdAutocompleteModule,
@@ -51,7 +49,7 @@ const MATERIAL_MODULES = [
   MdListModule,
   MdMenuModule,
   MdProgressBarModule,
-  MdProgressSpinnerModule,
+  MdProgressCircleModule,
   MdRadioModule,
   MdRippleModule,
   MdSelectModule,
@@ -65,12 +63,10 @@ const MATERIAL_MODULES = [
   OverlayModule,
   PortalModule,
   RtlModule,
-  StyleModule,
   A11yModule,
   PlatformModule,
   ProjectionModule,
-  CompatibilityModule,
-  ObserveContentModule
+  DefaultStyleCompatibilityModeModule,
 ];
 
 @NgModule({
@@ -84,7 +80,7 @@ const MATERIAL_MODULES = [
     MdInputModule.forRoot(),
     MdListModule.forRoot(),
     MdProgressBarModule.forRoot(),
-    MdProgressSpinnerModule.forRoot(),
+    MdProgressCircleModule.forRoot(),
     MdRippleModule.forRoot(),
     MdSelectModule.forRoot(),
     MdSidenavModule.forRoot(),
@@ -93,7 +89,6 @@ const MATERIAL_MODULES = [
     PortalModule.forRoot(),
     ProjectionModule.forRoot(),
     RtlModule.forRoot(),
-    ObserveContentModule.forRoot(),
 
     // These modules include providers.
     A11yModule.forRoot(),
@@ -108,7 +103,7 @@ const MATERIAL_MODULES = [
     MdTooltipModule.forRoot(),
     PlatformModule.forRoot(),
     OverlayModule.forRoot(),
-    CompatibilityModule.forRoot(),
+    DefaultStyleCompatibilityModeModule.forRoot(),
   ],
   exports: MATERIAL_MODULES,
 })
@@ -120,7 +115,6 @@ export class MaterialRootModule { }
   exports: MATERIAL_MODULES,
 })
 export class MaterialModule {
-  /** @deprecated */
   static forRoot(): ModuleWithProviders {
     return {ngModule: MaterialRootModule};
   }

@@ -29,25 +29,16 @@ describe('Overlay directives', () => {
     fixture.detectChanges();
   });
 
-  /** Returns the current open overlay pane element. */
-  function getPaneElement() {
-    return overlayContainerElement.querySelector('.cdk-overlay-pane') as HTMLElement;
-  }
-
   it(`should attach the overlay based on the open property`, () => {
     fixture.componentInstance.isOpen = true;
     fixture.detectChanges();
 
     expect(overlayContainerElement.textContent).toContain('Menu content');
-    expect(getPaneElement().style.pointerEvents)
-      .toBeFalsy('Expected the overlay pane to enable pointerEvents when attached.');
 
     fixture.componentInstance.isOpen = false;
     fixture.detectChanges();
 
     expect(overlayContainerElement.textContent).toBe('');
-    expect(getPaneElement().style.pointerEvents)
-      .toBe('none', 'Expected the overlay pane to disable pointerEvents when detached.');
   });
 
   it('should destroy the overlay when the directive is destroyed', () => {
@@ -56,8 +47,6 @@ describe('Overlay directives', () => {
     fixture.destroy();
 
     expect(overlayContainerElement.textContent.trim()).toBe('');
-    expect(getPaneElement())
-      .toBeFalsy('Expected the overlay pane element to be removed when disposed.');
   });
 
   it('should use a connected position strategy with a default set of positions', () => {
@@ -119,7 +108,7 @@ describe('Overlay directives', () => {
       fixture.componentInstance.isOpen = true;
       fixture.detectChanges();
 
-      let backdrop = overlayContainerElement.querySelector('.cdk-overlay-backdrop');
+      let backdrop = overlayContainerElement.querySelector('.md-overlay-backdrop');
       expect(backdrop).toBeTruthy();
     });
 
@@ -127,7 +116,7 @@ describe('Overlay directives', () => {
       fixture.componentInstance.isOpen = true;
       fixture.detectChanges();
 
-      let backdrop = overlayContainerElement.querySelector('.cdk-overlay-backdrop');
+      let backdrop = overlayContainerElement.querySelector('.md-overlay-backdrop');
       expect(backdrop).toBeNull();
     });
 
@@ -136,8 +125,7 @@ describe('Overlay directives', () => {
       fixture.componentInstance.isOpen = true;
       fixture.detectChanges();
 
-      const backdrop =
-          overlayContainerElement.querySelector('.cdk-overlay-backdrop') as HTMLElement;
+      const backdrop = overlayContainerElement.querySelector('.md-overlay-backdrop') as HTMLElement;
       expect(backdrop.classList).toContain('md-test-class');
     });
 
@@ -202,8 +190,7 @@ describe('Overlay directives', () => {
       fixture.componentInstance.isOpen = true;
       fixture.detectChanges();
 
-      const backdrop =
-          overlayContainerElement.querySelector('.cdk-overlay-backdrop') as HTMLElement;
+      const backdrop = overlayContainerElement.querySelector('.md-overlay-backdrop') as HTMLElement;
       backdrop.click();
       fixture.detectChanges();
 
@@ -245,9 +232,8 @@ describe('Overlay directives', () => {
 
 @Component({
   template: `
-  <button cdk-overlay-origin #trigger="cdkOverlayOrigin">Toggle menu</button>
-  <template cdk-connected-overlay [open]="isOpen" [width]="width" [height]="height"
-            [origin]="trigger"
+  <button overlay-origin #trigger="overlayOrigin">Toggle menu</button>
+  <template connected-overlay [origin]="trigger" [open]="isOpen" [width]="width" [height]="height"
             [hasBackdrop]="hasBackdrop" backdropClass="md-test-class"
             (backdropClick)="backdropClicked=true" [offsetX]="offsetX" [offsetY]="offsetY"
             (positionChange)="positionChangeHandler($event)" (attach)="attachHandler()"

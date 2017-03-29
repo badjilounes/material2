@@ -1,8 +1,14 @@
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+"use strict";
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = Object.setPrototypeOf ||
+        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -12,32 +18,29 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Component, ViewChild, ViewEncapsulation, NgZone, Renderer } from '@angular/core';
-import { BasePortalHost, PortalHostDirective } from '../core';
-import { MdDialogContentAlreadyAttachedError } from './dialog-errors';
-import { FocusTrap } from '../core/a11y/focus-trap';
-import 'rxjs/add/operator/first';
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = require("@angular/core");
+var core_2 = require("../core");
+var dialog_errors_1 = require("./dialog-errors");
+var focus_trap_1 = require("../core/a11y/focus-trap");
+require("rxjs/add/operator/first");
 /**
  * Internal component that wraps user-provided dialog content.
- * @docs-private
  */
-export var MdDialogContainer = (function (_super) {
+var MdDialogContainer = (function (_super) {
     __extends(MdDialogContainer, _super);
-    function MdDialogContainer(_ngZone, _renderer) {
-        _super.call(this);
-        this._ngZone = _ngZone;
-        this._renderer = _renderer;
+    function MdDialogContainer(_ngZone) {
+        var _this = _super.call(this) || this;
+        _this._ngZone = _ngZone;
         /** Element that was focused before the dialog was opened. Save this to restore upon close. */
-        this._elementFocusedBeforeDialogWasOpened = null;
+        _this._elementFocusedBeforeDialogWasOpened = null;
+        return _this;
     }
-    /**
-     * Attach a portal as content to this dialog container.
-     * @param portal Portal to be attached as the dialog content.
-     */
+    /** Attach a portal as content to this dialog container. */
     MdDialogContainer.prototype.attachComponentPortal = function (portal) {
         var _this = this;
         if (this._portalHost.hasAttached()) {
-            throw new MdDialogContentAlreadyAttachedError();
+            throw new dialog_errors_1.MdDialogContentAlreadyAttachedError();
         }
         var attachResult = this._portalHost.attachComponentPortal(portal);
         // If were to attempt to focus immediately, then the content of the dialog would not yet be
@@ -49,14 +52,10 @@ export var MdDialogContainer = (function (_super) {
         });
         return attachResult;
     };
-    /** @docs-private */
     MdDialogContainer.prototype.attachTemplatePortal = function (portal) {
         throw Error('Not yet implemented');
     };
-    /**
-     * Handles the user pressing the Escape key.
-     * @docs-private
-     */
+    /** Handles the user pressing the Escape key. */
     MdDialogContainer.prototype.handleEscapeKey = function () {
         if (!this.dialogConfig.disableClose) {
             this.dialogRef.close();
@@ -66,35 +65,35 @@ export var MdDialogContainer = (function (_super) {
         var _this = this;
         // When the dialog is destroyed, return focus to the element that originally had it before
         // the dialog was opened. Wait for the DOM to finish settling before changing the focus so
-        // that it doesn't end up back on the <body>. Also note that we need the extra check, because
-        // IE can set the `activeElement` to null in some cases.
-        if (this._elementFocusedBeforeDialogWasOpened) {
-            this._ngZone.onMicrotaskEmpty.first().subscribe(function () {
-                _this._renderer.invokeElementMethod(_this._elementFocusedBeforeDialogWasOpened, 'focus');
-            });
-        }
+        // that it doesn't end up back on the <body>.
+        this._ngZone.onMicrotaskEmpty.first().subscribe(function () {
+            _this._elementFocusedBeforeDialogWasOpened.focus();
+        });
     };
-    __decorate([
-        ViewChild(PortalHostDirective), 
-        __metadata('design:type', PortalHostDirective)
-    ], MdDialogContainer.prototype, "_portalHost", void 0);
-    __decorate([
-        ViewChild(FocusTrap), 
-        __metadata('design:type', FocusTrap)
-    ], MdDialogContainer.prototype, "_focusTrap", void 0);
-    MdDialogContainer = __decorate([
-        Component({selector: 'md-dialog-container, mat-dialog-container',
-            template: "<cdk-focus-trap> <template cdkPortalHost></template> </cdk-focus-trap> ",
-            styles: ["/** * Applies styles for users in high contrast mode. Note that this only applies * to Microsoft browsers. Chrome can be included by checking for the `html[hc]` * attribute, however Chrome handles high contrast differently. */ md-dialog-container { box-shadow: 0px 11px 15px -7px rgba(0, 0, 0, 0.2), 0px 24px 38px 3px rgba(0, 0, 0, 0.14), 0px 9px 46px 8px rgba(0, 0, 0, 0.12); display: block; padding: 24px; border-radius: 2px; box-sizing: border-box; overflow: auto; max-width: 80vw; width: 100%; height: 100%; } @media screen and (-ms-high-contrast: active) { md-dialog-container { outline: solid 1px; } } md-dialog-content, [md-dialog-content], mat-dialog-content, [mat-dialog-content] { display: block; margin: 0 -24px; padding: 0 24px; max-height: 65vh; overflow: auto; } [md-dialog-title], [mat-dialog-title] { font-size: 20px; font-weight: bold; margin: 0 0 20px; display: block; } md-dialog-actions, [md-dialog-actions], mat-dialog-actions, [mat-dialog-actions] { padding: 12px 0; display: flex; } md-dialog-actions:last-child, [md-dialog-actions]:last-child, mat-dialog-actions:last-child, [mat-dialog-actions]:last-child { margin-bottom: -24px; } md-dialog-actions[align='end'], [md-dialog-actions][align='end'], mat-dialog-actions[align='end'], [mat-dialog-actions][align='end'] { justify-content: flex-end; } md-dialog-actions[align='center'], [md-dialog-actions][align='center'], mat-dialog-actions[align='center'], [mat-dialog-actions][align='center'] { justify-content: center; } /*# sourceMappingURL=dialog.css.map */ "],
-            host: {
-                'class': 'md-dialog-container',
-                '[attr.role]': 'dialogConfig?.role',
-                '(keydown.escape)': 'handleEscapeKey()',
-            },
-            encapsulation: ViewEncapsulation.None,
-        }), 
-        __metadata('design:paramtypes', [NgZone, Renderer])
-    ], MdDialogContainer);
     return MdDialogContainer;
-}(BasePortalHost));
-//# sourceMappingURL=dialog-container.js.map
+}(core_2.BasePortalHost));
+__decorate([
+    core_1.ViewChild(core_2.PortalHostDirective),
+    __metadata("design:type", core_2.PortalHostDirective)
+], MdDialogContainer.prototype, "_portalHost", void 0);
+__decorate([
+    core_1.ViewChild(focus_trap_1.FocusTrap),
+    __metadata("design:type", focus_trap_1.FocusTrap)
+], MdDialogContainer.prototype, "_focusTrap", void 0);
+MdDialogContainer = __decorate([
+    core_1.Component({
+        moduleId: module.id,
+        selector: 'md-dialog-container, mat-dialog-container',
+        templateUrl: 'dialog-container.html',
+        styleUrls: ['dialog-container.css'],
+        host: {
+            'class': 'md-dialog-container',
+            '[attr.role]': 'dialogConfig?.role',
+            '(keydown.escape)': 'handleEscapeKey()',
+        },
+        encapsulation: core_1.ViewEncapsulation.None,
+    }),
+    __metadata("design:paramtypes", [core_1.NgZone])
+], MdDialogContainer);
+exports.MdDialogContainer = MdDialogContainer;
+//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/dialog/dialog-container.js.map

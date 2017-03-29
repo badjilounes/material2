@@ -1,5 +1,5 @@
 import {Directive, ElementRef, Renderer, Input} from '@angular/core';
-import {coerceBooleanProperty} from '../core/coercion/boolean-property';
+import {coerceBooleanProperty} from '../core/coersion/boolean-property';
 
 
 /** Used in the `md-tab-group` view to display tab labels */
@@ -15,7 +15,6 @@ export class MdTabLabelWrapper {
   /** Whether the tab label is disabled.  */
   private _disabled: boolean = false;
 
-  /** Whether the element is disabled. */
   @Input()
   get disabled() { return this._disabled; }
   set disabled(value: any) { this._disabled = coerceBooleanProperty(value); }

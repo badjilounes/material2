@@ -1,9 +1,9 @@
+import { ModuleWithProviders } from '@angular/core';
 /**
  * Service to detect the current platform by comparing the userAgent strings and
  * checking browser-specific global properties.
- * @docs-private
  */
-export declare class Platform {
+export declare class MdPlatform {
     /** Layout Engines */
     EDGE: boolean;
     TRIDENT: boolean;
@@ -13,4 +13,7 @@ export declare class Platform {
     IOS: boolean;
     FIREFOX: boolean;
     ANDROID: boolean;
+}
+export declare class PlatformModule {
+    static forRoot(): ModuleWithProviders;
 }

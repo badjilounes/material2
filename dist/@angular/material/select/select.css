@@ -40,22 +40,19 @@ md-select {
   .md-select-placeholder.md-floating-placeholder {
     top: -22px;
     left: -2px;
-    text-align: left;
     transform: scale(0.75); }
   [dir='rtl'] .md-select-placeholder {
     transform-origin: right top; }
     [dir='rtl'] .md-select-placeholder.md-floating-placeholder {
-      left: 2px;
-      text-align: right; }
+      left: 2px; }
   [aria-required=true] .md-select-placeholder::after {
     content: '*'; }
 
 .md-select-value {
+  position: absolute;
   white-space: nowrap;
   overflow-x: hidden;
   text-overflow: ellipsis;
-  position: absolute;
-  max-width: calc(100% - 10px);
   left: 0;
   top: 6px; }
   [dir='rtl'] .md-select-value {
@@ -82,5 +79,44 @@ md-select {
   @media screen and (-ms-high-contrast: active) {
     .md-select-panel {
       outline: solid 1px; } }
+
+md-option {
+  white-space: nowrap;
+  overflow-x: hidden;
+  text-overflow: ellipsis;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 48px;
+  padding: 0 16px;
+  font-size: 16px;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  text-align: start;
+  text-decoration: none;
+  position: relative;
+  cursor: pointer;
+  outline: none; }
+  md-option[disabled] {
+    cursor: default; }
+  md-option md-icon {
+    margin-right: 16px; }
+    [dir='rtl'] md-option md-icon {
+      margin-left: 16px; }
+  md-option[aria-disabled='true'] {
+    cursor: default;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none; }
+
+.md-option-ripple {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0; }
+  @media screen and (-ms-high-contrast: active) {
+    .md-option-ripple {
+      opacity: 0.5; } }
 
 /*# sourceMappingURL=select.css.map */

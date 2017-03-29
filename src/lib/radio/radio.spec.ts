@@ -70,19 +70,19 @@ describe('MdRadio', () => {
       expect(radioInstances[0].checked).toBe(false);
     });
 
-    it('should set label position based on the group labelPosition', () => {
-      testComponent.labelPos = 'before';
+    it('should set alignment based on the group alignment', () => {
+      testComponent.alignment = 'end';
       fixture.detectChanges();
 
       for (let radio of radioInstances) {
-        expect(radio.labelPosition).toBe('before');
+        expect(radio.align).toBe('end');
       }
 
-      testComponent.labelPos = 'after';
+      testComponent.alignment = 'start';
       fixture.detectChanges();
 
       for (let radio of radioInstances) {
-        expect(radio.labelPosition).toBe('after');
+        expect(radio.align).toBe('start');
       }
     });
 
@@ -249,7 +249,7 @@ describe('MdRadio', () => {
       expect(rippleElement).toBeFalsy('Expected a disabled radio button not to have a ripple');
     });
 
-    it('should remove ripple if mdRippleDisabled input is set', async(() => {
+    it('should remove ripple if md-ripple-disabled input is set', async(() => {
       fixture.detectChanges();
       for (let radioNativeElement of radioNativeElements)
       {
@@ -586,7 +586,7 @@ describe('MdRadio', () => {
 @Component({
   template: `
   <md-radio-group [disabled]="isGroupDisabled"
-                  [labelPosition]="labelPos"
+                  [align]="alignment"
                   [value]="groupValue"
                   name="test-name">
     <md-radio-button value="fire" [disableRipple]="disableRipple">Charmander</md-radio-button>
@@ -596,7 +596,7 @@ describe('MdRadio', () => {
   `
 })
 class RadiosInsideRadioGroup {
-  labelPos: 'before' | 'after';
+  alignment: string;
   isGroupDisabled: boolean = false;
   groupValue: string = null;
   disableRipple: boolean = false;

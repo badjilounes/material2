@@ -1,8 +1,7 @@
 import {Injectable} from '@angular/core';
-import {Platform} from '../platform/platform';
+import {MdPlatform} from '../platform/platform';
 
-/**
- * The InteractivityChecker leans heavily on the ally.js accessibility utilities.
+/* The InteractivityChecker leans heavily on the ally.js accessibility utilities.
  * Methods like `isTabbable` are only covering specific edge-cases for the browsers which are
  * supported.
  */
@@ -14,15 +13,10 @@ import {Platform} from '../platform/platform';
 @Injectable()
 export class InteractivityChecker {
 
-  constructor(private _platform: Platform) {}
+  constructor(private _platform: MdPlatform) {}
 
-  /**
-   * Gets whether an element is disabled.
-   *
-   * @param element Element to be checked.
-   * @returns Whether the element is disabled.
-   */
-  isDisabled(element: HTMLElement): boolean {
+  /** Gets whether an element is disabled. */
+  isDisabled(element: HTMLElement) {
     // This does not capture some cases, such as a non-form control with a disabled attribute or
     // a form control inside of a disabled form, but should capture the most common cases.
     return element.hasAttribute('disabled');
@@ -33,21 +27,16 @@ export class InteractivityChecker {
    *
    * This will capture states like `display: none` and `visibility: hidden`, but not things like
    * being clipped by an `overflow: hidden` parent or being outside the viewport.
-   *
-   * @returns Whether the element is visible.
    */
-  isVisible(element: HTMLElement): boolean {
+  isVisible(element: HTMLElement) {
     return hasGeometry(element) && getComputedStyle(element).visibility === 'visible';
   }
 
   /**
    * Gets whether an element can be reached via Tab key.
    * Assumes that the element has already been checked with isFocusable.
-   *
-   * @param element Element to be checked.
-   * @returns Whether the element is tabbable.
    */
-  isTabbable(element: HTMLElement): boolean {
+  isTabbable(element: HTMLElement) {
 
     let frameElement = getWindow(element).frameElement as HTMLElement;
 
@@ -118,12 +107,7 @@ export class InteractivityChecker {
     return element.tabIndex >= 0;
   }
 
-  /**
-   * Gets whether an element can be focused by the user.
-   *
-   * @param element Element to be checked.
-   * @returns Whether the element is focusable.
-   */
+  /** Gets whether an element can be focused by the user. */
   isFocusable(element: HTMLElement): boolean {
     // Perform checks in order of left to most expensive.
     // Again, naive approach that does not capture many edge cases and browser quirks.

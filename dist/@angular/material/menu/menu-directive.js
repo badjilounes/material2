@@ -1,4 +1,5 @@
 // TODO(kara): prevent-close functionality
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -11,22 +12,19 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { Attribute, Component, ContentChildren, EventEmitter, Input, Output, QueryList, TemplateRef, ViewChild, ViewEncapsulation } from '@angular/core';
-import { MdMenuInvalidPositionX, MdMenuInvalidPositionY } from './menu-errors';
-import { MdMenuItem } from './menu-item';
-import { FocusKeyManager } from '../core/a11y/focus-key-manager';
-import { transformMenu, fadeInItems } from './menu-animations';
-export var MdMenu = (function () {
+Object.defineProperty(exports, "__esModule", { value: true });
+var core_1 = require("@angular/core");
+var menu_errors_1 = require("./menu-errors");
+var menu_item_1 = require("./menu-item");
+var list_key_manager_1 = require("../core/a11y/list-key-manager");
+var menu_animations_1 = require("./menu-animations");
+var MdMenu = (function () {
     function MdMenu(posX, posY) {
         /** Config object to be passed into the menu's ngClass */
         this._classList = {};
-        /** Position of the menu in the X axis. */
         this.positionX = 'after';
-        /** Position of the menu in the Y axis. */
         this.positionY = 'below';
-        this.overlapTrigger = true;
-        /** Event emitted when the menu is closed. */
-        this.close = new EventEmitter();
+        this.close = new core_1.EventEmitter();
         if (posX) {
             this._setPositionX(posX);
         }
@@ -35,13 +33,15 @@ export var MdMenu = (function () {
         }
         this.setPositionClasses(this.positionX, this.positionY);
     }
+    // TODO: internal
     MdMenu.prototype.ngAfterContentInit = function () {
         var _this = this;
-        this._keyManager = new FocusKeyManager(this.items).withWrap();
+        this._keyManager = new list_key_manager_1.ListKeyManager(this.items).withFocusWrap();
         this._tabSubscription = this._keyManager.tabOut.subscribe(function () {
             _this._emitCloseEvent();
         });
     };
+    // TODO: internal
     MdMenu.prototype.ngOnDestroy = function () {
         this._tabSubscription.unsubscribe();
     };
@@ -65,9 +65,10 @@ export var MdMenu = (function () {
     /**
      * Focus the first item in the menu. This method is used by the menu trigger
      * to focus the first item when the menu is opened by the ENTER key.
+     * TODO: internal
      */
     MdMenu.prototype.focusFirstItem = function () {
-        this._keyManager.setFirstItemActive();
+        this._keyManager.focusFirstItem();
     };
     /**
      * This emits a close event to which the trigger is subscribed. When emitted, the
@@ -78,13 +79,13 @@ export var MdMenu = (function () {
     };
     MdMenu.prototype._setPositionX = function (pos) {
         if (pos !== 'before' && pos !== 'after') {
-            throw new MdMenuInvalidPositionX();
+            throw new menu_errors_1.MdMenuInvalidPositionX();
         }
         this.positionX = pos;
     };
     MdMenu.prototype._setPositionY = function (pos) {
         if (pos !== 'above' && pos !== 'below') {
-            throw new MdMenuInvalidPositionY();
+            throw new menu_errors_1.MdMenuInvalidPositionY();
         }
         this.positionY = pos;
     };
@@ -98,43 +99,42 @@ export var MdMenu = (function () {
         this._classList['md-menu-above'] = posY == 'above';
         this._classList['md-menu-below'] = posY == 'below';
     };
-    __decorate([
-        ViewChild(TemplateRef), 
-        __metadata('design:type', TemplateRef)
-    ], MdMenu.prototype, "templateRef", void 0);
-    __decorate([
-        ContentChildren(MdMenuItem), 
-        __metadata('design:type', QueryList)
-    ], MdMenu.prototype, "items", void 0);
-    __decorate([
-        Input(), 
-        __metadata('design:type', Object)
-    ], MdMenu.prototype, "overlapTrigger", void 0);
-    __decorate([
-        Input('class'), 
-        __metadata('design:type', String), 
-        __metadata('design:paramtypes', [String])
-    ], MdMenu.prototype, "classList", null);
-    __decorate([
-        Output(), 
-        __metadata('design:type', Object)
-    ], MdMenu.prototype, "close", void 0);
-    MdMenu = __decorate([
-        Component({selector: 'md-menu, mat-menu',
-            host: { 'role': 'menu' },
-            template: "<template> <div class=\"md-menu-panel\" [ngClass]=\"_classList\" (keydown)=\"_keyManager.onKeydown($event)\" (click)=\"_emitCloseEvent()\" [@transformMenu]=\"'showing'\"> <div class=\"md-menu-content\" [@fadeInItems]=\"'showing'\"> <ng-content></ng-content> </div> </div> </template> ",
-            styles: ["/** The mixins below are shared between md-menu and md-select */ /** * This mixin adds the correct panel transform styles based * on the direction that the menu panel opens. */ /** * Applies styles for users in high contrast mode. Note that this only applies * to Microsoft browsers. Chrome can be included by checking for the `html[hc]` * attribute, however Chrome handles high contrast differently. */ .md-menu-panel { box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12); min-width: 112px; max-width: 280px; overflow: auto; -webkit-overflow-scrolling: touch; max-height: calc(100vh + 48px); } .md-menu-panel.md-menu-after.md-menu-below { transform-origin: left top; } .md-menu-panel.md-menu-after.md-menu-above { transform-origin: left bottom; } .md-menu-panel.md-menu-before.md-menu-below { transform-origin: right top; } .md-menu-panel.md-menu-before.md-menu-above { transform-origin: right bottom; } [dir='rtl'] .md-menu-panel.md-menu-after.md-menu-below { transform-origin: right top; } [dir='rtl'] .md-menu-panel.md-menu-after.md-menu-above { transform-origin: right bottom; } [dir='rtl'] .md-menu-panel.md-menu-before.md-menu-below { transform-origin: left top; } [dir='rtl'] .md-menu-panel.md-menu-before.md-menu-above { transform-origin: left bottom; } @media screen and (-ms-high-contrast: active) { .md-menu-panel { outline: solid 1px; } } .md-menu-content { padding-top: 8px; padding-bottom: 8px; } [md-menu-item] { cursor: pointer; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; outline: none; border: none; white-space: nowrap; overflow-x: hidden; text-overflow: ellipsis; display: block; line-height: 48px; height: 48px; padding: 0 16px; font-size: 16px; font-family: Roboto, \"Helvetica Neue\", sans-serif; text-align: start; text-decoration: none; position: relative; } [md-menu-item][disabled] { cursor: default; } [md-menu-item] md-icon { margin-right: 16px; } [dir='rtl'] [md-menu-item] md-icon { margin-left: 16px; } button[md-menu-item] { width: 100%; } .md-menu-ripple { position: absolute; top: 0; left: 0; bottom: 0; right: 0; } /*# sourceMappingURL=menu.css.map */ "],
-            encapsulation: ViewEncapsulation.None,
-            animations: [
-                transformMenu,
-                fadeInItems
-            ],
-            exportAs: 'mdMenu'
-        }),
-        __param(0, Attribute('x-position')),
-        __param(1, Attribute('y-position')), 
-        __metadata('design:paramtypes', [String, String])
-    ], MdMenu);
     return MdMenu;
 }());
-//# sourceMappingURL=menu-directive.js.map
+__decorate([
+    core_1.ViewChild(core_1.TemplateRef),
+    __metadata("design:type", core_1.TemplateRef)
+], MdMenu.prototype, "templateRef", void 0);
+__decorate([
+    core_1.ContentChildren(menu_item_1.MdMenuItem),
+    __metadata("design:type", core_1.QueryList)
+], MdMenu.prototype, "items", void 0);
+__decorate([
+    core_1.Input('class'),
+    __metadata("design:type", String),
+    __metadata("design:paramtypes", [String])
+], MdMenu.prototype, "classList", null);
+__decorate([
+    core_1.Output(),
+    __metadata("design:type", Object)
+], MdMenu.prototype, "close", void 0);
+MdMenu = __decorate([
+    core_1.Component({
+        moduleId: module.id,
+        selector: 'md-menu, mat-menu',
+        host: { 'role': 'menu' },
+        templateUrl: 'menu.html',
+        styleUrls: ['menu.css'],
+        encapsulation: core_1.ViewEncapsulation.None,
+        animations: [
+            menu_animations_1.transformMenu,
+            menu_animations_1.fadeInItems
+        ],
+        exportAs: 'mdMenu'
+    }),
+    __param(0, core_1.Attribute('x-position')),
+    __param(1, core_1.Attribute('y-position')),
+    __metadata("design:paramtypes", [String, String])
+], MdMenu);
+exports.MdMenu = MdMenu;
+//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/menu/menu-directive.js.map

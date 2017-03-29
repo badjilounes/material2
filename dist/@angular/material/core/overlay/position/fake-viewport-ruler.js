@@ -1,5 +1,6 @@
-/** @docs-private */
-export var FakeViewportRuler = (function () {
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var FakeViewportRuler = (function () {
     function FakeViewportRuler() {
     }
     FakeViewportRuler.prototype.getViewportRect = function () {
@@ -12,4 +13,5 @@ export var FakeViewportRuler = (function () {
     };
     return FakeViewportRuler;
 }());
-//# sourceMappingURL=fake-viewport-ruler.js.map
+exports.FakeViewportRuler = FakeViewportRuler;
+//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/core/overlay/position/fake-viewport-ruler.js.map

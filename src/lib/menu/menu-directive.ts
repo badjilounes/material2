@@ -17,7 +17,7 @@ import {
 import {MenuPositionX, MenuPositionY} from './menu-positions';
 import {MdMenuInvalidPositionX, MdMenuInvalidPositionY} from './menu-errors';
 import {MdMenuItem} from './menu-item';
-import {FocusKeyManager} from '../core/a11y/focus-key-manager';
+import {ListKeyManager} from '../core/a11y/list-key-manager';
 import {MdMenuPanel} from './menu-panel';
 import {Subscription} from 'rxjs/Subscription';
 import {transformMenu, fadeInItems} from './menu-animations';
@@ -36,7 +36,7 @@ import {transformMenu, fadeInItems} from './menu-animations';
   exportAs: 'mdMenu'
 })
 export class MdMenu implements AfterContentInit, MdMenuPanel, OnDestroy {
-  private _keyManager: FocusKeyManager;
+  private _keyManager: ListKeyManager;
 
   /** Subscription to tab events on the menu panel */
   private _tabSubscription: Subscription;
@@ -44,15 +44,11 @@ export class MdMenu implements AfterContentInit, MdMenuPanel, OnDestroy {
   /** Config object to be passed into the menu's ngClass */
   _classList: any = {};
 
-  /** Position of the menu in the X axis. */
   positionX: MenuPositionX = 'after';
-
-  /** Position of the menu in the Y axis. */
   positionY: MenuPositionY = 'below';
 
   @ViewChild(TemplateRef) templateRef: TemplateRef<any>;
   @ContentChildren(MdMenuItem) items: QueryList<MdMenuItem>;
-  @Input() overlapTrigger = true;
 
   constructor(@Attribute('x-position') posX: MenuPositionX,
               @Attribute('y-position') posY: MenuPositionY) {
@@ -61,16 +57,19 @@ export class MdMenu implements AfterContentInit, MdMenuPanel, OnDestroy {
     this.setPositionClasses(this.positionX, this.positionY);
   }
 
+  // TODO: internal
   ngAfterContentInit() {
-    this._keyManager = new FocusKeyManager(this.items).withWrap();
+    this._keyManager = new ListKeyManager(this.items).withFocusWrap();
     this._tabSubscription = this._keyManager.tabOut.subscribe(() => {
       this._emitCloseEvent();
     });
   }
 
+  // TODO: internal
   ngOnDestroy() {
     this._tabSubscription.unsubscribe();
   }
+
 
   /**
    * This method takes classes set on the host md-menu element and applies them on the
@@ -87,15 +86,15 @@ export class MdMenu implements AfterContentInit, MdMenuPanel, OnDestroy {
     this.setPositionClasses(this.positionX, this.positionY);
   }
 
-  /** Event emitted when the menu is closed. */
   @Output() close = new EventEmitter<void>();
 
   /**
    * Focus the first item in the menu. This method is used by the menu trigger
    * to focus the first item when the menu is opened by the ENTER key.
+   * TODO: internal
    */
   focusFirstItem() {
-    this._keyManager.setFirstItemActive();
+    this._keyManager.focusFirstItem();
   }
 
   /**

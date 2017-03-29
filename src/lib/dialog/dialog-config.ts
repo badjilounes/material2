@@ -11,6 +11,7 @@ export interface DialogPosition {
   right?: string;
 };
 
+
 /**
  * Configuration for opening a modal dialog with the MdDialog service.
  */
@@ -31,9 +32,6 @@ export class MdDialogConfig {
 
   /** Position overrides. */
   position?: DialogPosition;
-
-  /** Data being injected into the child component. */
-  data?: any;
 
   // TODO(jelbourn): add configuration for lifecycle hooks, ARIA labelling.
 }
