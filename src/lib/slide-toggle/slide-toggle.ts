@@ -40,7 +40,6 @@ export class MdSlideToggleChange {
 let nextId = 0;
 
 @Component({
-  moduleId: module.id,
   selector: 'md-slide-toggle, mat-slide-toggle',
   host: {
     '[class.md-checked]': 'checked',
@@ -49,8 +48,8 @@ let nextId = 0;
     '[class.md-slide-toggle-focused]': '_hasFocus',
     '(mousedown)': '_setMousedown()'
   },
-  templateUrl: 'slide-toggle.html',
-  styleUrls: ['slide-toggle.css'],
+  template: require('./slide-toggle.html'),
+  styles: [require('./slide-toggle.css').toString()],
   providers: [MD_SLIDE_TOGGLE_VALUE_ACCESSOR],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush

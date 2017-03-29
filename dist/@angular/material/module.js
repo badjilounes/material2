@@ -125,4 +125,4 @@ MaterialModule = __decorate([
     })
 ], MaterialModule);
 exports.MaterialModule = MaterialModule;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/module.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/module.js.map

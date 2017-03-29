@@ -118,4 +118,4 @@ MdCoreModule = MdCoreModule_1 = __decorate([
 ], MdCoreModule);
 exports.MdCoreModule = MdCoreModule;
 var MdCoreModule_1;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/core/core.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/core/core.js.map

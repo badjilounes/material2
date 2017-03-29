@@ -8,9 +8,8 @@ import {coerceBooleanProperty} from '../core/coersion/boolean-property';
 import {MdTabLabel} from './tab-label';
 
 @Component({
-  moduleId: module.id,
   selector: 'md-tab',
-  templateUrl: 'tab.html',
+  template: require('./tab.html'),
 })
 export class MdTab implements OnInit {
   /** Content for the tab label given by <template md-tab-label>. */

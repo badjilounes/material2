@@ -64,4 +64,4 @@ exports.fadeInContent = core_1.trigger('fadeInContent', [
         core_1.animate("150ms 100ms cubic-bezier(0.55, 0, 0.55, 0.2)")
     ])
 ]);
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/select/select-animations.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/select/select-animations.js.map

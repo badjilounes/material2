@@ -468,10 +468,9 @@ __decorate([
 ], MdButtonToggle.prototype, "disabled", null);
 MdButtonToggle = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: 'md-button-toggle',
-        templateUrl: 'button-toggle.html',
-        styleUrls: ['button-toggle.css'],
+        template: require('./button-toggle.html'),
+        styles: [require('./button-toggle.css').toString()],
         encapsulation: core_1.ViewEncapsulation.None,
     }),
     __param(0, core_1.Optional()),
@@ -507,4 +506,4 @@ MdButtonToggleModule = MdButtonToggleModule_1 = __decorate([
 ], MdButtonToggleModule);
 exports.MdButtonToggleModule = MdButtonToggleModule;
 var MdButtonToggleModule_1;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/button-toggle/button-toggle.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/button-toggle/button-toggle.js.map

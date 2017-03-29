@@ -14,4 +14,4 @@ var FakeViewportRuler = (function () {
     return FakeViewportRuler;
 }());
 exports.FakeViewportRuler = FakeViewportRuler;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/core/overlay/position/fake-viewport-ruler.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/core/overlay/position/fake-viewport-ruler.js.map

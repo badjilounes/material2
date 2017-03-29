@@ -213,15 +213,14 @@ __decorate([
 ], MdProgressCircle.prototype, "mode", null);
 MdProgressCircle = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: 'md-progress-circle, mat-progress-circle',
         host: {
             'role': 'progressbar',
             '[attr.aria-valuemin]': '_ariaValueMin',
             '[attr.aria-valuemax]': '_ariaValueMax',
         },
-        templateUrl: 'progress-circle.html',
-        styleUrls: ['progress-circle.css'],
+        template: require('./progress-circle.html'),
+        styles: [require('./progress-circle.css').toString()],
         changeDetection: core_1.ChangeDetectionStrategy.OnPush,
     }),
     __metadata("design:paramtypes", [core_1.ChangeDetectorRef,
@@ -251,14 +250,13 @@ var MdSpinner = (function (_super) {
 }(MdProgressCircle));
 MdSpinner = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: 'md-spinner, mat-spinner',
         host: {
             'role': 'progressbar',
             'mode': 'indeterminate',
         },
-        templateUrl: 'progress-circle.html',
-        styleUrls: ['progress-circle.css'],
+        template: require('./progress-circle.html'),
+        styles: [require('./progress-circle.css').toString()],
     }),
     __metadata("design:paramtypes", [core_1.ChangeDetectorRef, core_1.ElementRef, core_1.NgZone])
 ], MdSpinner);
@@ -342,4 +340,4 @@ MdProgressCircleModule = MdProgressCircleModule_1 = __decorate([
 ], MdProgressCircleModule);
 exports.MdProgressCircleModule = MdProgressCircleModule;
 var MdProgressCircleModule_1;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/progress-circle/progress-circle.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/progress-circle/progress-circle.js.map

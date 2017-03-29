@@ -139,10 +139,9 @@ __decorate([
 ], MdGridList.prototype, "rowHeight", null);
 MdGridList = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: 'md-grid-list, mat-grid-list',
-        templateUrl: 'grid-list.html',
-        styleUrls: ['grid-list.css'],
+        template: require('./grid-list.html'),
+        styles: [require('./grid-list.css').toString()],
         encapsulation: core_1.ViewEncapsulation.None,
     }),
     __param(2, core_1.Optional()),
@@ -177,4 +176,4 @@ MdGridListModule = MdGridListModule_1 = __decorate([
 ], MdGridListModule);
 exports.MdGridListModule = MdGridListModule;
 var MdGridListModule_1;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/grid-list/grid-list.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/grid-list/grid-list.js.map

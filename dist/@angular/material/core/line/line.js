@@ -67,4 +67,4 @@ MdLineModule = __decorate([
     })
 ], MdLineModule);
 exports.MdLineModule = MdLineModule;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/core/line/line.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/core/line/line.js.map

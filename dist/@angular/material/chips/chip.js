@@ -32,4 +32,4 @@ MdChip = __decorate([
     __metadata("design:paramtypes", [core_1.Renderer, core_1.ElementRef])
 ], MdChip);
 exports.MdChip = MdChip;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/chips/chip.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/chips/chip.js.map

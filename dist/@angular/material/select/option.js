@@ -117,7 +117,6 @@ __decorate([
 ], MdOption.prototype, "onSelect", void 0);
 MdOption = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: 'md-option, mat-option',
         host: {
             'role': 'option',
@@ -130,11 +129,11 @@ MdOption = __decorate([
             '(click)': '_selectViaInteraction()',
             '(keydown)': '_handleKeydown($event)'
         },
-        templateUrl: 'option.html',
-        styleUrls: ['select.css'],
+        template: require('./option.html'),
+        styles: [require('./select.css').toString()],
         encapsulation: core_1.ViewEncapsulation.None
     }),
     __metadata("design:paramtypes", [core_1.ElementRef, core_1.Renderer])
 ], MdOption);
 exports.MdOption = MdOption;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/select/option.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/select/option.js.map

@@ -60,11 +60,10 @@ __decorate([
 ], MdGridTile.prototype, "colspan", null);
 MdGridTile = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: 'md-grid-tile, mat-grid-tile',
         host: { 'role': 'listitem' },
-        templateUrl: 'grid-tile.html',
-        styleUrls: ['grid-list.css'],
+        template: require('./grid-tile.html'),
+        styles: [require('./grid-list.css').toString()],
         encapsulation: core_1.ViewEncapsulation.None,
     }),
     __metadata("design:paramtypes", [core_1.Renderer, core_1.ElementRef])
@@ -86,11 +85,10 @@ __decorate([
 ], MdGridTileText.prototype, "_lines", void 0);
 MdGridTileText = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: 'md-grid-tile-header, mat-grid-tile-header, md-grid-tile-footer, mat-grid-tile-footer',
-        templateUrl: 'grid-tile-text.html'
+        template: require('./grid-tile-text.html')
     }),
     __metadata("design:paramtypes", [core_1.Renderer, core_1.ElementRef])
 ], MdGridTileText);
 exports.MdGridTileText = MdGridTileText;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/grid-list/grid-tile.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/grid-list/grid-tile.js.map

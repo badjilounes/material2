@@ -44,4 +44,4 @@ var MdGridListBadRatioError = (function (_super) {
     return MdGridListBadRatioError;
 }(core_1.MdError));
 exports.MdGridListBadRatioError = MdGridListBadRatioError;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/grid-list/grid-list-errors.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/grid-list/grid-list-errors.js.map

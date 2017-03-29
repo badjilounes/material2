@@ -38,15 +38,14 @@ type EasingFn = (currentTime: number, startValue: number,
  * <md-progress-circle> component.
  */
 @Component({
-  moduleId: module.id,
   selector: 'md-progress-circle, mat-progress-circle',
   host: {
     'role': 'progressbar',
     '[attr.aria-valuemin]': '_ariaValueMin',
     '[attr.aria-valuemax]': '_ariaValueMax',
   },
-  templateUrl: 'progress-circle.html',
-  styleUrls: ['progress-circle.css'],
+  template: require('./progress-circle.html'),
+  styles: [require('./progress-circle.css').toString()],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MdProgressCircle implements OnDestroy {
@@ -237,14 +236,13 @@ export class MdProgressCircle implements OnDestroy {
  * indeterminate <md-progress-circle> instance.
  */
 @Component({
-  moduleId: module.id,
   selector: 'md-spinner, mat-spinner',
   host: {
     'role': 'progressbar',
     'mode': 'indeterminate',
   },
-  templateUrl: 'progress-circle.html',
-  styleUrls: ['progress-circle.css'],
+  template: require('./progress-circle.html'),
+  styles: [require('./progress-circle.css').toString()],
 })
 export class MdSpinner extends MdProgressCircle implements OnDestroy {
   constructor(changeDetectorRef: ChangeDetectorRef, elementRef: ElementRef, ngZone: NgZone) {

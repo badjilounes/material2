@@ -46,4 +46,4 @@ var MdMenuInvalidPositionY = (function (_super) {
     return MdMenuInvalidPositionY;
 }(core_1.MdError));
 exports.MdMenuInvalidPositionY = MdMenuInvalidPositionY;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/menu/menu-errors.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/menu/menu-errors.js.map

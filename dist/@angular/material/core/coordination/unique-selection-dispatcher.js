@@ -37,4 +37,4 @@ MdUniqueSelectionDispatcher = __decorate([
     core_1.Injectable()
 ], MdUniqueSelectionDispatcher);
 exports.MdUniqueSelectionDispatcher = MdUniqueSelectionDispatcher;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/core/coordination/unique-selection-dispatcher.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/core/coordination/unique-selection-dispatcher.js.map

@@ -1,10 +1,9 @@
 import {Component, ViewEncapsulation} from '@angular/core';
 
 @Component({
-  moduleId: module.id,
   selector: 'md-autocomplete, mat-autocomplete',
-  templateUrl: 'autocomplete.html',
-  styleUrls: ['autocomplete.css'],
+  template: require('./autocomplete.html'),
+  styles: [require('./autocomplete.css').toString()],
   encapsulation: ViewEncapsulation.None,
 })
 export class MdAutocomplete {}

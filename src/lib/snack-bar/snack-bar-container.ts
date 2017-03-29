@@ -34,10 +34,9 @@ export const HIDE_ANIMATION = '195ms cubic-bezier(0.0,0.0,0.2,1)';
  * Internal component that wraps user-provided snack bar content.
  */
 @Component({
-  moduleId: module.id,
   selector: 'snack-bar-container',
-  templateUrl: 'snack-bar-container.html',
-  styleUrls: ['snack-bar-container.css'],
+  template: require('./snack-bar-container.html'),
+  styles: [require('./snack-bar-container.css').toString()],
   host: {
     'role': 'alert',
     '[@state]': 'animationState',

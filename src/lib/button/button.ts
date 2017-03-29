@@ -19,7 +19,6 @@ import {ViewportRuler} from '../core/overlay/position/viewport-ruler';
 
 
 @Component({
-  moduleId: module.id,
   selector: 'button[md-button], button[md-raised-button], button[md-icon-button], ' +
             'button[md-fab], button[md-mini-fab]',
   host: {
@@ -29,8 +28,8 @@ import {ViewportRuler} from '../core/overlay/position/viewport-ruler';
     '(focus)': '_setKeyboardFocus()',
     '(blur)': '_removeKeyboardFocus()',
   },
-  templateUrl: 'button.html',
-  styleUrls: ['button.css'],
+  template: require('./button.html'),
+  styles: [require('./button.css').toString()],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -117,7 +116,6 @@ export class MdButton {
 }
 
 @Component({
-  moduleId: module.id,
   selector: 'a[md-button], a[md-raised-button], a[md-icon-button], a[md-fab], a[md-mini-fab]',
   inputs: ['color', 'disabled', 'disableRipple'],
   host: {
@@ -128,8 +126,8 @@ export class MdButton {
     '(blur)': '_removeKeyboardFocus()',
     '(click)': '_haltDisabledEvents($event)',
   },
-  templateUrl: 'button.html',
-  styleUrls: ['button.css'],
+  template: require('./button.html'),
+  styles: [require('./button.css').toString()],
   encapsulation: ViewEncapsulation.None
 })
 export class MdAnchor extends MdButton {

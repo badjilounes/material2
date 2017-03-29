@@ -387,10 +387,9 @@ __decorate([
 ], MdCheckbox.prototype, "color", null);
 MdCheckbox = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: 'md-checkbox, mat-checkbox',
-        templateUrl: 'checkbox.html',
-        styleUrls: ['checkbox.css'],
+        template: require('./checkbox.html'),
+        styles: [require('./checkbox.css').toString()],
         host: {
             '[class.md-checkbox-indeterminate]': 'indeterminate',
             '[class.md-checkbox-checked]': 'checked',
@@ -427,4 +426,4 @@ MdCheckboxModule = MdCheckboxModule_1 = __decorate([
 ], MdCheckboxModule);
 exports.MdCheckboxModule = MdCheckboxModule;
 var MdCheckboxModule_1;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/checkbox/checkbox.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/checkbox/checkbox.js.map

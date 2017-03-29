@@ -91,10 +91,9 @@ __decorate([
 ], MdSnackBarContainer.prototype, "_portalHost", void 0);
 MdSnackBarContainer = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: 'snack-bar-container',
-        templateUrl: 'snack-bar-container.html',
-        styleUrls: ['snack-bar-container.css'],
+        template: require('./snack-bar-container.html'),
+        styles: [require('./snack-bar-container.css').toString()],
         host: {
             'role': 'alert',
             '[@state]': 'animationState',
@@ -113,4 +112,4 @@ MdSnackBarContainer = __decorate([
     __metadata("design:paramtypes", [core_1.NgZone])
 ], MdSnackBarContainer);
 exports.MdSnackBarContainer = MdSnackBarContainer;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/snack-bar/snack-bar-container.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/snack-bar/snack-bar-container.js.map

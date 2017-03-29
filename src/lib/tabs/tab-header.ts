@@ -33,10 +33,9 @@ const EXAGGERATED_OVERSCROLL = 60;
  * left and right across the header.
  */
 @Component({
-  moduleId: module.id,
   selector: 'md-tab-header',
-  templateUrl: 'tab-header.html',
-  styleUrls: ['tab-header.css'],
+  template: require('./tab-header.html').toString(),
+  styles: [require('./tab-header.css').toString()],
   encapsulation: ViewEncapsulation.None,
   host: {
     'class': 'md-tab-header',

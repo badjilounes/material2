@@ -301,7 +301,6 @@ __decorate([
 ], MdSidenav.prototype, "opened", null);
 MdSidenav = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: 'md-sidenav, mat-sidenav',
         template: '<focus-trap [disabled]="isFocusTrapDisabled"><ng-content></ng-content></focus-trap>',
         host: {
@@ -507,15 +506,14 @@ __decorate([
 ], MdSidenavLayout.prototype, "onBackdropClicked", void 0);
 MdSidenavLayout = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: 'md-sidenav-layout, mat-sidenav-layout',
         // Do not use ChangeDetectionStrategy.OnPush. It does not work for this component because
         // technically it is a sibling of MdSidenav (on the content tree) and isn't updated when MdSidenav
         // changes its state.
-        templateUrl: 'sidenav.html',
-        styleUrls: [
-            'sidenav.css',
-            'sidenav-transitions.css',
+        template: require('./sidenav.html'),
+        styles: [
+            require('./sidenav.css').toString(),
+            require('./sidenav-transitions.css').toString(),
         ],
         encapsulation: core_1.ViewEncapsulation.None,
     }),
@@ -544,4 +542,4 @@ MdSidenavModule = MdSidenavModule_1 = __decorate([
 ], MdSidenavModule);
 exports.MdSidenavModule = MdSidenavModule;
 var MdSidenavModule_1;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/sidenav/sidenav.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/sidenav/sidenav.js.map

@@ -351,10 +351,9 @@ __decorate([
 ], MdTabHeader.prototype, "indexFocused", void 0);
 MdTabHeader = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: 'md-tab-header',
-        templateUrl: 'tab-header.html',
-        styleUrls: ['tab-header.css'],
+        template: require('./tab-header.html').toString(),
+        styles: [require('./tab-header.css').toString()],
         encapsulation: core_1.ViewEncapsulation.None,
         host: {
             'class': 'md-tab-header',
@@ -368,4 +367,4 @@ MdTabHeader = __decorate([
         core_2.Dir])
 ], MdTabHeader);
 exports.MdTabHeader = MdTabHeader;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/tabs/tab-header.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/tabs/tab-header.js.map

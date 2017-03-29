@@ -82,10 +82,9 @@ __decorate([
 ], MdDialogContainer.prototype, "_focusTrap", void 0);
 MdDialogContainer = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: 'md-dialog-container, mat-dialog-container',
-        templateUrl: 'dialog-container.html',
-        styleUrls: ['dialog-container.css'],
+        template: require('./dialog-container.html'),
+        styles: [require('./dialog-container.css').toString()],
         host: {
             'class': 'md-dialog-container',
             '[attr.role]': 'dialogConfig?.role',
@@ -96,4 +95,4 @@ MdDialogContainer = __decorate([
     __metadata("design:paramtypes", [core_1.NgZone])
 ], MdDialogContainer);
 exports.MdDialogContainer = MdDialogContainer;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/dialog/dialog-container.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/dialog/dialog-container.js.map

@@ -20,7 +20,6 @@ var MdChipList = (function () {
 }());
 MdChipList = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: 'md-chip-list',
         template: "<ng-content></ng-content>",
         host: {
@@ -29,7 +28,7 @@ MdChipList = __decorate([
             'role': 'listbox',
             'class': 'md-chip-list'
         },
-        styleUrls: ['chips.css'],
+        styles: [require('./chips.css').toString()],
         encapsulation: core_1.ViewEncapsulation.None,
         changeDetection: core_1.ChangeDetectionStrategy.OnPush
     }),
@@ -56,4 +55,4 @@ MdChipsModule = MdChipsModule_1 = __decorate([
 ], MdChipsModule);
 exports.MdChipsModule = MdChipsModule;
 var MdChipsModule_1;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/chips/chip-list.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/chips/chip-list.js.map

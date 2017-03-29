@@ -11,4 +11,4 @@ function isFakeMousedownFromScreenReader(event) {
     return event.buttons === 0;
 }
 exports.isFakeMousedownFromScreenReader = isFakeMousedownFromScreenReader;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/core/a11y/fake-mousedown.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/core/a11y/fake-mousedown.js.map

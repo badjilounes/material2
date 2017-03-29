@@ -271,7 +271,6 @@ __decorate([
 ], MdSlideToggle.prototype, "color", null);
 MdSlideToggle = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: 'md-slide-toggle, mat-slide-toggle',
         host: {
             '[class.md-checked]': 'checked',
@@ -280,8 +279,8 @@ MdSlideToggle = __decorate([
             '[class.md-slide-toggle-focused]': '_hasFocus',
             '(mousedown)': '_setMousedown()'
         },
-        templateUrl: 'slide-toggle.html',
-        styleUrls: ['slide-toggle.css'],
+        template: require('./slide-toggle.html'),
+        styles: [require('./slide-toggle.css').toString()],
         providers: [exports.MD_SLIDE_TOGGLE_VALUE_ACCESSOR],
         encapsulation: core_1.ViewEncapsulation.None,
         changeDetection: core_1.ChangeDetectionStrategy.OnPush
@@ -355,4 +354,4 @@ MdSlideToggleModule = MdSlideToggleModule_1 = __decorate([
 ], MdSlideToggleModule);
 exports.MdSlideToggleModule = MdSlideToggleModule;
 var MdSlideToggleModule_1;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/slide-toggle/slide-toggle.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/slide-toggle/slide-toggle.js.map

@@ -119,7 +119,6 @@ __decorate([
 ], MdButton.prototype, "color", null);
 MdButton = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: 'button[md-button], button[md-raised-button], button[md-icon-button], ' +
             'button[md-fab], button[md-mini-fab]',
         host: {
@@ -129,8 +128,8 @@ MdButton = __decorate([
             '(focus)': '_setKeyboardFocus()',
             '(blur)': '_removeKeyboardFocus()',
         },
-        templateUrl: 'button.html',
-        styleUrls: ['button.css'],
+        template: require('./button.html'),
+        styles: [require('./button.css').toString()],
         encapsulation: core_1.ViewEncapsulation.None,
         changeDetection: core_1.ChangeDetectionStrategy.OnPush,
     }),
@@ -178,7 +177,6 @@ __decorate([
 ], MdAnchor.prototype, "isAriaDisabled", null);
 MdAnchor = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: 'a[md-button], a[md-raised-button], a[md-icon-button], a[md-fab], a[md-mini-fab]',
         inputs: ['color', 'disabled', 'disableRipple'],
         host: {
@@ -189,8 +187,8 @@ MdAnchor = __decorate([
             '(blur)': '_removeKeyboardFocus()',
             '(click)': '_haltDisabledEvents($event)',
         },
-        templateUrl: 'button.html',
-        styleUrls: ['button.css'],
+        template: require('./button.html'),
+        styles: [require('./button.css').toString()],
         encapsulation: core_1.ViewEncapsulation.None
     }),
     __metadata("design:paramtypes", [core_1.ElementRef, core_1.Renderer])
@@ -216,4 +214,4 @@ MdButtonModule = MdButtonModule_1 = __decorate([
 ], MdButtonModule);
 exports.MdButtonModule = MdButtonModule;
 var MdButtonModule_1;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/button/button.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/button/button.js.map

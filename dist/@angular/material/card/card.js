@@ -103,10 +103,9 @@ var MdCard = (function () {
 }());
 MdCard = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: 'md-card, mat-card',
-        templateUrl: 'card.html',
-        styleUrls: ['card.css'],
+        template: require('./card.html'),
+        styles: [require('./card.css').toString()],
         encapsulation: core_1.ViewEncapsulation.None,
         changeDetection: core_1.ChangeDetectionStrategy.OnPush,
     })
@@ -132,9 +131,8 @@ var MdCardHeader = (function () {
 }());
 MdCardHeader = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: 'md-card-header, mat-card-header',
-        templateUrl: 'card-header.html',
+        template: require('./card-header.html'),
         encapsulation: core_1.ViewEncapsulation.None,
         changeDetection: core_1.ChangeDetectionStrategy.OnPush,
     })
@@ -157,9 +155,8 @@ var MdCardTitleGroup = (function () {
 }());
 MdCardTitleGroup = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: 'md-card-title-group, mat-card-title-group',
-        templateUrl: 'card-title-group.html',
+        template: require('./card-title-group.html'),
         encapsulation: core_1.ViewEncapsulation.None,
         changeDetection: core_1.ChangeDetectionStrategy.OnPush,
     })
@@ -198,4 +195,4 @@ MdCardModule = MdCardModule_1 = __decorate([
 ], MdCardModule);
 exports.MdCardModule = MdCardModule;
 var MdCardModule_1;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/card/card.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/card/card.js.map

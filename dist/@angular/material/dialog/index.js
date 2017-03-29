@@ -7,4 +7,4 @@ __export(require("./dialog"));
 __export(require("./dialog-container"));
 __export(require("./dialog-config"));
 __export(require("./dialog-ref"));
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/dialog/index.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/dialog/index.js.map

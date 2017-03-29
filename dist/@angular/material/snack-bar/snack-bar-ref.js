@@ -59,4 +59,4 @@ var MdSnackBarRef = (function () {
     return MdSnackBarRef;
 }());
 exports.MdSnackBarRef = MdSnackBarRef;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/snack-bar/snack-bar-ref.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/snack-bar/snack-bar-ref.js.map

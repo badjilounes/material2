@@ -39,4 +39,4 @@ MdMenuModule = MdMenuModule_1 = __decorate([
 ], MdMenuModule);
 exports.MdMenuModule = MdMenuModule;
 var MdMenuModule_1;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/menu/menu.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/menu/menu.js.map

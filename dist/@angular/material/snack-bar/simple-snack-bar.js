@@ -28,11 +28,10 @@ var SimpleSnackBar = (function () {
 }());
 SimpleSnackBar = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: 'simple-snack-bar',
-        templateUrl: 'simple-snack-bar.html',
-        styleUrls: ['simple-snack-bar.css'],
+        template: require('./simple-snack-bar.html'),
+        styles: [require('./simple-snack-bar.css').toString()],
     })
 ], SimpleSnackBar);
 exports.SimpleSnackBar = SimpleSnackBar;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/snack-bar/simple-snack-bar.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/snack-bar/simple-snack-bar.js.map

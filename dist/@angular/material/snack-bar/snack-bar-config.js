@@ -17,4 +17,4 @@ var MdSnackBarConfig = (function () {
     return MdSnackBarConfig;
 }());
 exports.MdSnackBarConfig = MdSnackBarConfig;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/snack-bar/snack-bar-config.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/snack-bar/snack-bar-config.js.map

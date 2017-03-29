@@ -24,4 +24,4 @@ var MdError = (function (_super) {
     return MdError;
 }(Error));
 exports.MdError = MdError;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/core/errors/error.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/core/errors/error.js.map

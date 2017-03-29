@@ -17,7 +17,6 @@ import {coerceBooleanProperty} from '../core/coersion/boolean-property';
 let _uniqueIdCounter = 0;
 
 @Component({
-  moduleId: module.id,
   selector: 'md-option, mat-option',
   host: {
     'role': 'option',
@@ -30,8 +29,8 @@ let _uniqueIdCounter = 0;
     '(click)': '_selectViaInteraction()',
     '(keydown)': '_handleKeydown($event)'
   },
-  templateUrl: 'option.html',
-  styleUrls: ['select.css'],
+  template: require('./option.html'),
+  styles: [require('./select.css').toString()],
   encapsulation: ViewEncapsulation.None
 })
 export class MdOption {

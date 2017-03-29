@@ -553,10 +553,9 @@ __decorate([
 ], MdSelect.prototype, "onClose", void 0);
 MdSelect = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: 'md-select, mat-select',
-        templateUrl: 'select.html',
-        styleUrls: ['select.css'],
+        template: require('./select.html'),
+        styles: [require('./select.css').toString()],
         encapsulation: core_1.ViewEncapsulation.None,
         host: {
             'role': 'listbox',
@@ -588,4 +587,4 @@ exports.MdSelect = MdSelect;
 function clampValue(min, n, max) {
     return Math.min(Math.max(min, n), max);
 }
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/select/select.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/select/select.js.map

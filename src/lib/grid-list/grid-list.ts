@@ -30,10 +30,9 @@ import {
 const MD_FIT_MODE = 'fit';
 
 @Component({
-  moduleId: module.id,
   selector: 'md-grid-list, mat-grid-list',
-  templateUrl: 'grid-list.html',
-  styleUrls: ['grid-list.css'],
+  template: require('./grid-list.html'),
+  styles: [require('./grid-list.css').toString()],
   encapsulation: ViewEncapsulation.None,
 })
 export class MdGridList implements OnInit, AfterContentChecked {

@@ -35,4 +35,4 @@ MdSelectModule = MdSelectModule_1 = __decorate([
 ], MdSelectModule);
 exports.MdSelectModule = MdSelectModule;
 var MdSelectModule_1;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/select/index.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/select/index.js.map

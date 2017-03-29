@@ -28,4 +28,4 @@ __export(require("./tabs/index"));
 __export(require("./tabs/tab-nav-bar/index"));
 __export(require("./toolbar/index"));
 __export(require("./tooltip/index"));
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/index.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/index.js.map

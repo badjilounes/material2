@@ -11,10 +11,10 @@ import {coerceBooleanProperty} from '../coersion/boolean-property';
  * Things like tabIndex > 0, flex `order`, and shadow roots can cause to two to misalign.
  * This will be replaced with a more intelligent solution before the library is considered stable.
  */
+
 @Component({
-  moduleId: module.id,
   selector: 'focus-trap',
-  templateUrl: 'focus-trap.html',
+  template: require('./focus-trap.html'),
   encapsulation: ViewEncapsulation.None,
 })
 export class FocusTrap {

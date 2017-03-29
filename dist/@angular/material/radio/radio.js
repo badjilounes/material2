@@ -481,10 +481,9 @@ __decorate([
 ], MdRadioButton.prototype, "disabled", null);
 MdRadioButton = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: 'md-radio-button, mat-radio-button',
-        templateUrl: 'radio.html',
-        styleUrls: ['radio.css'],
+        template: require('./radio.html'),
+        styles: [require('./radio.css').toString()],
         encapsulation: core_1.ViewEncapsulation.None
     }),
     __param(0, core_1.Optional()),
@@ -514,4 +513,4 @@ MdRadioModule = MdRadioModule_1 = __decorate([
 ], MdRadioModule);
 exports.MdRadioModule = MdRadioModule;
 var MdRadioModule_1;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/radio/radio.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/radio/radio.js.map

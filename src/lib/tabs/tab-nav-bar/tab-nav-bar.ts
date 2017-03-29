@@ -17,10 +17,9 @@ import {ViewportRuler} from '../../core/overlay/position/viewport-ruler';
  * Provides anchored navigation with animated ink bar.
  */
 @Component({
-  moduleId: module.id,
   selector: '[md-tab-nav-bar], [mat-tab-nav-bar]',
-  templateUrl: 'tab-nav-bar.html',
-  styleUrls: ['tab-nav-bar.css'],
+  template: require('./tab-nav-bar.html'),
+  styles: [require('./tab-nav-bar.css').toString()],
   encapsulation: ViewEncapsulation.None,
 })
 export class MdTabNavBar {

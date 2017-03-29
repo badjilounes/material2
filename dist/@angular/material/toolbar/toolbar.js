@@ -56,10 +56,9 @@ __decorate([
 ], MdToolbar.prototype, "color", null);
 MdToolbar = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: 'md-toolbar, mat-toolbar',
-        templateUrl: 'toolbar.html',
-        styleUrls: ['toolbar.css'],
+        template: require('./toolbar.html').toString(),
+        styles: [require('./toolbar.css').toString()],
         changeDetection: core_1.ChangeDetectionStrategy.OnPush,
         encapsulation: core_1.ViewEncapsulation.None
     }),
@@ -86,4 +85,4 @@ MdToolbarModule = MdToolbarModule_1 = __decorate([
 ], MdToolbarModule);
 exports.MdToolbarModule = MdToolbarModule;
 var MdToolbarModule_1;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/toolbar/toolbar.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/toolbar/toolbar.js.map

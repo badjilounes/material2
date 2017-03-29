@@ -47,4 +47,4 @@ NoConflictStyleCompatibilityMode = NoConflictStyleCompatibilityMode_1 = __decora
 ], NoConflictStyleCompatibilityMode);
 exports.NoConflictStyleCompatibilityMode = NoConflictStyleCompatibilityMode;
 var NoConflictStyleCompatibilityMode_1;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/core/compatibility/no-conflict-mode.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/core/compatibility/no-conflict-mode.js.map

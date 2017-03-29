@@ -514,7 +514,6 @@ __decorate([
 ], MdSlider.prototype, "change", void 0);
 MdSlider = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: 'md-slider, mat-slider',
         providers: [exports.MD_SLIDER_VALUE_ACCESSOR],
         host: {
@@ -540,8 +539,8 @@ MdSlider = __decorate([
             '[class.md-slider-thumb-label-showing]': 'thumbLabel',
             '[class.md-slider-vertical]': 'vertical',
         },
-        templateUrl: 'slider.html',
-        styleUrls: ['slider.css'],
+        template: require('./slider.html'),
+        styles: [require('./slider.css').toString()],
         encapsulation: core_1.ViewEncapsulation.None,
     }),
     __param(0, core_1.Optional()),
@@ -597,4 +596,4 @@ MdSliderModule = MdSliderModule_1 = __decorate([
 ], MdSliderModule);
 exports.MdSliderModule = MdSliderModule;
 var MdSliderModule_1;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/slider/slider.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/slider/slider.js.map

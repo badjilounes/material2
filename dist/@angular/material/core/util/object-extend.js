@@ -28,4 +28,4 @@ function extendObject(dest) {
     return dest;
 }
 exports.extendObject = extendObject;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/core/util/object-extend.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/core/util/object-extend.js.map

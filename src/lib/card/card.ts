@@ -70,10 +70,9 @@ it also provides a number of preset styles for common card sections, including:
 */
 
 @Component({
-  moduleId: module.id,
   selector: 'md-card, mat-card',
-  templateUrl: 'card.html',
-  styleUrls: ['card.css'],
+  template: require('./card.html'),
+  styles: [require('./card.css').toString()],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -95,9 +94,8 @@ TODO(kara): update link to demo site when it exists
 */
 
 @Component({
-  moduleId: module.id,
   selector: 'md-card-header, mat-card-header',
-  templateUrl: 'card-header.html',
+  template: require('./card-header.html'),
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -115,9 +113,8 @@ TODO(kara): update link to demo site when it exists
 */
 
 @Component({
-  moduleId: module.id,
   selector: 'md-card-title-group, mat-card-title-group',
-  templateUrl: 'card-title-group.html',
+  template: require('./card-title-group.html'),
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
 })

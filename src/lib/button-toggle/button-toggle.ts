@@ -260,10 +260,9 @@ export class MdButtonToggleGroupMultiple {
 }
 
 @Component({
-  moduleId: module.id,
   selector: 'md-button-toggle',
-  templateUrl: 'button-toggle.html',
-  styleUrls: ['button-toggle.css'],
+  template: require('./button-toggle.html'),
+  styles: [require('./button-toggle.css').toString()],
   encapsulation: ViewEncapsulation.None,
 })
 export class MdButtonToggle implements OnInit {

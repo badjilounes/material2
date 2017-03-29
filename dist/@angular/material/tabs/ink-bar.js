@@ -59,4 +59,4 @@ MdInkBar = __decorate([
     __metadata("design:paramtypes", [core_1.Renderer, core_1.ElementRef])
 ], MdInkBar);
 exports.MdInkBar = MdInkBar;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/tabs/ink-bar.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/tabs/ink-bar.js.map

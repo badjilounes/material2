@@ -36,4 +36,4 @@ MdTabLabel = __decorate([
     __metadata("design:paramtypes", [core_1.TemplateRef, core_1.ViewContainerRef])
 ], MdTabLabel);
 exports.MdTabLabel = MdTabLabel;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/tabs/tab-label.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/tabs/tab-label.js.map

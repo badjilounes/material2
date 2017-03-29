@@ -32,4 +32,4 @@ var OverlayContainer = (function () {
     return OverlayContainer;
 }());
 exports.OverlayContainer = OverlayContainer;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/core/overlay/overlay-container.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/core/overlay/overlay-container.js.map

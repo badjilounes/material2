@@ -7,10 +7,9 @@ import {MdSnackBarRef} from './snack-bar-ref';
  * This should only be used internally by the snack bar service.
  */
 @Component({
-  moduleId: module.id,
   selector: 'simple-snack-bar',
-  templateUrl: 'simple-snack-bar.html',
-  styleUrls: ['simple-snack-bar.css'],
+  template: require('./simple-snack-bar.html'),
+  styles: [require('./simple-snack-bar.css').toString()],
 })
 export class SimpleSnackBar {
   /** The message to be shown in the snack bar. */

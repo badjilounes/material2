@@ -2344,8 +2344,9 @@ __decorate$11([
     __metadata$7("design:paramtypes", [Boolean])
 ], exports.FocusTrap.prototype, "disabled", null);
 exports.FocusTrap = __decorate$11([
-    _angular_core.Component({selector: 'focus-trap',
-        template: "<div *ngIf=\"!disabled\" tabindex=\"0\" (focus)=\"focusLastTabbableElement()\"></div> <div #trappedContent><ng-content></ng-content></div> <div *ngIf=\"!disabled\" tabindex=\"0\" (focus)=\"focusFirstTabbableElement()\"></div> ",
+    _angular_core.Component({
+        selector: 'focus-trap',
+        template: require('./focus-trap.html'),
         encapsulation: _angular_core.ViewEncapsulation.None,
     }),
     __metadata$7("design:paramtypes", [exports.InteractivityChecker, _angular_core.NgZone])
@@ -3242,9 +3243,10 @@ __decorate$20([
     __metadata$12("design:paramtypes", [Boolean])
 ], exports.MdButtonToggle.prototype, "disabled", null);
 exports.MdButtonToggle = __decorate$20([
-    _angular_core.Component({selector: 'md-button-toggle',
-        template: "<label [attr.for]=\"inputId\" class=\"md-button-toggle-label\"> <input #input class=\"md-button-toggle-input md-visually-hidden\" [type]=\"_type\" [id]=\"inputId\" [checked]=\"checked\" [disabled]=\"disabled\" [name]=\"name\" (change)=\"_onInputChange($event)\" (click)=\"_onInputClick($event)\"> <div class=\"md-button-toggle-label-content\"> <ng-content></ng-content> </div> </label> ",
-        styles: ["md-button-toggle-group { box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12); position: relative; display: inline-flex; flex-direction: row; border-radius: 2px; cursor: pointer; white-space: nowrap; } .md-button-toggle-vertical { flex-direction: column; } .md-button-toggle-vertical .md-button-toggle-label-content { display: block; } .md-button-toggle-disabled .md-button-toggle-label-content { cursor: default; } md-button-toggle { white-space: nowrap; } .md-button-toggle-label-content { display: inline-block; line-height: 36px; padding: 0 16px; cursor: pointer; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; } .md-button-toggle-label-content > * { vertical-align: middle; } /*# sourceMappingURL=button-toggle.css.map */ "],
+    _angular_core.Component({
+        selector: 'md-button-toggle',
+        template: require('./button-toggle.html'),
+        styles: [require('./button-toggle.css').toString()],
         encapsulation: _angular_core.ViewEncapsulation.None,
     }),
     __param$3(0, _angular_core.Optional()),
@@ -3391,7 +3393,8 @@ __decorate$21([
     __metadata$13("design:paramtypes", [String])
 ], exports.MdButton.prototype, "color", null);
 exports.MdButton = __decorate$21([
-    _angular_core.Component({selector: 'button[md-button], button[md-raised-button], button[md-icon-button], ' +
+    _angular_core.Component({
+        selector: 'button[md-button], button[md-raised-button], button[md-icon-button], ' +
             'button[md-fab], button[md-mini-fab]',
         host: {
             '[disabled]': 'disabled',
@@ -3400,8 +3403,8 @@ exports.MdButton = __decorate$21([
             '(focus)': '_setKeyboardFocus()',
             '(blur)': '_removeKeyboardFocus()',
         },
-        template: "<span class=\"md-button-wrapper\"><ng-content></ng-content></span> <div md-ripple *ngIf=\"!_isRippleDisabled()\" class=\"md-button-ripple\" [class.md-button-ripple-round]=\"isRoundButton()\" [md-ripple-trigger]=\"getHostElement()\" [md-ripple-color]=\"isRoundButton() ? 'rgba(255, 255, 255, 0.2)' : ''\" md-ripple-background-color=\"rgba(0, 0, 0, 0)\"></div> <!-- the touchstart handler prevents the overlay from capturing the initial tap on touch devices --> <div class=\"md-button-focus-overlay\" (touchstart)=\"$event.preventDefault()\"></div> ",
-        styles: ["[md-raised-button], [md-fab], [md-mini-fab], [md-button], [md-icon-button] { box-sizing: border-box; position: relative; cursor: pointer; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; outline: none; border: none; display: inline-block; white-space: nowrap; text-decoration: none; vertical-align: baseline; font-size: 14px; font-family: Roboto, \"Helvetica Neue\", sans-serif; font-weight: 500; color: currentColor; text-align: center; margin: 0; min-width: 88px; line-height: 36px; padding: 0 16px; border-radius: 2px; } [disabled][md-raised-button], [disabled][md-fab], [disabled][md-mini-fab], [disabled][md-button], [disabled][md-icon-button] { cursor: default; } .md-button-focus[md-raised-button] .md-button-focus-overlay, .md-button-focus[md-fab] .md-button-focus-overlay, .md-button-focus[md-mini-fab] .md-button-focus-overlay, .md-button-focus[md-button] .md-button-focus-overlay, .md-button-focus[md-icon-button] .md-button-focus-overlay { opacity: 1; } [md-raised-button], [md-fab], [md-mini-fab] { box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12); transform: translate3d(0, 0, 0); transition: background 400ms cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1); } [md-raised-button]:active, [md-fab]:active, [md-mini-fab]:active { box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12); } [disabled][md-raised-button], [disabled][md-fab], [disabled][md-mini-fab] { box-shadow: none; } /** * Applies styles for users in high contrast mode. Note that this only applies * to Microsoft browsers. Chrome can be included by checking for the `html[hc]` * attribute, however Chrome handles high contrast differently. */ [md-button]:hover .md-button-focus-overlay, [md-icon-button]:hover .md-button-focus-overlay { opacity: 1; } [md-button][disabled]:hover.md-primary, [md-button][disabled]:hover.md-accent, [md-button][disabled]:hover.md-warn, [md-button][disabled]:hover .md-button-focus-overlay, [md-icon-button][disabled]:hover.md-primary, [md-icon-button][disabled]:hover.md-accent, [md-icon-button][disabled]:hover.md-warn, [md-icon-button][disabled]:hover .md-button-focus-overlay { background-color: transparent; } [md-fab] { box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12); min-width: 0; border-radius: 50%; width: 56px; height: 56px; padding: 0; flex-shrink: 0; } [md-fab]:active { box-shadow: 0px 7px 8px -4px rgba(0, 0, 0, 0.2), 0px 12px 17px 2px rgba(0, 0, 0, 0.14), 0px 5px 22px 4px rgba(0, 0, 0, 0.12); } [md-fab] i, [md-fab] md-icon { padding: 16px 0; line-height: 24px; } [md-mini-fab] { box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12); min-width: 0; border-radius: 50%; width: 40px; height: 40px; padding: 0; flex-shrink: 0; } [md-mini-fab]:active { box-shadow: 0px 7px 8px -4px rgba(0, 0, 0, 0.2), 0px 12px 17px 2px rgba(0, 0, 0, 0.14), 0px 5px 22px 4px rgba(0, 0, 0, 0.12); } [md-mini-fab] i, [md-mini-fab] md-icon { padding: 8px 0; line-height: 24px; } [md-icon-button] { padding: 0; min-width: 0; width: 40px; height: 40px; flex-shrink: 0; line-height: 40px; border-radius: 50%; } [md-icon-button] i, [md-icon-button] md-icon { line-height: 24px; } [md-button] .md-button-wrapper > *, [md-raised-button] .md-button-wrapper > *, [md-icon-button] .md-button-wrapper > * { vertical-align: middle; } .md-button-ripple, .md-button-focus-overlay { position: absolute; top: 0; left: 0; bottom: 0; right: 0; } .md-button-focus-overlay { background-color: rgba(0, 0, 0, 0.12); border-radius: inherit; pointer-events: none; opacity: 0; } @media screen and (-ms-high-contrast: active) { .md-button-focus-overlay { background-color: rgba(255, 255, 255, 0.5); } } .md-button-ripple-round { border-radius: 50%; z-index: 1; } @media screen and (-ms-high-contrast: active) { [md-button], [md-raised-button], [md-icon-button], [md-fab], [md-mini-fab] { outline: solid 1px; } } /*# sourceMappingURL=button.css.map */ "],
+        template: require('./button.html'),
+        styles: [require('./button.css').toString()],
         encapsulation: _angular_core.ViewEncapsulation.None,
         changeDetection: _angular_core.ChangeDetectionStrategy.OnPush,
     }),
@@ -3447,7 +3450,8 @@ __decorate$21([
     __metadata$13("design:paramtypes", [])
 ], exports.MdAnchor.prototype, "isAriaDisabled", null);
 exports.MdAnchor = __decorate$21([
-    _angular_core.Component({selector: 'a[md-button], a[md-raised-button], a[md-icon-button], a[md-fab], a[md-mini-fab]',
+    _angular_core.Component({
+        selector: 'a[md-button], a[md-raised-button], a[md-icon-button], a[md-fab], a[md-mini-fab]',
         inputs: ['color', 'disabled', 'disableRipple'],
         host: {
             '[attr.disabled]': 'disabled',
@@ -3457,8 +3461,8 @@ exports.MdAnchor = __decorate$21([
             '(blur)': '_removeKeyboardFocus()',
             '(click)': '_haltDisabledEvents($event)',
         },
-        template: "<span class=\"md-button-wrapper\"><ng-content></ng-content></span> <div md-ripple *ngIf=\"!_isRippleDisabled()\" class=\"md-button-ripple\" [class.md-button-ripple-round]=\"isRoundButton()\" [md-ripple-trigger]=\"getHostElement()\" [md-ripple-color]=\"isRoundButton() ? 'rgba(255, 255, 255, 0.2)' : ''\" md-ripple-background-color=\"rgba(0, 0, 0, 0)\"></div> <!-- the touchstart handler prevents the overlay from capturing the initial tap on touch devices --> <div class=\"md-button-focus-overlay\" (touchstart)=\"$event.preventDefault()\"></div> ",
-        styles: ["[md-raised-button], [md-fab], [md-mini-fab], [md-button], [md-icon-button] { box-sizing: border-box; position: relative; cursor: pointer; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; outline: none; border: none; display: inline-block; white-space: nowrap; text-decoration: none; vertical-align: baseline; font-size: 14px; font-family: Roboto, \"Helvetica Neue\", sans-serif; font-weight: 500; color: currentColor; text-align: center; margin: 0; min-width: 88px; line-height: 36px; padding: 0 16px; border-radius: 2px; } [disabled][md-raised-button], [disabled][md-fab], [disabled][md-mini-fab], [disabled][md-button], [disabled][md-icon-button] { cursor: default; } .md-button-focus[md-raised-button] .md-button-focus-overlay, .md-button-focus[md-fab] .md-button-focus-overlay, .md-button-focus[md-mini-fab] .md-button-focus-overlay, .md-button-focus[md-button] .md-button-focus-overlay, .md-button-focus[md-icon-button] .md-button-focus-overlay { opacity: 1; } [md-raised-button], [md-fab], [md-mini-fab] { box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12); transform: translate3d(0, 0, 0); transition: background 400ms cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1); } [md-raised-button]:active, [md-fab]:active, [md-mini-fab]:active { box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12); } [disabled][md-raised-button], [disabled][md-fab], [disabled][md-mini-fab] { box-shadow: none; } /** * Applies styles for users in high contrast mode. Note that this only applies * to Microsoft browsers. Chrome can be included by checking for the `html[hc]` * attribute, however Chrome handles high contrast differently. */ [md-button]:hover .md-button-focus-overlay, [md-icon-button]:hover .md-button-focus-overlay { opacity: 1; } [md-button][disabled]:hover.md-primary, [md-button][disabled]:hover.md-accent, [md-button][disabled]:hover.md-warn, [md-button][disabled]:hover .md-button-focus-overlay, [md-icon-button][disabled]:hover.md-primary, [md-icon-button][disabled]:hover.md-accent, [md-icon-button][disabled]:hover.md-warn, [md-icon-button][disabled]:hover .md-button-focus-overlay { background-color: transparent; } [md-fab] { box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12); min-width: 0; border-radius: 50%; width: 56px; height: 56px; padding: 0; flex-shrink: 0; } [md-fab]:active { box-shadow: 0px 7px 8px -4px rgba(0, 0, 0, 0.2), 0px 12px 17px 2px rgba(0, 0, 0, 0.14), 0px 5px 22px 4px rgba(0, 0, 0, 0.12); } [md-fab] i, [md-fab] md-icon { padding: 16px 0; line-height: 24px; } [md-mini-fab] { box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12); min-width: 0; border-radius: 50%; width: 40px; height: 40px; padding: 0; flex-shrink: 0; } [md-mini-fab]:active { box-shadow: 0px 7px 8px -4px rgba(0, 0, 0, 0.2), 0px 12px 17px 2px rgba(0, 0, 0, 0.14), 0px 5px 22px 4px rgba(0, 0, 0, 0.12); } [md-mini-fab] i, [md-mini-fab] md-icon { padding: 8px 0; line-height: 24px; } [md-icon-button] { padding: 0; min-width: 0; width: 40px; height: 40px; flex-shrink: 0; line-height: 40px; border-radius: 50%; } [md-icon-button] i, [md-icon-button] md-icon { line-height: 24px; } [md-button] .md-button-wrapper > *, [md-raised-button] .md-button-wrapper > *, [md-icon-button] .md-button-wrapper > * { vertical-align: middle; } .md-button-ripple, .md-button-focus-overlay { position: absolute; top: 0; left: 0; bottom: 0; right: 0; } .md-button-focus-overlay { background-color: rgba(0, 0, 0, 0.12); border-radius: inherit; pointer-events: none; opacity: 0; } @media screen and (-ms-high-contrast: active) { .md-button-focus-overlay { background-color: rgba(255, 255, 255, 0.5); } } .md-button-ripple-round { border-radius: 50%; z-index: 1; } @media screen and (-ms-high-contrast: active) { [md-button], [md-raised-button], [md-icon-button], [md-fab], [md-mini-fab] { outline: solid 1px; } } /*# sourceMappingURL=button.css.map */ "],
+        template: require('./button.html'),
+        styles: [require('./button.css').toString()],
         encapsulation: _angular_core.ViewEncapsulation.None
     }),
     __metadata$13("design:paramtypes", [_angular_core.ElementRef, _angular_core.Renderer])
@@ -3853,9 +3857,10 @@ __decorate$22([
     __metadata$14("design:paramtypes", [String])
 ], exports.MdCheckbox.prototype, "color", null);
 exports.MdCheckbox = __decorate$22([
-    _angular_core.Component({selector: 'md-checkbox, mat-checkbox',
-        template: "<label class=\"md-checkbox-layout\"> <div class=\"md-checkbox-inner-container\"> <input #input class=\"md-checkbox-input md-visually-hidden\" type=\"checkbox\" [id]=\"inputId\" [required]=\"required\" [checked]=\"checked\" [disabled]=\"disabled\" [name]=\"name\" [tabIndex]=\"tabindex\" [indeterminate]=\"indeterminate\" [attr.aria-label]=\"ariaLabel\" [attr.aria-labelledby]=\"ariaLabelledby\" (focus)=\"_onInputFocus()\" (blur)=\"_onInputBlur()\" (change)=\"_onInteractionEvent($event)\" (click)=\"_onInputClick($event)\"> <div md-ripple *ngIf=\"!_isRippleDisabled()\" class=\"md-checkbox-ripple\" [md-ripple-trigger]=\"getHostElement()\" [md-ripple-centered]=\"true\" [md-ripple-speed-factor]=\"0.3\" md-ripple-background-color=\"rgba(0, 0, 0, 0)\"></div> <div class=\"md-checkbox-frame\"></div> <div class=\"md-checkbox-background\"> <svg version=\"1.1\" class=\"md-checkbox-checkmark\" xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 24 24\" xml:space=\"preserve\"> <path class=\"md-checkbox-checkmark-path\" fill=\"none\" stroke=\"white\" d=\"M4.1,12.7 9,17.6 20.3,6.3\"/> </svg> <!-- Element for rendering the indeterminate state checkbox. --> <div class=\"md-checkbox-mixedmark\"></div> </div> </div> <span class=\"md-checkbox-label\"> <ng-content></ng-content> </span> </label> ",
-        styles: ["@keyframes md-checkbox-fade-in-background { 0% { opacity: 0; } 50% { opacity: 1; } } @keyframes md-checkbox-fade-out-background { 0%, 50% { opacity: 1; } 100% { opacity: 0; } } @keyframes md-checkbox-unchecked-checked-checkmark-path { 0%, 50% { stroke-dashoffset: 22.91026; } 50% { animation-timing-function: cubic-bezier(0, 0, 0.2, 0.1); } 100% { stroke-dashoffset: 0; } } @keyframes md-checkbox-unchecked-indeterminate-mixedmark { 0%, 68.2% { transform: scaleX(0); } 68.2% { animation-timing-function: cubic-bezier(0, 0, 0, 1); } 100% { transform: scaleX(1); } } @keyframes md-checkbox-checked-unchecked-checkmark-path { from { animation-timing-function: cubic-bezier(0.4, 0, 1, 1); stroke-dashoffset: 0; } to { stroke-dashoffset: -22.91026; } } @keyframes md-checkbox-checked-indeterminate-checkmark { from { animation-timing-function: cubic-bezier(0, 0, 0.2, 0.1); opacity: 1; transform: rotate(0deg); } to { opacity: 0; transform: rotate(45deg); } } @keyframes md-checkbox-indeterminate-checked-checkmark { from { animation-timing-function: cubic-bezier(0.14, 0, 0, 1); opacity: 0; transform: rotate(45deg); } to { opacity: 1; transform: rotate(360deg); } } @keyframes md-checkbox-checked-indeterminate-mixedmark { from { animation-timing-function: cubic-bezier(0, 0, 0.2, 0.1); opacity: 0; transform: rotate(-45deg); } to { opacity: 1; transform: rotate(0deg); } } @keyframes md-checkbox-indeterminate-checked-mixedmark { from { animation-timing-function: cubic-bezier(0.14, 0, 0, 1); opacity: 1; transform: rotate(0deg); } to { opacity: 0; transform: rotate(315deg); } } @keyframes md-checkbox-indeterminate-unchecked-mixedmark { 0% { animation-timing-function: linear; opacity: 1; transform: scaleX(1); } 32.8%, 100% { opacity: 0; transform: scaleX(0); } } .md-checkbox-frame, .md-checkbox-background, .md-checkbox-checkmark { bottom: 0; left: 0; position: absolute; right: 0; top: 0; } .md-checkbox-checkmark, .md-checkbox-mixedmark { width: calc(100% - 4px); } .md-checkbox-frame, .md-checkbox-background { border-radius: 2px; box-sizing: border-box; pointer-events: none; } md-checkbox { cursor: pointer; transition: background 400ms cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1); } .md-checkbox-layout { cursor: inherit; align-items: baseline; vertical-align: middle; display: inline-flex; } .md-checkbox-inner-container { display: inline-block; height: 20px; line-height: 0; margin: auto; margin-right: 8px; order: 0; position: relative; vertical-align: middle; white-space: nowrap; width: 20px; flex-shrink: 0; } [dir='rtl'] .md-checkbox-inner-container { margin-left: 8px; margin-right: auto; } .md-checkbox-layout .md-checkbox-label { line-height: 24px; } .md-checkbox-frame { background-color: transparent; border: 2px solid; transition: border-color 90ms cubic-bezier(0, 0, 0.2, 0.1); will-change: border-color; } .md-checkbox-background { align-items: center; display: inline-flex; justify-content: center; transition: background-color 90ms cubic-bezier(0, 0, 0.2, 0.1), opacity 90ms cubic-bezier(0, 0, 0.2, 0.1); will-change: background-color, opacity; } .md-checkbox-checkmark { width: 100%; } .md-checkbox-checkmark-path { stroke-dashoffset: 22.91026; stroke-dasharray: 22.91026; stroke-width: 2.66667px; } .md-checkbox-mixedmark { height: 2px; opacity: 0; transform: scaleX(0) rotate(0deg); } .md-checkbox-align-end .md-checkbox-inner-container { order: 1; margin-left: 8px; margin-right: auto; } [dir='rtl'] .md-checkbox-align-end .md-checkbox-inner-container { margin-left: auto; margin-right: 8px; } .md-checkbox-checked .md-checkbox-checkmark { opacity: 1; } .md-checkbox-checked .md-checkbox-checkmark-path { stroke-dashoffset: 0; } .md-checkbox-checked .md-checkbox-mixedmark { transform: scaleX(1) rotate(-45deg); } .md-checkbox-indeterminate .md-checkbox-checkmark { opacity: 0; transform: rotate(45deg); } .md-checkbox-indeterminate .md-checkbox-checkmark-path { stroke-dashoffset: 0; } .md-checkbox-indeterminate .md-checkbox-mixedmark { opacity: 1; transform: scaleX(1) rotate(0deg); } .md-checkbox-unchecked .md-checkbox-background { background-color: transparent; } .md-checkbox-disabled { cursor: default; } .md-checkbox-anim-unchecked-checked .md-checkbox-background { animation: 180ms linear 0ms md-checkbox-fade-in-background; } .md-checkbox-anim-unchecked-checked .md-checkbox-checkmark-path { animation: 180ms linear 0ms md-checkbox-unchecked-checked-checkmark-path; } .md-checkbox-anim-unchecked-indeterminate .md-checkbox-background { animation: 180ms linear 0ms md-checkbox-fade-in-background; } .md-checkbox-anim-unchecked-indeterminate .md-checkbox-mixedmark { animation: 90ms linear 0ms md-checkbox-unchecked-indeterminate-mixedmark; } .md-checkbox-anim-checked-unchecked .md-checkbox-background { animation: 180ms linear 0ms md-checkbox-fade-out-background; } .md-checkbox-anim-checked-unchecked .md-checkbox-checkmark-path { animation: 90ms linear 0ms md-checkbox-checked-unchecked-checkmark-path; } .md-checkbox-anim-checked-indeterminate .md-checkbox-checkmark { animation: 90ms linear 0ms md-checkbox-checked-indeterminate-checkmark; } .md-checkbox-anim-checked-indeterminate .md-checkbox-mixedmark { animation: 90ms linear 0ms md-checkbox-checked-indeterminate-mixedmark; } .md-checkbox-anim-indeterminate-checked .md-checkbox-checkmark { animation: 500ms linear 0ms md-checkbox-indeterminate-checked-checkmark; } .md-checkbox-anim-indeterminate-checked .md-checkbox-mixedmark { animation: 500ms linear 0ms md-checkbox-indeterminate-checked-mixedmark; } .md-checkbox-anim-indeterminate-unchecked .md-checkbox-background { animation: 180ms linear 0ms md-checkbox-fade-out-background; } .md-checkbox-anim-indeterminate-unchecked .md-checkbox-mixedmark { animation: 300ms linear 0ms md-checkbox-indeterminate-unchecked-mixedmark; } .md-checkbox-input { bottom: 0; left: 50%; } .md-checkbox-ripple { position: absolute; left: -15px; top: -15px; right: -15px; bottom: -15px; border-radius: 50%; z-index: 1; pointer-events: none; } /*# sourceMappingURL=checkbox.css.map */ "],
+    _angular_core.Component({
+        selector: 'md-checkbox, mat-checkbox',
+        template: require('./checkbox.html'),
+        styles: [require('./checkbox.css').toString()],
         host: {
             '[class.md-checkbox-indeterminate]': 'indeterminate',
             '[class.md-checkbox-checked]': 'checked',
@@ -4363,9 +4368,10 @@ __decorate$23([
     __metadata$15("design:paramtypes", [Boolean])
 ], exports.MdRadioButton.prototype, "disabled", null);
 exports.MdRadioButton = __decorate$23([
-    _angular_core.Component({selector: 'md-radio-button, mat-radio-button',
-        template: "<!-- TODO(jelbourn): render the radio on either side of the content --> <!-- TODO(mtlin): Evaluate trade-offs of using native radio vs. cost of additional bindings. --> <label [attr.for]=\"inputId\" class=\"md-radio-label\"> <!-- The actual 'radio' part of the control. --> <div class=\"md-radio-container\"> <div class=\"md-radio-outer-circle\"></div> <div class=\"md-radio-inner-circle\"></div> <div md-ripple *ngIf=\"!_isRippleDisabled()\" class=\"md-radio-ripple\" [md-ripple-trigger]=\"getHostElement()\" [md-ripple-centered]=\"true\" [md-ripple-speed-factor]=\"0.3\" md-ripple-background-color=\"rgba(0, 0, 0, 0)\"></div> </div> <input #input class=\"md-radio-input md-visually-hidden\" type=\"radio\" [id]=\"inputId\" [checked]=\"checked\" [disabled]=\"disabled\" [name]=\"name\" [attr.aria-label]=\"ariaLabel\" [attr.aria-labelledby]=\"ariaLabelledby\" (change)=\"_onInputChange($event)\" (focus)=\"_onInputFocus()\" (blur)=\"_onInputBlur()\" (click)=\"_onInputClick($event)\"> <!-- The label content for radio control. --> <div class=\"md-radio-label-content\" [class.md-radio-align-end]=\"align == 'end'\"> <ng-content></ng-content> </div> </label> ",
-        styles: ["md-radio-button { display: inline-block; } .md-radio-label { cursor: pointer; display: inline-flex; align-items: baseline; white-space: nowrap; } .md-radio-container { box-sizing: border-box; display: inline-block; height: 20px; position: relative; width: 20px; top: 2px; } .md-radio-outer-circle { border: solid 2px; border-radius: 50%; box-sizing: border-box; height: 20px; left: 0; position: absolute; top: 0; transition: border-color ease 280ms; width: 20px; } .md-radio-inner-circle { border-radius: 50%; box-sizing: border-box; height: 20px; left: 0; position: absolute; top: 0; transition: transform ease 280ms, background-color ease 280ms; transform: scale(0); width: 20px; } .md-radio-checked .md-radio-inner-circle { transform: scale(0.5); } .md-radio-label-content { display: inline-block; order: 0; line-height: inherit; padding-left: 8px; padding-right: 0; } [dir='rtl'] .md-radio-label-content { padding-right: 8px; padding-left: 0; } .md-radio-label-content.md-radio-align-end { order: -1; padding-left: 0; padding-right: 8px; } [dir='rtl'] .md-radio-label-content.md-radio-align-end { padding-right: 0; padding-left: 8px; } .md-radio-disabled, .md-radio-disabled .md-radio-label { cursor: default; } .md-radio-ripple { position: absolute; left: -15px; top: -15px; right: -15px; bottom: -15px; border-radius: 50%; z-index: 1; pointer-events: none; } /*# sourceMappingURL=radio.css.map */ "],
+    _angular_core.Component({
+        selector: 'md-radio-button, mat-radio-button',
+        template: require('./radio.html'),
+        styles: [require('./radio.css').toString()],
         encapsulation: _angular_core.ViewEncapsulation.None
     }),
     __param$4(0, _angular_core.Optional()),
@@ -4507,7 +4513,8 @@ __decorate$26([
     __metadata$17("design:type", Object)
 ], MdOption.prototype, "onSelect", void 0);
 MdOption = __decorate$26([
-    _angular_core.Component({selector: 'md-option, mat-option',
+    _angular_core.Component({
+        selector: 'md-option, mat-option',
         host: {
             'role': 'option',
             '[attr.tabindex]': '_getTabIndex()',
@@ -4519,8 +4526,8 @@ MdOption = __decorate$26([
             '(click)': '_selectViaInteraction()',
             '(keydown)': '_handleKeydown($event)'
         },
-        template: "<ng-content></ng-content> <div class=\"md-option-ripple\" *ngIf=\"!disabled\" md-ripple md-ripple-background-color=\"rgba(0,0,0,0)\" [md-ripple-trigger]=\"_getHostElement()\"></div>",
-        styles: ["/** The mixins below are shared between md-menu and md-select */ /** * This mixin adds the correct panel transform styles based * on the direction that the menu panel opens. */ /** * Applies styles for users in high contrast mode. Note that this only applies * to Microsoft browsers. Chrome can be included by checking for the `html[hc]` * attribute, however Chrome handles high contrast differently. */ md-select { display: inline-block; outline: none; } .md-select-trigger { display: flex; justify-content: space-between; align-items: center; height: 30px; min-width: 112px; cursor: pointer; position: relative; box-sizing: border-box; } [aria-disabled='true'] .md-select-trigger { background-image: linear-gradient(to right, rgba(0, 0, 0, 0.26) 0%, rgba(0, 0, 0, 0.26) 33%, transparent 0%); background-size: 4px 1px; background-repeat: repeat-x; border-bottom: transparent; background-position: 0 bottom; cursor: default; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; } .md-select-placeholder { position: relative; padding: 0 2px; transform-origin: left top; } .md-select-placeholder.md-floating-placeholder { top: -22px; left: -2px; transform: scale(0.75); } [dir='rtl'] .md-select-placeholder { transform-origin: right top; } [dir='rtl'] .md-select-placeholder.md-floating-placeholder { left: 2px; } [aria-required=true] .md-select-placeholder::after { content: '*'; } .md-select-value { position: absolute; white-space: nowrap; overflow-x: hidden; text-overflow: ellipsis; left: 0; top: 6px; } [dir='rtl'] .md-select-value { left: auto; right: 0; } .md-select-arrow { width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 5px solid; margin: 0 4px; } .md-select-panel { box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12); min-width: 112px; max-width: 280px; overflow: auto; -webkit-overflow-scrolling: touch; padding-top: 0; padding-bottom: 0; max-height: 256px; } @media screen and (-ms-high-contrast: active) { .md-select-panel { outline: solid 1px; } } md-option { white-space: nowrap; overflow-x: hidden; text-overflow: ellipsis; display: flex; flex-direction: row; align-items: center; height: 48px; padding: 0 16px; font-size: 16px; font-family: Roboto, \"Helvetica Neue\", sans-serif; text-align: start; text-decoration: none; position: relative; cursor: pointer; outline: none; } md-option[disabled] { cursor: default; } md-option md-icon { margin-right: 16px; } [dir='rtl'] md-option md-icon { margin-left: 16px; } md-option[aria-disabled='true'] { cursor: default; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; } .md-option-ripple { position: absolute; top: 0; left: 0; bottom: 0; right: 0; } @media screen and (-ms-high-contrast: active) { .md-option-ripple { opacity: 0.5; } } /*# sourceMappingURL=select.css.map */ "],
+        template: require('./option.html'),
+        styles: [require('./select.css').toString()],
         encapsulation: _angular_core.ViewEncapsulation.None
     }),
     __metadata$17("design:paramtypes", [_angular_core.ElementRef, _angular_core.Renderer])
@@ -5270,9 +5277,10 @@ __decorate$25([
     __metadata$16("design:type", Object)
 ], exports.MdSelect.prototype, "onClose", void 0);
 exports.MdSelect = __decorate$25([
-    _angular_core.Component({selector: 'md-select, mat-select',
-        template: "<div class=\"md-select-trigger\" overlay-origin (click)=\"toggle()\" #origin=\"overlayOrigin\" #trigger> <span class=\"md-select-placeholder\" [class.md-floating-placeholder]=\"this.selected\" [@transformPlaceholder]=\"_placeholderState\" [style.width.px]=\"_selectedValueWidth\"> {{ placeholder }} </span> <span class=\"md-select-value\" *ngIf=\"selected\"> {{ selected?.viewValue }} </span> <span class=\"md-select-arrow\"></span> </div> <template connected-overlay [origin]=\"origin\"  [open]=\"panelOpen\" hasBackdrop (backdropClick)=\"close()\" backdropClass=\"md-overlay-transparent-backdrop\" [positions]=\"_positions\" [minWidth]=\"_triggerWidth\" [offsetY]=\"_offsetY\" [offsetX]=\"_offsetX\" (attach)=\"_setScrollTop()\"> <div class=\"md-select-panel\" [@transformPanel]=\"'showing'\" (@transformPanel.done)=\"_onPanelDone()\" (keydown)=\"_keyManager.onKeydown($event)\" [style.transformOrigin]=\"_transformOrigin\"> <div class=\"md-select-content\" [@fadeInContent]=\"'showing'\"> <ng-content></ng-content> </div> </div> </template> ",
-        styles: ["/** The mixins below are shared between md-menu and md-select */ /** * This mixin adds the correct panel transform styles based * on the direction that the menu panel opens. */ /** * Applies styles for users in high contrast mode. Note that this only applies * to Microsoft browsers. Chrome can be included by checking for the `html[hc]` * attribute, however Chrome handles high contrast differently. */ md-select { display: inline-block; outline: none; } .md-select-trigger { display: flex; justify-content: space-between; align-items: center; height: 30px; min-width: 112px; cursor: pointer; position: relative; box-sizing: border-box; } [aria-disabled='true'] .md-select-trigger { background-image: linear-gradient(to right, rgba(0, 0, 0, 0.26) 0%, rgba(0, 0, 0, 0.26) 33%, transparent 0%); background-size: 4px 1px; background-repeat: repeat-x; border-bottom: transparent; background-position: 0 bottom; cursor: default; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; } .md-select-placeholder { position: relative; padding: 0 2px; transform-origin: left top; } .md-select-placeholder.md-floating-placeholder { top: -22px; left: -2px; transform: scale(0.75); } [dir='rtl'] .md-select-placeholder { transform-origin: right top; } [dir='rtl'] .md-select-placeholder.md-floating-placeholder { left: 2px; } [aria-required=true] .md-select-placeholder::after { content: '*'; } .md-select-value { position: absolute; white-space: nowrap; overflow-x: hidden; text-overflow: ellipsis; left: 0; top: 6px; } [dir='rtl'] .md-select-value { left: auto; right: 0; } .md-select-arrow { width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 5px solid; margin: 0 4px; } .md-select-panel { box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12); min-width: 112px; max-width: 280px; overflow: auto; -webkit-overflow-scrolling: touch; padding-top: 0; padding-bottom: 0; max-height: 256px; } @media screen and (-ms-high-contrast: active) { .md-select-panel { outline: solid 1px; } } md-option { white-space: nowrap; overflow-x: hidden; text-overflow: ellipsis; display: flex; flex-direction: row; align-items: center; height: 48px; padding: 0 16px; font-size: 16px; font-family: Roboto, \"Helvetica Neue\", sans-serif; text-align: start; text-decoration: none; position: relative; cursor: pointer; outline: none; } md-option[disabled] { cursor: default; } md-option md-icon { margin-right: 16px; } [dir='rtl'] md-option md-icon { margin-left: 16px; } md-option[aria-disabled='true'] { cursor: default; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; } .md-option-ripple { position: absolute; top: 0; left: 0; bottom: 0; right: 0; } @media screen and (-ms-high-contrast: active) { .md-option-ripple { opacity: 0.5; } } /*# sourceMappingURL=select.css.map */ "],
+    _angular_core.Component({
+        selector: 'md-select, mat-select',
+        template: require('./select.html'),
+        styles: [require('./select.css').toString()],
         encapsulation: _angular_core.ViewEncapsulation.None,
         host: {
             'role': 'listbox',
@@ -5594,7 +5602,8 @@ __decorate$27([
     __metadata$18("design:paramtypes", [String])
 ], exports.MdSlideToggle.prototype, "color", null);
 exports.MdSlideToggle = __decorate$27([
-    _angular_core.Component({selector: 'md-slide-toggle, mat-slide-toggle',
+    _angular_core.Component({
+        selector: 'md-slide-toggle, mat-slide-toggle',
         host: {
             '[class.md-checked]': 'checked',
             '[class.md-disabled]': 'disabled',
@@ -5602,8 +5611,8 @@ exports.MdSlideToggle = __decorate$27([
             '[class.md-slide-toggle-focused]': '_hasFocus',
             '(mousedown)': '_setMousedown()'
         },
-        template: "<label class=\"md-slide-toggle-label\"> <div class=\"md-slide-toggle-container\"> <div class=\"md-slide-toggle-bar\"></div> <div class=\"md-slide-toggle-thumb-container\" (slidestart)=\"_onDragStart()\" (slide)=\"_onDrag($event)\" (slideend)=\"_onDragEnd()\"> <div class=\"md-slide-toggle-thumb\"> <div class=\"md-ink-ripple\"></div> </div> </div> <input #input class=\"md-slide-toggle-input md-visually-hidden\" type=\"checkbox\" [id]=\"getInputId()\" [required]=\"required\" [tabIndex]=\"tabIndex\" [checked]=\"checked\" [disabled]=\"disabled\" [attr.name]=\"name\" [attr.aria-label]=\"ariaLabel\" [attr.aria-labelledby]=\"ariaLabelledby\" (blur)=\"_onInputBlur()\" (focus)=\"_onInputFocus()\" (change)=\"_onChangeEvent($event)\" (click)=\"_onInputClick($event)\"> </div> <span class=\"md-slide-toggle-content\"> <ng-content></ng-content> </span> </label> ",
-        styles: ["/** * Applies styles for users in high contrast mode. Note that this only applies * to Microsoft browsers. Chrome can be included by checking for the `html[hc]` * attribute, however Chrome handles high contrast differently. */ md-slide-toggle { display: flex; height: 24px; margin: 16px 0; line-height: 24px; white-space: nowrap; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; outline: none; } md-slide-toggle.md-checked .md-slide-toggle-thumb-container { transform: translate3d(100%, 0, 0); } md-slide-toggle .md-ink-ripple { border-radius: 50%; opacity: 0; height: 48px; left: 50%; overflow: hidden; pointer-events: none; position: absolute; top: 50%; transform: translate(-50%, -50%); transition: opacity ease 280ms, background-color ease 280ms; width: 48px; } md-slide-toggle.md-slide-toggle-focused .md-ink-ripple { opacity: 1; } md-slide-toggle.md-slide-toggle-disabled .md-ink-ripple { background-color: #000; } md-slide-toggle.md-disabled .md-slide-toggle-label, md-slide-toggle.md-disabled .md-slide-toggle-container { cursor: default; } .md-slide-toggle-content { font-size: 14px; font-family: Roboto, \"Helvetica Neue\", sans-serif; font-weight: 500; } .md-slide-toggle-label { display: flex; flex: 1; cursor: pointer; } .md-slide-toggle-container { cursor: -webkit-grab; cursor: grab; width: 36px; height: 24px; position: relative; margin-right: 8px; } [dir='rtl'] .md-slide-toggle-container { margin-left: 8px; margin-right: 0; } .md-slide-toggle-thumb-container { position: absolute; top: 2px; left: 0; z-index: 1; width: 16px; transform: translate3d(0, 0, 0); transition: all 80ms linear; transition-property: transform; } .md-slide-toggle-thumb-container.md-dragging { transition-duration: 0ms; } .md-slide-toggle-thumb { position: absolute; margin: 0; left: 0; top: 0; height: 20px; width: 20px; border-radius: 50%; box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 0px 1px 3px 0px rgba(0, 0, 0, 0.12); } @media screen and (-ms-high-contrast: active) { .md-slide-toggle-thumb { background: #fff; border: solid 1px #000; } } .md-slide-toggle-bar { position: absolute; left: 1px; top: 5px; width: 34px; height: 14px; border-radius: 8px; } @media screen and (-ms-high-contrast: active) { .md-slide-toggle-bar { background: #fff; } } .md-slide-toggle-input { bottom: 0; left: 10px; } .md-slide-toggle-bar, .md-slide-toggle-thumb { transition: all 80ms linear; transition-property: background-color; transition-delay: 50ms; } /*# sourceMappingURL=slide-toggle.css.map */ "],
+        template: require('./slide-toggle.html'),
+        styles: [require('./slide-toggle.css').toString()],
         providers: [MD_SLIDE_TOGGLE_VALUE_ACCESSOR],
         encapsulation: _angular_core.ViewEncapsulation.None,
         changeDetection: _angular_core.ChangeDetectionStrategy.OnPush
@@ -6181,7 +6190,8 @@ __decorate$28([
     __metadata$19("design:type", Object)
 ], exports.MdSlider.prototype, "change", void 0);
 exports.MdSlider = __decorate$28([
-    _angular_core.Component({selector: 'md-slider, mat-slider',
+    _angular_core.Component({
+        selector: 'md-slider, mat-slider',
         providers: [MD_SLIDER_VALUE_ACCESSOR],
         host: {
             '(blur)': '_onBlur()',
@@ -6206,8 +6216,8 @@ exports.MdSlider = __decorate$28([
             '[class.md-slider-thumb-label-showing]': 'thumbLabel',
             '[class.md-slider-vertical]': 'vertical',
         },
-        template: "<div class=\"md-slider-track\"> <div class=\"md-slider-track-fill\" [ngStyle]=\"trackFillStyles\"></div> <div class=\"md-slider-ticks-container\" [ngStyle]=\"ticksContainerStyles\"> <div class=\"md-slider-ticks\" [ngStyle]=\"ticksStyles\"></div> </div> <div class=\"md-slider-thumb-container\" [ngStyle]=\"thumbContainerStyles\"> <div class=\"md-slider-thumb\"></div> <div class=\"md-slider-thumb-label\"> <span class=\"md-slider-thumb-label-text\">{{value}}</span> </div> </div> </div> ",
-        styles: ["md-slider { display: inline-block; position: relative; box-sizing: border-box; padding: 8px; outline: none; vertical-align: middle; } .md-slider-track { position: absolute; } .md-slider-track-fill { position: absolute; transform-origin: 0 0; transition: transform 400ms cubic-bezier(0.25, 0.8, 0.25, 1); } .md-slider-ticks-container { position: absolute; left: 0; top: 0; overflow: hidden; } .md-slider-ticks { opacity: 0; transition: opacity 400ms cubic-bezier(0.25, 0.8, 0.25, 1); } .md-slider-thumb-container { position: absolute; z-index: 1; transition: transform 400ms cubic-bezier(0.25, 0.8, 0.25, 1); } .md-slider-thumb { position: absolute; right: -10px; bottom: -10px; width: 20px; height: 20px; border-radius: 50%; transform: scale(0.7); transition: transform 400ms cubic-bezier(0.25, 0.8, 0.25, 1); } .md-slider-thumb-label { display: none; align-items: center; justify-content: center; position: absolute; width: 28px; height: 28px; border-radius: 50%; transition: 300ms cubic-bezier(0.35, 0, 0.25, 1); transition-property: transform, border-radius; } .md-slider-thumb-label-text { z-index: 1; font-size: 12px; font-weight: bold; opacity: 0; transition: opacity 300ms cubic-bezier(0.35, 0, 0.25, 1); } .md-slider-sliding .md-slider-track-fill, .md-slider-sliding .md-slider-thumb-container { transition: none; } .md-slider-has-ticks .md-slider-track::after { content: ''; position: absolute; border: 0 solid rgba(0, 0, 0, 0.6); opacity: 0; transition: opacity 300ms cubic-bezier(0.35, 0, 0.25, 1); } .md-slider-has-ticks.md-slider-active .md-slider-track::after, .md-slider-has-ticks:hover .md-slider-track::after { opacity: 1; } .md-slider-has-ticks.md-slider-active .md-slider-ticks, .md-slider-has-ticks:hover .md-slider-ticks { opacity: 1; } .md-slider-thumb-label-showing .md-slider-thumb-label { display: flex; } .md-slider-axis-inverted .md-slider-track-fill { transform-origin: 100% 100%; } .md-slider-active .md-slider-thumb { transform: scale(1); } .md-slider-active.md-slider-thumb-label-showing .md-slider-thumb { transform: scale(0); } .md-slider-active .md-slider-thumb-label { border-radius: 50% 50% 0; } .md-slider-active .md-slider-thumb-label-text { opacity: 1; } .md-slider-horizontal { height: 48px; min-width: 128px; } .md-slider-horizontal .md-slider-track { height: 2px; top: 23px; left: 8px; right: 8px; } .md-slider-horizontal .md-slider-track::after { height: 2px; border-left-width: 2px; right: 0; } .md-slider-horizontal .md-slider-track-fill { height: 2px; width: 100%; transform: scaleX(0); } .md-slider-horizontal .md-slider-ticks-container { height: 2px; width: 100%; } .md-slider-horizontal .md-slider-ticks { background: repeating-linear-gradient(to right, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6) 2px, transparent 0, transparent) repeat; background: -moz-repeating-linear-gradient(0.0001deg, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6) 2px, transparent 0, transparent) repeat; height: 2px; width: 100%; } .md-slider-horizontal .md-slider-thumb-container { width: 100%; height: 0; top: 50%; } .md-slider-horizontal .md-slider-thumb-label { right: -14px; top: -40px; transform: translateY(26px) scale(0.4) rotate(45deg); } .md-slider-horizontal .md-slider-thumb-label-text { transform: rotate(-45deg); } .md-slider-horizontal.md-slider-active .md-slider-thumb-label { transform: rotate(45deg); } .md-slider-vertical { width: 48px; min-height: 128px; } .md-slider-vertical .md-slider-track { width: 2px; top: 8px; bottom: 8px; left: 23px; } .md-slider-vertical .md-slider-track::after { width: 2px; border-top-width: 2px; bottom: 0; } .md-slider-vertical .md-slider-track-fill { height: 100%; width: 2px; transform: scaleY(0); } .md-slider-vertical .md-slider-ticks-container { width: 2px; height: 100%; } .md-slider-vertical .md-slider-ticks { background: repeating-linear-gradient(to bottom, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6) 2px, transparent 0, transparent) repeat; width: 2px; height: 100%; } .md-slider-vertical .md-slider-thumb-container { height: 100%; width: 0; left: 50%; } .md-slider-vertical .md-slider-thumb-label { bottom: -14px; left: -40px; transform: translateX(26px) scale(0.4) rotate(-45deg); } .md-slider-vertical .md-slider-thumb-label-text { transform: rotate(45deg); } .md-slider-vertical.md-slider-active .md-slider-thumb-label { transform: rotate(-45deg); } [dir='rtl'] .md-slider-track::after { left: 0; right: auto; } [dir='rtl'] .md-slider-horizontal .md-slider-track-fill { transform-origin: 100% 100%; } [dir='rtl'] .md-slider-horizontal.md-slider-axis-inverted .md-slider-track-fill { transform-origin: 0 0; } /*# sourceMappingURL=slider.css.map */ "],
+        template: require('./slider.html'),
+        styles: [require('./slider.css').toString()],
         encapsulation: _angular_core.ViewEncapsulation.None,
     }),
     __param$6(0, _angular_core.Optional()),
@@ -6548,7 +6558,8 @@ __decorate$29([
     __metadata$20("design:paramtypes", [Boolean])
 ], exports.MdSidenav.prototype, "opened", null);
 exports.MdSidenav = __decorate$29([
-    _angular_core.Component({selector: 'md-sidenav, mat-sidenav',
+    _angular_core.Component({
+        selector: 'md-sidenav, mat-sidenav',
         template: '<focus-trap [disabled]="isFocusTrapDisabled"><ng-content></ng-content></focus-trap>',
         host: {
             '(transitionend)': '_onTransitionEnd($event)',
@@ -6745,13 +6756,16 @@ __decorate$29([
     __metadata$20("design:type", Object)
 ], exports.MdSidenavLayout.prototype, "onBackdropClicked", void 0);
 exports.MdSidenavLayout = __decorate$29([
-    _angular_core.Component({selector: 'md-sidenav-layout, mat-sidenav-layout',
+    _angular_core.Component({
+        selector: 'md-sidenav-layout, mat-sidenav-layout',
         // Do not use ChangeDetectionStrategy.OnPush. It does not work for this component because
         // technically it is a sibling of MdSidenav (on the content tree) and isn't updated when MdSidenav
         // changes its state.
-        template: "<div class=\"md-sidenav-backdrop\" (click)=\"_onBackdropClicked()\" [class.md-sidenav-shown]=\"_isShowingBackdrop()\"></div> <ng-content select=\"md-sidenav, mat-sidenav\"></ng-content> <div class=\"md-sidenav-content\" [ngStyle]=\"_getStyles()\"> <ng-content></ng-content> </div> ",
-        styles: ["/** * Applies styles for users in high contrast mode. Note that this only applies * to Microsoft browsers. Chrome can be included by checking for the `html[hc]` * attribute, however Chrome handles high contrast differently. */ md-sidenav-layout { position: relative; transform: translate3d(0, 0, 0); box-sizing: border-box; -webkit-overflow-scrolling: touch; display: block; overflow: hidden; } md-sidenav-layout[fullscreen] { position: absolute; top: 0; left: 0; right: 0; bottom: 0; } md-sidenav-layout[fullscreen].md-sidenav-opened { overflow: hidden; } .md-sidenav-backdrop { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: block; z-index: 2; visibility: hidden; } .md-sidenav-backdrop.md-sidenav-shown { visibility: visible; } @media screen and (-ms-high-contrast: active) { .md-sidenav-backdrop { opacity: 0.5; } } .md-sidenav-content { position: relative; transform: translate3d(0, 0, 0); display: block; height: 100%; overflow: auto; } md-sidenav { position: relative; transform: translate3d(0, 0, 0); display: block; position: absolute; top: 0; bottom: 0; z-index: 3; min-width: 5%; overflow-y: auto; transform: translate3d(-100%, 0, 0); } md-sidenav.md-sidenav-closed { visibility: hidden; } md-sidenav.md-sidenav-closing { transform: translate3d(-100%, 0, 0); } md-sidenav.md-sidenav-opening { box-shadow: 0px 8px 10px -5px rgba(0, 0, 0, 0.2), 0px 16px 24px 2px rgba(0, 0, 0, 0.14), 0px 6px 30px 5px rgba(0, 0, 0, 0.12); visibility: visible; transform: translate3d(0, 0, 0); } md-sidenav.md-sidenav-opened { box-shadow: 0px 8px 10px -5px rgba(0, 0, 0, 0.2), 0px 16px 24px 2px rgba(0, 0, 0, 0.14), 0px 6px 30px 5px rgba(0, 0, 0, 0.12); transform: translate3d(0, 0, 0); } md-sidenav.md-sidenav-side { z-index: 1; } md-sidenav.md-sidenav-end { right: 0; transform: translate3d(100%, 0, 0); } md-sidenav.md-sidenav-end.md-sidenav-closed { visibility: hidden; } md-sidenav.md-sidenav-end.md-sidenav-closing { transform: translate3d(100%, 0, 0); } md-sidenav.md-sidenav-end.md-sidenav-opening { box-shadow: 0px 8px 10px -5px rgba(0, 0, 0, 0.2), 0px 16px 24px 2px rgba(0, 0, 0, 0.14), 0px 6px 30px 5px rgba(0, 0, 0, 0.12); visibility: visible; transform: translate3d(0, 0, 0); } md-sidenav.md-sidenav-end.md-sidenav-opened { box-shadow: 0px 8px 10px -5px rgba(0, 0, 0, 0.2), 0px 16px 24px 2px rgba(0, 0, 0, 0.14), 0px 6px 30px 5px rgba(0, 0, 0, 0.12); transform: translate3d(0, 0, 0); } [dir='rtl'] md-sidenav { transform: translate3d(100%, 0, 0); } [dir='rtl'] md-sidenav.md-sidenav-closed { visibility: hidden; } [dir='rtl'] md-sidenav.md-sidenav-closing { transform: translate3d(100%, 0, 0); } [dir='rtl'] md-sidenav.md-sidenav-opening { box-shadow: 0px 8px 10px -5px rgba(0, 0, 0, 0.2), 0px 16px 24px 2px rgba(0, 0, 0, 0.14), 0px 6px 30px 5px rgba(0, 0, 0, 0.12); visibility: visible; transform: translate3d(0, 0, 0); } [dir='rtl'] md-sidenav.md-sidenav-opened { box-shadow: 0px 8px 10px -5px rgba(0, 0, 0, 0.2), 0px 16px 24px 2px rgba(0, 0, 0, 0.14), 0px 6px 30px 5px rgba(0, 0, 0, 0.12); transform: translate3d(0, 0, 0); } [dir='rtl'] md-sidenav.md-sidenav-end { left: 0; right: auto; transform: translate3d(-100%, 0, 0); } [dir='rtl'] md-sidenav.md-sidenav-end.md-sidenav-closed { visibility: hidden; } [dir='rtl'] md-sidenav.md-sidenav-end.md-sidenav-closing { transform: translate3d(-100%, 0, 0); } [dir='rtl'] md-sidenav.md-sidenav-end.md-sidenav-opening { box-shadow: 0px 8px 10px -5px rgba(0, 0, 0, 0.2), 0px 16px 24px 2px rgba(0, 0, 0, 0.14), 0px 6px 30px 5px rgba(0, 0, 0, 0.12); visibility: visible; transform: translate3d(0, 0, 0); } [dir='rtl'] md-sidenav.md-sidenav-end.md-sidenav-opened { box-shadow: 0px 8px 10px -5px rgba(0, 0, 0, 0.2), 0px 16px 24px 2px rgba(0, 0, 0, 0.14), 0px 6px 30px 5px rgba(0, 0, 0, 0.12); transform: translate3d(0, 0, 0); } .md-sidenav-invalid { display: none; } /*# sourceMappingURL=sidenav.css.map */ ",
-"md-sidenav { transition: transform 400ms cubic-bezier(0.25, 0.8, 0.25, 1); } .md-sidenav-content { transition: transform 400ms cubic-bezier(0.25, 0.8, 0.25, 1); } .md-sidenav-backdrop.md-sidenav-shown { transition: background-color 400ms cubic-bezier(0.25, 0.8, 0.25, 1); } /*# sourceMappingURL=sidenav-transitions.css.map */ "],
+        template: require('./sidenav.html'),
+        styles: [
+            require('./sidenav.css').toString(),
+            require('./sidenav-transitions.css').toString(),
+        ],
         encapsulation: _angular_core.ViewEncapsulation.None,
     }),
     __param$7(0, _angular_core.Optional()),
@@ -6803,10 +6817,11 @@ exports.MdList = (function () {
     return MdList;
 }());
 exports.MdList = __decorate$30([
-    _angular_core.Component({selector: 'md-list, mat-list, md-nav-list, mat-nav-list',
+    _angular_core.Component({
+        selector: 'md-list, mat-list, md-nav-list, mat-nav-list',
         host: { 'role': 'list' },
         template: '<ng-content></ng-content>',
-        styles: ["md-list, md-nav-list { padding-top: 8px; display: block; } md-list [md-subheader], md-nav-list [md-subheader] { display: block; box-sizing: border-box; height: 48px; padding: 16px; margin: 0; font-size: 14px; font-weight: 500; } md-list [md-subheader]:first-child, md-nav-list [md-subheader]:first-child { margin-top: -8px; } md-list md-list-item, md-list a[md-list-item], md-nav-list md-list-item, md-nav-list a[md-list-item] { display: block; } md-list md-list-item .md-list-item, md-list a[md-list-item] .md-list-item, md-nav-list md-list-item .md-list-item, md-nav-list a[md-list-item] .md-list-item { display: flex; flex-direction: row; align-items: center; font-family: Roboto, \"Helvetica Neue\", sans-serif; box-sizing: border-box; font-size: 16px; height: 48px; padding: 0 16px; } md-list md-list-item.md-list-avatar .md-list-item, md-list a[md-list-item].md-list-avatar .md-list-item, md-nav-list md-list-item.md-list-avatar .md-list-item, md-nav-list a[md-list-item].md-list-avatar .md-list-item { height: 56px; } md-list md-list-item.md-2-line .md-list-item, md-list a[md-list-item].md-2-line .md-list-item, md-nav-list md-list-item.md-2-line .md-list-item, md-nav-list a[md-list-item].md-2-line .md-list-item { height: 72px; } md-list md-list-item.md-3-line .md-list-item, md-list a[md-list-item].md-3-line .md-list-item, md-nav-list md-list-item.md-3-line .md-list-item, md-nav-list a[md-list-item].md-3-line .md-list-item { height: 88px; } md-list md-list-item.md-multi-line .md-list-item, md-list a[md-list-item].md-multi-line .md-list-item, md-nav-list md-list-item.md-multi-line .md-list-item, md-nav-list a[md-list-item].md-multi-line .md-list-item { height: 100%; padding: 8px 16px; } md-list md-list-item .md-list-text, md-list a[md-list-item] .md-list-text, md-nav-list md-list-item .md-list-text, md-nav-list a[md-list-item] .md-list-text { display: flex; flex-direction: column; width: 100%; box-sizing: border-box; overflow: hidden; padding: 0 16px; } md-list md-list-item .md-list-text > *, md-list a[md-list-item] .md-list-text > *, md-nav-list md-list-item .md-list-text > *, md-nav-list a[md-list-item] .md-list-text > * { margin: 0; padding: 0; font-weight: normal; font-size: inherit; } md-list md-list-item .md-list-text:empty, md-list a[md-list-item] .md-list-text:empty, md-nav-list md-list-item .md-list-text:empty, md-nav-list a[md-list-item] .md-list-text:empty { display: none; } md-list md-list-item .md-list-text:first-child, md-list a[md-list-item] .md-list-text:first-child, md-nav-list md-list-item .md-list-text:first-child, md-nav-list a[md-list-item] .md-list-text:first-child { padding: 0; } md-list md-list-item [md-list-avatar], md-list a[md-list-item] [md-list-avatar], md-nav-list md-list-item [md-list-avatar], md-nav-list a[md-list-item] [md-list-avatar] { flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%; } md-list md-list-item [md-list-icon], md-list a[md-list-item] [md-list-icon], md-nav-list md-list-item [md-list-icon], md-nav-list a[md-list-item] [md-list-icon] { width: 24px; height: 24px; border-radius: 50%; padding: 4px; } md-list md-list-item [md-line], md-list a[md-list-item] [md-line], md-nav-list md-list-item [md-line], md-nav-list a[md-list-item] [md-line] { white-space: nowrap; overflow-x: hidden; text-overflow: ellipsis; display: block; box-sizing: border-box; } md-list md-list-item [md-line]:nth-child(n+2), md-list a[md-list-item] [md-line]:nth-child(n+2), md-nav-list md-list-item [md-line]:nth-child(n+2), md-nav-list a[md-list-item] [md-line]:nth-child(n+2) { font-size: 14px; } md-list[dense], md-nav-list[dense] { padding-top: 4px; display: block; } md-list[dense] [md-subheader], md-nav-list[dense] [md-subheader] { display: block; box-sizing: border-box; height: 40px; padding: 16px; margin: 0; font-size: 13px; font-weight: 500; } md-list[dense] [md-subheader]:first-child, md-nav-list[dense] [md-subheader]:first-child { margin-top: -4px; } md-list[dense] md-list-item, md-list[dense] a[md-list-item], md-nav-list[dense] md-list-item, md-nav-list[dense] a[md-list-item] { display: block; } md-list[dense] md-list-item .md-list-item, md-list[dense] a[md-list-item] .md-list-item, md-nav-list[dense] md-list-item .md-list-item, md-nav-list[dense] a[md-list-item] .md-list-item { display: flex; flex-direction: row; align-items: center; font-family: Roboto, \"Helvetica Neue\", sans-serif; box-sizing: border-box; font-size: 13px; height: 40px; padding: 0 16px; } md-list[dense] md-list-item.md-list-avatar .md-list-item, md-list[dense] a[md-list-item].md-list-avatar .md-list-item, md-nav-list[dense] md-list-item.md-list-avatar .md-list-item, md-nav-list[dense] a[md-list-item].md-list-avatar .md-list-item { height: 48px; } md-list[dense] md-list-item.md-2-line .md-list-item, md-list[dense] a[md-list-item].md-2-line .md-list-item, md-nav-list[dense] md-list-item.md-2-line .md-list-item, md-nav-list[dense] a[md-list-item].md-2-line .md-list-item { height: 60px; } md-list[dense] md-list-item.md-3-line .md-list-item, md-list[dense] a[md-list-item].md-3-line .md-list-item, md-nav-list[dense] md-list-item.md-3-line .md-list-item, md-nav-list[dense] a[md-list-item].md-3-line .md-list-item { height: 76px; } md-list[dense] md-list-item.md-multi-line .md-list-item, md-list[dense] a[md-list-item].md-multi-line .md-list-item, md-nav-list[dense] md-list-item.md-multi-line .md-list-item, md-nav-list[dense] a[md-list-item].md-multi-line .md-list-item { height: 100%; padding: 8px 16px; } md-list[dense] md-list-item .md-list-text, md-list[dense] a[md-list-item] .md-list-text, md-nav-list[dense] md-list-item .md-list-text, md-nav-list[dense] a[md-list-item] .md-list-text { display: flex; flex-direction: column; width: 100%; box-sizing: border-box; overflow: hidden; padding: 0 16px; } md-list[dense] md-list-item .md-list-text > *, md-list[dense] a[md-list-item] .md-list-text > *, md-nav-list[dense] md-list-item .md-list-text > *, md-nav-list[dense] a[md-list-item] .md-list-text > * { margin: 0; padding: 0; font-weight: normal; font-size: inherit; } md-list[dense] md-list-item .md-list-text:empty, md-list[dense] a[md-list-item] .md-list-text:empty, md-nav-list[dense] md-list-item .md-list-text:empty, md-nav-list[dense] a[md-list-item] .md-list-text:empty { display: none; } md-list[dense] md-list-item .md-list-text:first-child, md-list[dense] a[md-list-item] .md-list-text:first-child, md-nav-list[dense] md-list-item .md-list-text:first-child, md-nav-list[dense] a[md-list-item] .md-list-text:first-child { padding: 0; } md-list[dense] md-list-item [md-list-avatar], md-list[dense] a[md-list-item] [md-list-avatar], md-nav-list[dense] md-list-item [md-list-avatar], md-nav-list[dense] a[md-list-item] [md-list-avatar] { flex-shrink: 0; width: 40px; height: 40px; border-radius: 50%; } md-list[dense] md-list-item [md-list-icon], md-list[dense] a[md-list-item] [md-list-icon], md-nav-list[dense] md-list-item [md-list-icon], md-nav-list[dense] a[md-list-item] [md-list-icon] { width: 24px; height: 24px; border-radius: 50%; padding: 4px; } md-list[dense] md-list-item [md-line], md-list[dense] a[md-list-item] [md-line], md-nav-list[dense] md-list-item [md-line], md-nav-list[dense] a[md-list-item] [md-line] { white-space: nowrap; overflow-x: hidden; text-overflow: ellipsis; display: block; box-sizing: border-box; } md-list[dense] md-list-item [md-line]:nth-child(n+2), md-list[dense] a[md-list-item] [md-line]:nth-child(n+2), md-nav-list[dense] md-list-item [md-line]:nth-child(n+2), md-nav-list[dense] a[md-list-item] [md-line]:nth-child(n+2) { font-size: 13px; } md-divider { display: block; border-top-style: solid; border-top-width: 1px; margin: 0; } md-nav-list a { text-decoration: none; color: inherit; } md-nav-list .md-list-item { cursor: pointer; } md-nav-list .md-list-item:hover, md-nav-list .md-list-item.md-list-item-focus { outline: none; } /*# sourceMappingURL=list.css.map */ "],
+        styles: [require('./list.css').toString()],
         encapsulation: _angular_core.ViewEncapsulation.None
     })
 ], exports.MdList);
@@ -6853,13 +6868,14 @@ __decorate$30([
     __metadata$21("design:paramtypes", [exports.MdListAvatar])
 ], exports.MdListItem.prototype, "_hasAvatar", null);
 exports.MdListItem = __decorate$30([
-    _angular_core.Component({selector: 'md-list-item, mat-list-item, a[md-list-item], a[mat-list-item]',
+    _angular_core.Component({
+        selector: 'md-list-item, mat-list-item, a[md-list-item], a[mat-list-item]',
         host: {
             'role': 'listitem',
             '(focus)': '_handleFocus()',
             '(blur)': '_handleBlur()',
         },
-        template: "<div class=\"md-list-item\" [class.md-list-item-focus]=\"_hasFocus\"> <ng-content select=\"[md-list-avatar],[md-list-icon], [mat-list-avatar], [mat-list-icon]\"></ng-content> <div class=\"md-list-text\"><ng-content select=\"[md-line], [mat-line]\"></ng-content></div> <ng-content></ng-content> </div> ",
+        template: require('./list-item.html'),
         encapsulation: _angular_core.ViewEncapsulation.None
     }),
     __metadata$21("design:paramtypes", [_angular_core.Renderer, _angular_core.ElementRef])
@@ -6962,10 +6978,11 @@ __decorate$32([
     __metadata$23("design:paramtypes", [Object])
 ], MdGridTile.prototype, "colspan", null);
 MdGridTile = __decorate$32([
-    _angular_core.Component({selector: 'md-grid-tile, mat-grid-tile',
+    _angular_core.Component({
+        selector: 'md-grid-tile, mat-grid-tile',
         host: { 'role': 'listitem' },
-        template: "<!-- TODO(kara): Revisit why this is a figure.--> <figure> <ng-content></ng-content> </figure>",
-        styles: ["md-grid-list { display: block; position: relative; } md-grid-tile { display: block; position: absolute; overflow: hidden; } md-grid-tile figure { display: flex; position: absolute; align-items: center; justify-content: center; height: 100%; top: 0; right: 0; bottom: 0; left: 0; padding: 0; margin: 0; } md-grid-tile md-grid-tile-header, md-grid-tile md-grid-tile-footer { display: flex; align-items: center; height: 48px; color: #fff; background: rgba(0, 0, 0, 0.38); overflow: hidden; padding: 0 16px; font-size: 16px; position: absolute; left: 0; right: 0; } md-grid-tile md-grid-tile-header [md-line], md-grid-tile md-grid-tile-footer [md-line] { white-space: nowrap; overflow-x: hidden; text-overflow: ellipsis; display: block; box-sizing: border-box; } md-grid-tile md-grid-tile-header [md-line]:nth-child(n+2), md-grid-tile md-grid-tile-footer [md-line]:nth-child(n+2) { font-size: 12px; } md-grid-tile md-grid-tile-header > *, md-grid-tile md-grid-tile-footer > * { margin: 0; padding: 0; font-weight: normal; font-size: inherit; } md-grid-tile md-grid-tile-header.md-2-line, md-grid-tile md-grid-tile-footer.md-2-line { height: 68px; } md-grid-tile .md-grid-list-text { display: flex; flex-direction: column; width: 100%; box-sizing: border-box; overflow: hidden; } md-grid-tile .md-grid-list-text > * { margin: 0; padding: 0; font-weight: normal; font-size: inherit; } md-grid-tile .md-grid-list-text:empty { display: none; } md-grid-tile md-grid-tile-header { top: 0; } md-grid-tile md-grid-tile-footer { bottom: 0; } md-grid-tile [md-grid-avatar] { padding-right: 16px; } [dir='rtl'] md-grid-tile [md-grid-avatar] { padding-right: 0; padding-left: 16px; } md-grid-tile [md-grid-avatar]:empty { display: none; } /*# sourceMappingURL=grid-list.css.map */ "],
+        template: require('./grid-tile.html'),
+        styles: [require('./grid-list.css').toString()],
         encapsulation: _angular_core.ViewEncapsulation.None,
     }),
     __metadata$23("design:paramtypes", [_angular_core.Renderer, _angular_core.ElementRef])
@@ -6985,8 +7002,9 @@ __decorate$32([
     __metadata$23("design:type", _angular_core.QueryList)
 ], MdGridTileText.prototype, "_lines", void 0);
 MdGridTileText = __decorate$32([
-    _angular_core.Component({selector: 'md-grid-tile-header, mat-grid-tile-header, md-grid-tile-footer, mat-grid-tile-footer',
-        template: "<ng-content select=\"[md-grid-avatar], [mat-grid-avatar]\"></ng-content> <div class=\"md-grid-list-text\"><ng-content select=\"[md-line], [mat-line]\"></ng-content></div> <ng-content></ng-content> "
+    _angular_core.Component({
+        selector: 'md-grid-tile-header, mat-grid-tile-header, md-grid-tile-footer, mat-grid-tile-footer',
+        template: require('./grid-tile-text.html')
     }),
     __metadata$23("design:paramtypes", [_angular_core.Renderer, _angular_core.ElementRef])
 ], MdGridTileText);
@@ -7481,9 +7499,10 @@ __decorate$31([
     __metadata$22("design:paramtypes", [Object])
 ], exports.MdGridList.prototype, "rowHeight", null);
 exports.MdGridList = __decorate$31([
-    _angular_core.Component({selector: 'md-grid-list, mat-grid-list',
-        template: "<div class=\"md-grid-list\"> <ng-content></ng-content> </div>",
-        styles: ["md-grid-list { display: block; position: relative; } md-grid-tile { display: block; position: absolute; overflow: hidden; } md-grid-tile figure { display: flex; position: absolute; align-items: center; justify-content: center; height: 100%; top: 0; right: 0; bottom: 0; left: 0; padding: 0; margin: 0; } md-grid-tile md-grid-tile-header, md-grid-tile md-grid-tile-footer { display: flex; align-items: center; height: 48px; color: #fff; background: rgba(0, 0, 0, 0.38); overflow: hidden; padding: 0 16px; font-size: 16px; position: absolute; left: 0; right: 0; } md-grid-tile md-grid-tile-header [md-line], md-grid-tile md-grid-tile-footer [md-line] { white-space: nowrap; overflow-x: hidden; text-overflow: ellipsis; display: block; box-sizing: border-box; } md-grid-tile md-grid-tile-header [md-line]:nth-child(n+2), md-grid-tile md-grid-tile-footer [md-line]:nth-child(n+2) { font-size: 12px; } md-grid-tile md-grid-tile-header > *, md-grid-tile md-grid-tile-footer > * { margin: 0; padding: 0; font-weight: normal; font-size: inherit; } md-grid-tile md-grid-tile-header.md-2-line, md-grid-tile md-grid-tile-footer.md-2-line { height: 68px; } md-grid-tile .md-grid-list-text { display: flex; flex-direction: column; width: 100%; box-sizing: border-box; overflow: hidden; } md-grid-tile .md-grid-list-text > * { margin: 0; padding: 0; font-weight: normal; font-size: inherit; } md-grid-tile .md-grid-list-text:empty { display: none; } md-grid-tile md-grid-tile-header { top: 0; } md-grid-tile md-grid-tile-footer { bottom: 0; } md-grid-tile [md-grid-avatar] { padding-right: 16px; } [dir='rtl'] md-grid-tile [md-grid-avatar] { padding-right: 0; padding-left: 16px; } md-grid-tile [md-grid-avatar]:empty { display: none; } /*# sourceMappingURL=grid-list.css.map */ "],
+    _angular_core.Component({
+        selector: 'md-grid-list, mat-grid-list',
+        template: require('./grid-list.html'),
+        styles: [require('./grid-list.css').toString()],
         encapsulation: _angular_core.ViewEncapsulation.None,
     }),
     __param$8(2, _angular_core.Optional()),
@@ -7579,9 +7598,10 @@ exports.MdCard = (function () {
     return MdCard;
 }());
 exports.MdCard = __decorate$33([
-    _angular_core.Component({selector: 'md-card, mat-card',
-        template: "<ng-content></ng-content> ",
-        styles: ["/** * Applies styles for users in high contrast mode. Note that this only applies * to Microsoft browsers. Chrome can be included by checking for the `html[hc]` * attribute, however Chrome handles high contrast differently. */ md-card { box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px 0px rgba(0, 0, 0, 0.14), 0px 1px 5px 0px rgba(0, 0, 0, 0.12); transition: box-shadow 280ms cubic-bezier(0.4, 0, 0.2, 1); will-change: box-shadow; display: block; position: relative; padding: 24px; border-radius: 2px; font-family: Roboto, \"Helvetica Neue\", sans-serif; } @media screen and (-ms-high-contrast: active) { md-card { outline: solid 1px; } } .md-card-flat { box-shadow: none; } md-card-title, md-card-subtitle, md-card-content, md-card-actions { display: block; margin-bottom: 16px; } md-card-title { font-size: 24px; font-weight: 400; } md-card-subtitle { font-size: 14px; } md-card-content { font-size: 14px; } md-card-actions { margin-left: -16px; margin-right: -16px; padding: 8px 0; } md-card-actions[align='end'] { display: flex; justify-content: flex-end; } [md-card-image] { width: calc(100% + 48px); margin: 0 -24px 16px -24px; } [md-card-xl-image] { width: 240px; height: 240px; margin: -8px; } md-card-footer { position: absolute; width: 100%; min-height: 5px; bottom: 0; left: 0; } md-card-actions [md-button], md-card-actions [md-raised-button] { margin: 0 4px; } md-card-header { display: flex; flex-direction: row; height: 40px; margin: -8px 0 16px 0; } .md-card-header-text { height: 40px; margin: 0 8px; } [md-card-avatar] { height: 40px; width: 40px; border-radius: 50%; } md-card-header md-card-title { font-size: 14px; } [md-card-sm-image], [md-card-md-image], [md-card-lg-image] { margin: -8px 0; } md-card-title-group { display: flex; justify-content: space-between; margin: 0 -8px; } [md-card-sm-image] { width: 80px; height: 80px; } [md-card-md-image] { width: 112px; height: 112px; } [md-card-lg-image] { width: 152px; height: 152px; } @media (max-width: 600px) { md-card { padding: 24px 16px; } [md-card-image] { width: calc(100% + 32px); margin: 16px -16px; } md-card-title-group { margin: 0; } [md-card-xl-image] { margin-left: 0; margin-right: 0; } md-card-header { margin: -8px 0 0 0; } } md-card > :first-child, md-card-content > :first-child { margin-top: 0; } md-card > :last-child, md-card-content > :last-child { margin-bottom: 0; } [md-card-image]:first-child { margin-top: -24px; } md-card > md-card-actions:last-child { margin-bottom: -16px; padding-bottom: 0; } md-card-actions [md-button]:first-child, md-card-actions [md-raised-button]:first-child { margin-left: 0; margin-right: 0; } md-card-title:not(:first-child), md-card-subtitle:not(:first-child) { margin-top: -4px; } md-card-header md-card-subtitle:not(:first-child) { margin-top: -8px; } md-card > [md-card-xl-image]:first-child { margin-top: -8px; } md-card > [md-card-xl-image]:last-child { margin-bottom: -8px; } /*# sourceMappingURL=card.css.map */ "],
+    _angular_core.Component({
+        selector: 'md-card, mat-card',
+        template: require('./card.html'),
+        styles: [require('./card.css').toString()],
         encapsulation: _angular_core.ViewEncapsulation.None,
         changeDetection: _angular_core.ChangeDetectionStrategy.OnPush,
     })
@@ -7592,8 +7612,9 @@ exports.MdCardHeader = (function () {
     return MdCardHeader;
 }());
 exports.MdCardHeader = __decorate$33([
-    _angular_core.Component({selector: 'md-card-header, mat-card-header',
-        template: "<ng-content select=\"[md-card-avatar], [mat-card-avatar]\"></ng-content> <div class=\"md-card-header-text\"> <ng-content select=\"md-card-title, mat-card-title, md-card-subtitle, mat-card-subtitle\"></ng-content> </div> <ng-content></ng-content> ",
+    _angular_core.Component({
+        selector: 'md-card-header, mat-card-header',
+        template: require('./card-header.html'),
         encapsulation: _angular_core.ViewEncapsulation.None,
         changeDetection: _angular_core.ChangeDetectionStrategy.OnPush,
     })
@@ -7604,8 +7625,9 @@ exports.MdCardTitleGroup = (function () {
     return MdCardTitleGroup;
 }());
 exports.MdCardTitleGroup = __decorate$33([
-    _angular_core.Component({selector: 'md-card-title-group, mat-card-title-group',
-        template: "<div> <ng-content select=\"md-card-title, mat-card-title, md-card-subtitle, mat-card-subtitle\"></ng-content> </div> <ng-content select=\"img\"></ng-content> <ng-content></ng-content> ",
+    _angular_core.Component({
+        selector: 'md-card-title-group, mat-card-title-group',
+        template: require('./card-title-group.html'),
         encapsulation: _angular_core.ViewEncapsulation.None,
         changeDetection: _angular_core.ChangeDetectionStrategy.OnPush,
     })
@@ -7691,7 +7713,8 @@ exports.MdChipList = (function () {
     return MdChipList;
 }());
 exports.MdChipList = __decorate$34([
-    _angular_core.Component({selector: 'md-chip-list',
+    _angular_core.Component({
+        selector: 'md-chip-list',
         template: "<ng-content></ng-content>",
         host: {
             // Properties
@@ -7699,7 +7722,7 @@ exports.MdChipList = __decorate$34([
             'role': 'listbox',
             'class': 'md-chip-list'
         },
-        styles: [".md-chip-list { padding: 12px; } .md-chip { display: inline-block; padding: 8px 12px 8px 12px; border-radius: 24px; font-size: 13px; line-height: 16px; } /*# sourceMappingURL=chips.css.map */ "],
+        styles: [require('./chips.css').toString()],
         encapsulation: _angular_core.ViewEncapsulation.None,
         changeDetection: _angular_core.ChangeDetectionStrategy.OnPush
     }),
@@ -8297,9 +8320,10 @@ __decorate$36([
     __metadata$26("design:paramtypes", [String])
 ], exports.MdIcon.prototype, "color", null);
 exports.MdIcon = __decorate$36([
-    _angular_core.Component({template: '<ng-content></ng-content>',
+    _angular_core.Component({
+        template: '<ng-content></ng-content>',
         selector: 'md-icon, mat-icon',
-        styles: ["md-icon { background-repeat: no-repeat; display: inline-block; fill: currentColor; height: 24px; width: 24px; } /*# sourceMappingURL=icon.css.map */ "],
+        styles: [require('./icon.css').toString()],
         host: {
             'role': 'img',
         },
@@ -8537,14 +8561,15 @@ __decorate$38([
     __metadata$28("design:paramtypes", [String])
 ], exports.MdProgressCircle.prototype, "mode", null);
 exports.MdProgressCircle = __decorate$38([
-    _angular_core.Component({selector: 'md-progress-circle, mat-progress-circle',
+    _angular_core.Component({
+        selector: 'md-progress-circle, mat-progress-circle',
         host: {
             'role': 'progressbar',
             '[attr.aria-valuemin]': '_ariaValueMin',
             '[attr.aria-valuemax]': '_ariaValueMax',
         },
-        template: "<!-- preserveAspectRatio of xMidYMid meet as the center of the viewport is the circle's center.  The center of the circle with remain at the center of the md-progress-circle element containing the SVG. --> <svg viewBox=\"0 0 100 100\" preserveAspectRatio=\"xMidYMid meet\"> <path></path> </svg> ",
-        styles: [":host { display: block; height: 100px; width: 100px; overflow: hidden; } :host svg { height: 100%; width: 100%; transform-origin: center; } :host path { fill: transparent; stroke-width: 10px; } :host[mode='indeterminate'] svg { animation-duration: 5250ms, 2887.5ms; animation-name: md-progress-circle-sporadic-rotate, md-progress-circle-linear-rotate; animation-timing-function: cubic-bezier(0.35, 0, 0.25, 1), linear; animation-iteration-count: infinite; transition: none; } @keyframes md-progress-circle-linear-rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } } @keyframes md-progress-circle-sporadic-rotate { 12.5% { transform: rotate(135deg); } 25% { transform: rotate(270deg); } 37.5% { transform: rotate(405deg); } 50% { transform: rotate(540deg); } 62.5% { transform: rotate(675deg); } 75% { transform: rotate(810deg); } 87.5% { transform: rotate(945deg); } 100% { transform: rotate(1080deg); } } /*# sourceMappingURL=progress-circle.css.map */ "],
+        template: require('./progress-circle.html'),
+        styles: [require('./progress-circle.css').toString()],
         changeDetection: _angular_core.ChangeDetectionStrategy.OnPush,
     }),
     __metadata$28("design:paramtypes", [_angular_core.ChangeDetectorRef,
@@ -8566,13 +8591,14 @@ exports.MdSpinner = (function (_super) {
     return MdSpinner;
 }(exports.MdProgressCircle));
 exports.MdSpinner = __decorate$38([
-    _angular_core.Component({selector: 'md-spinner, mat-spinner',
+    _angular_core.Component({
+        selector: 'md-spinner, mat-spinner',
         host: {
             'role': 'progressbar',
             'mode': 'indeterminate',
         },
-        template: "<!-- preserveAspectRatio of xMidYMid meet as the center of the viewport is the circle's center.  The center of the circle with remain at the center of the md-progress-circle element containing the SVG. --> <svg viewBox=\"0 0 100 100\" preserveAspectRatio=\"xMidYMid meet\"> <path></path> </svg> ",
-        styles: [":host { display: block; height: 100px; width: 100px; overflow: hidden; } :host svg { height: 100%; width: 100%; transform-origin: center; } :host path { fill: transparent; stroke-width: 10px; } :host[mode='indeterminate'] svg { animation-duration: 5250ms, 2887.5ms; animation-name: md-progress-circle-sporadic-rotate, md-progress-circle-linear-rotate; animation-timing-function: cubic-bezier(0.35, 0, 0.25, 1), linear; animation-iteration-count: infinite; transition: none; } @keyframes md-progress-circle-linear-rotate { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } } @keyframes md-progress-circle-sporadic-rotate { 12.5% { transform: rotate(135deg); } 25% { transform: rotate(270deg); } 37.5% { transform: rotate(405deg); } 50% { transform: rotate(540deg); } 62.5% { transform: rotate(675deg); } 75% { transform: rotate(810deg); } 87.5% { transform: rotate(945deg); } 100% { transform: rotate(1080deg); } } /*# sourceMappingURL=progress-circle.css.map */ "],
+        template: require('./progress-circle.html'),
+        styles: [require('./progress-circle.css').toString()],
     }),
     __metadata$28("design:paramtypes", [_angular_core.ChangeDetectorRef, _angular_core.ElementRef, _angular_core.NgZone])
 ], exports.MdSpinner);
@@ -8733,14 +8759,15 @@ __decorate$39([
     __metadata$29("design:type", String)
 ], exports.MdProgressBar.prototype, "mode", void 0);
 exports.MdProgressBar = __decorate$39([
-    _angular_core.Component({selector: 'md-progress-bar, mat-progress-bar',
+    _angular_core.Component({
+        selector: 'md-progress-bar, mat-progress-bar',
         host: {
             'role': 'progressbar',
             'aria-valuemin': '0',
             'aria-valuemax': '100',
         },
-        template: "<!-- The background div is named as such because it appears below the other divs and is not sized based on values. --> <div class=\"md-progress-bar-background\"></div> <div class=\"md-progress-bar-buffer\" [ngStyle]=\"_bufferTransform()\"></div> <div class=\"md-progress-bar-primary md-progress-bar-fill\" [ngStyle]=\"_primaryTransform()\"></div> <div class=\"md-progress-bar-secondary md-progress-bar-fill\"></div> ",
-        styles: [":host { display: block; height: 5px; overflow: hidden; position: relative; transform: translateZ(0); transition: opacity 250ms linear; width: 100%; } :host .md-progress-bar-background { background-repeat: repeat-x; background-size: 10px 4px; height: 100%; position: absolute; visibility: hidden; width: 100%; } :host .md-progress-bar-buffer { height: 100%; position: absolute; transform-origin: top left; transition: transform 250ms ease; width: 100%; } :host .md-progress-bar-secondary { visibility: hidden; } :host .md-progress-bar-fill { animation: none; height: 100%; position: absolute; transform-origin: top left; transition: transform 250ms ease; width: 100%; } :host .md-progress-bar-fill::after { animation: none; content: ''; display: inline-block; height: 100%; position: absolute; width: 100%; left: 0; } :host[mode='query'] { transform: rotateZ(180deg); } :host[mode='indeterminate'] .md-progress-bar-fill, :host[mode='query'] .md-progress-bar-fill { transition: none; } :host[mode='indeterminate'] .md-progress-bar-primary, :host[mode='query'] .md-progress-bar-primary { animation: md-progress-bar-primary-indeterminate-translate 2000ms infinite linear; left: -145.166611%; } :host[mode='indeterminate'] .md-progress-bar-primary.md-progress-bar-fill::after, :host[mode='query'] .md-progress-bar-primary.md-progress-bar-fill::after { animation: md-progress-bar-primary-indeterminate-scale 2000ms infinite linear; } :host[mode='indeterminate'] .md-progress-bar-secondary, :host[mode='query'] .md-progress-bar-secondary { animation: md-progress-bar-secondary-indeterminate-translate 2000ms infinite linear; left: -54.888891%; visibility: visible; } :host[mode='indeterminate'] .md-progress-bar-secondary.md-progress-bar-fill::after, :host[mode='query'] .md-progress-bar-secondary.md-progress-bar-fill::after { animation: md-progress-bar-secondary-indeterminate-scale 2000ms infinite linear; } :host[mode='buffer'] .md-progress-bar-background { animation: md-progress-bar-background-scroll 250ms infinite linear; visibility: visible; } :host-context([dir='rtl']) { transform: rotateY(180deg); } @keyframes md-progress-bar-primary-indeterminate-translate { 0% { transform: translateX(0); } 20% { animation-timing-function: cubic-bezier(0.5, 0, 0.70173, 0.49582); transform: translateX(0); } 59.15% { animation-timing-function: cubic-bezier(0.30244, 0.38135, 0.55, 0.95635); transform: translateX(83.67142%); } 100% { transform: translateX(200.61106%); } } @keyframes md-progress-bar-primary-indeterminate-scale { 0% { transform: scaleX(0.08); } 36.65% { animation-timing-function: cubic-bezier(0.33473, 0.12482, 0.78584, 1); transform: scaleX(0.08); } 69.15% { animation-timing-function: cubic-bezier(0.06, 0.11, 0.6, 1); transform: scaleX(0.66148); } 100% { transform: scaleX(0.08); } } @keyframes md-progress-bar-secondary-indeterminate-translate { 0% { animation-timing-function: cubic-bezier(0.15, 0, 0.51506, 0.40969); transform: translateX(0); } 25% { animation-timing-function: cubic-bezier(0.31033, 0.28406, 0.8, 0.73371); transform: translateX(37.65191%); } 48.35% { animation-timing-function: cubic-bezier(0.4, 0.62704, 0.6, 0.90203); transform: translateX(84.38617%); } 100% { transform: translateX(160.27778%); } } @keyframes md-progress-bar-secondary-indeterminate-scale { 0% { animation-timing-function: cubic-bezier(0.15, 0, 0.51506, 0.40969); transform: scaleX(0.08); } 19.15% { animation-timing-function: cubic-bezier(0.31033, 0.28406, 0.8, 0.73371); transform: scaleX(0.4571); } 44.15% { animation-timing-function: cubic-bezier(0.4, 0.62704, 0.6, 0.90203); transform: scaleX(0.72796); } 100% { transform: scaleX(0.08); } } @keyframes md-progress-bar-background-scroll { to { transform: translateX(-10px); } } /*# sourceMappingURL=progress-bar.css.map */ "],
+        template: require('./progress-bar.html'),
+        styles: [require('./progress-bar.css').toString()],
         changeDetection: _angular_core.ChangeDetectionStrategy.OnPush,
     })
 ], exports.MdProgressBar);
@@ -9377,9 +9404,10 @@ __decorate$40([
     __metadata$30("design:type", _angular_core.ElementRef)
 ], exports.MdInput.prototype, "_inputElement", void 0);
 exports.MdInput = __decorate$40([
-    _angular_core.Component({selector: 'md-input, md-textarea',
-        template: "<div class=\"md-input-wrapper\"> <div class=\"md-input-table\"> <div class=\"md-input-prefix\"><ng-content select=\"[md-prefix]\"></ng-content></div> <div class=\"md-input-infix\"> <input #input *ngIf=\"_elementType === 'input'\" class=\"md-input-element\" [class.md-end]=\"align == 'end'\" [attr.aria-label]=\"ariaLabel\" [attr.aria-labelledby]=\"ariaLabelledBy\" [attr.aria-disabled]=\"ariaDisabled\" [attr.aria-required]=\"ariaRequired\" [attr.aria-invalid]=\"ariaInvalid\" [attr.autocomplete]=\"autocomplete\" [attr.autocorrect]=\"autocorrect\" [attr.autocapitalize]=\"autocapitalize\" [autofocus]=\"autofocus\" [disabled]=\"disabled\" [id]=\"inputId\" [attr.list]=\"list\" [attr.max]=\"max\" [attr.maxlength]=\"maxlength\" [attr.min]=\"min\" [attr.minlength]=\"minlength\" [readonly]=\"readonly\" [required]=\"required\" [spellcheck]=\"spellcheck\" [attr.step]=\"step\" [attr.tabindex]=\"tabindex\" [type]=\"type\" [attr.name]=\"name\" (focus)=\"_handleFocus($event)\" (blur)=\"_handleBlur($event)\" [(ngModel)]=\"value\" (change)=\"_handleChange($event)\"> <textarea #input *ngIf=\"_elementType === 'textarea'\" class=\"md-input-element  md-input-element-textarea\" [class.md-end]=\"align == 'end'\" [attr.aria-label]=\"ariaLabel\" [attr.aria-labelledby]=\"ariaLabelledBy\" [attr.aria-disabled]=\"ariaDisabled\" [attr.aria-required]=\"ariaRequired\" [attr.aria-invalid]=\"ariaInvalid\" [attr.autocomplete]=\"autocomplete\" [attr.autocapitalize]=\"autocapitalize\" [attr.cols]=\"cols\" [attr.rows]=\"rows\" [attr.wrap]=\"wrap\" [autofocus]=\"autofocus\" [disabled]=\"disabled\" [id]=\"inputId\" [attr.maxlength]=\"maxlength\" [attr.minlength]=\"minlength\" [readonly]=\"readonly\" [required]=\"required\" [spellcheck]=\"spellcheck\" [attr.tabindex]=\"tabindex\" [attr.name]=\"name\" (focus)=\"_handleFocus($event)\" (blur)=\"_handleBlur($event)\" [(ngModel)]=\"value\" (change)=\"_handleChange($event)\"></textarea> <label class=\"md-input-placeholder\" [attr.for]=\"inputId\" [class.md-empty]=\"empty\" [class.md-focused]=\"focused\" [class.md-float]=\"floatingPlaceholder\" [class.md-accent]=\"dividerColor == 'accent'\" [class.md-warn]=\"dividerColor == 'warn'\" *ngIf=\"_hasPlaceholder()\"> <ng-content select=\"md-placeholder\"></ng-content> {{placeholder}} <span class=\"md-placeholder-required\" *ngIf=\"required\">*</span> </label> </div> <div class=\"md-input-suffix\"><ng-content select=\"[md-suffix]\"></ng-content></div> </div> <div class=\"md-input-underline\" [class.md-disabled]=\"disabled\"> <span class=\"md-input-ripple\" [class.md-focused]=\"focused\" [class.md-accent]=\"dividerColor == 'accent'\" [class.md-warn]=\"dividerColor == 'warn'\"></span> </div> <div *ngIf=\"hintLabel != ''\" class=\"md-hint\">{{hintLabel}}</div> <ng-content select=\"md-hint\"></ng-content> </div> ",
-        styles: ["md-input, md-textarea { display: inline-block; position: relative; font-family: Roboto, \"Helvetica Neue\", sans-serif; line-height: normal; text-align: left; } [dir='rtl'] md-input, [dir='rtl'] md-textarea { text-align: right; } .md-input-wrapper { margin: 16px 0; } .md-input-table { display: inline-table; flex-flow: column; vertical-align: bottom; width: 100%; } .md-input-table > * { display: table-cell; } .md-input-infix { position: relative; } .md-input-element { font: inherit; background: transparent; color: currentColor; border: none; outline: none; padding: 0; width: 100%; } .md-input-element.md-end { text-align: right; } [dir='rtl'] .md-input-element.md-end { text-align: left; } .md-input-element:-moz-ui-invalid { box-shadow: none; } .md-input-element:-webkit-autofill + .md-input-placeholder.md-float { display: block; padding-bottom: 5px; transform: translateY(-100%) scale(0.75); width: 133.33333%; } .md-input-placeholder { position: absolute; left: 0; top: 0; font-size: 100%; pointer-events: none; z-index: 1; width: 100%; display: none; white-space: nowrap; text-overflow: ellipsis; overflow-x: hidden; transform: translateY(0); transform-origin: bottom left; transition: transform 400ms cubic-bezier(0.25, 0.8, 0.25, 1), scale 400ms cubic-bezier(0.25, 0.8, 0.25, 1), color 400ms cubic-bezier(0.25, 0.8, 0.25, 1), width 400ms cubic-bezier(0.25, 0.8, 0.25, 1); } .md-input-placeholder.md-empty { display: block; cursor: text; } .md-input-placeholder.md-float:not(.md-empty), .md-input-placeholder.md-float.md-focused { display: block; padding-bottom: 5px; transform: translateY(-100%) scale(0.75); width: 133.33333%; } [dir='rtl'] .md-input-placeholder { transform-origin: bottom right; } .md-input-underline { position: absolute; height: 1px; width: 100%; margin-top: 4px; border-top-width: 1px; border-top-style: solid; } .md-input-underline.md-disabled { background-image: linear-gradient(to right, rgba(0, 0, 0, 0.26) 0%, rgba(0, 0, 0, 0.26) 33%, transparent 0%); background-size: 4px 1px; background-repeat: repeat-x; border-top: 0; background-position: 0; } .md-input-underline .md-input-ripple { position: absolute; height: 2px; z-index: 1; top: -1px; width: 100%; transform-origin: top; opacity: 0; transform: scaleY(0); transition: transform 400ms cubic-bezier(0.25, 0.8, 0.25, 1), opacity 400ms cubic-bezier(0.25, 0.8, 0.25, 1); } .md-input-underline .md-input-ripple.md-focused { opacity: 1; transform: scaleY(1); } .md-hint { display: block; position: absolute; font-size: 75%; bottom: -0.5em; } .md-hint.md-right { right: 0; } [dir='rtl'] .md-hint { right: 0; left: auto; } [dir='rtl'] .md-hint.md-right { right: auto; left: 0; } /*# sourceMappingURL=input.css.map */ "],
+    _angular_core.Component({
+        selector: 'md-input, md-textarea',
+        template: require('./input.html'),
+        styles: [require('./input.css').toString()],
         providers: [MD_INPUT_CONTROL_VALUE_ACCESSOR],
         host: { '(click)': 'focus()' },
         encapsulation: _angular_core.ViewEncapsulation.None,
@@ -9582,9 +9610,10 @@ __decorate$43([
     __metadata$33("design:type", exports.PortalHostDirective)
 ], exports.MdSnackBarContainer.prototype, "_portalHost", void 0);
 exports.MdSnackBarContainer = __decorate$43([
-    _angular_core.Component({selector: 'snack-bar-container',
-        template: "<template portalHost></template>",
-        styles: ["/** * Applies styles for users in high contrast mode. Note that this only applies * to Microsoft browsers. Chrome can be included by checking for the `html[hc]` * attribute, however Chrome handles high contrast differently. */ :host { box-shadow: 0px 3px 5px -1px rgba(0, 0, 0, 0.2), 0px 6px 10px 0px rgba(0, 0, 0, 0.14), 0px 1px 18px 0px rgba(0, 0, 0, 0.12); background: #323232; border-radius: 2px; box-sizing: content-box; display: block; height: 20px; max-width: 568px; min-width: 288px; overflow: hidden; padding: 14px 24px; transform: translateY(100%); } @media screen and (-ms-high-contrast: active) { :host { border: solid 1px; } } /*# sourceMappingURL=snack-bar-container.css.map */ "],
+    _angular_core.Component({
+        selector: 'snack-bar-container',
+        template: require('./snack-bar-container.html'),
+        styles: [require('./snack-bar-container.css').toString()],
         host: {
             'role': 'alert',
             '[@state]': 'animationState',
@@ -9629,9 +9658,10 @@ var SimpleSnackBar = (function () {
     return SimpleSnackBar;
 }());
 SimpleSnackBar = __decorate$44([
-    _angular_core.Component({selector: 'simple-snack-bar',
-        template: "<span class=\"md-simple-snackbar-message\">{{message}}</span> <button md-button class=\"md-simple-snackbar-action\" *ngIf=\"hasAction\" (click)=\"dismiss()\">{{action}}</button>",
-        styles: ["md-simple-snackbar { display: flex; justify-content: space-between; } .md-simple-snackbar-message { box-sizing: border-box; border: none; color: white; font-family: Roboto, 'Helvetica Neue', sans-serif; font-size: 14px; line-height: 20px; outline: none; text-decoration: none; word-break: break-all; } .md-simple-snackbar-action { box-sizing: border-box; color: white; float: right; font-weight: 600; line-height: 20px; margin: -5px 0 0 48px; min-width: initial; padding: 5px; text-transform: uppercase; } /*# sourceMappingURL=simple-snack-bar.css.map */ "],
+    _angular_core.Component({
+        selector: 'simple-snack-bar',
+        template: require('./simple-snack-bar.html'),
+        styles: [require('./simple-snack-bar.css').toString()],
     })
 ], SimpleSnackBar);
 
@@ -9976,9 +10006,10 @@ __decorate$48([
     __metadata$37("design:type", MdInkBar)
 ], exports.MdTabNavBar.prototype, "_inkBar", void 0);
 exports.MdTabNavBar = __decorate$48([
-    _angular_core.Component({selector: '[md-tab-nav-bar], [mat-tab-nav-bar]',
-        template: "<ng-content></ng-content> <md-ink-bar></md-ink-bar> ",
-        styles: ["[md-tab-nav-bar] { overflow: hidden; position: relative; display: flex; flex-direction: row; flex-shrink: 0; } [md-tab-link] { line-height: 48px; height: 48px; padding: 0 12px; font-size: 14px; font-family: Roboto, \"Helvetica Neue\", sans-serif; font-weight: 500; cursor: pointer; box-sizing: border-box; color: currentColor; opacity: 0.6; min-width: 160px; text-align: center; text-decoration: none; position: relative; overflow: hidden; } [md-tab-link]:focus { outline: none; opacity: 1; } @media (max-width: 600px) { [md-tab-link] { min-width: 72px; } } md-ink-bar { position: absolute; bottom: 0; height: 2px; transition: 500ms cubic-bezier(0.35, 0, 0.25, 1); } /*# sourceMappingURL=tab-nav-bar.css.map */ "],
+    _angular_core.Component({
+        selector: '[md-tab-nav-bar], [mat-tab-nav-bar]',
+        template: require('./tab-nav-bar.html'),
+        styles: [require('./tab-nav-bar.css').toString()],
         encapsulation: _angular_core.ViewEncapsulation.None,
     })
 ], exports.MdTabNavBar);
@@ -10098,8 +10129,9 @@ __decorate$50([
     __metadata$39("design:paramtypes", [Boolean])
 ], MdTab.prototype, "disabled", null);
 MdTab = __decorate$50([
-    _angular_core.Component({selector: 'md-tab',
-        template: "<!-- Create a template for the content of the <md-tab> so that we can grab a reference to this TemplateRef and use it in a Portal to render the tab content in the appropriate place in the tab-group. --> <template><ng-content></ng-content></template> ",
+    _angular_core.Component({
+        selector: 'md-tab',
+        template: require('./tab.html'),
     }),
     __metadata$39("design:paramtypes", [_angular_core.ViewContainerRef])
 ], MdTab);
@@ -10228,8 +10260,9 @@ __decorate$51([
     __metadata$40("design:paramtypes", [Number])
 ], MdTabBody.prototype, "origin", null);
 MdTabBody = __decorate$51([
-    _angular_core.Component({selector: 'md-tab-body',
-        template: "<div class=\"md-tab-body-content\" #content [@translateTab]=\"_position\" (@translateTab.start)=\"_onTranslateTabStarted($event)\" (@translateTab.done)=\"_onTranslateTabComplete($event)\"> <template portalHost></template> </div> ",
+    _angular_core.Component({
+        selector: 'md-tab-body',
+        template: require('./tab-body.html'),
         animations: [
             _angular_core.trigger('translateTab', [
                 _angular_core.state('left', _angular_core.style({ transform: 'translate3d(-100%, 0, 0)' })),
@@ -10597,9 +10630,10 @@ __decorate$52([
     __metadata$41("design:type", Object)
 ], MdTabHeader.prototype, "indexFocused", void 0);
 MdTabHeader = __decorate$52([
-    _angular_core.Component({selector: 'md-tab-header',
-        template: "<div class=\"md-tab-header-pagination md-tab-header-pagination-before md-elevation-z4\" aria-hidden=\"true\" md-ripple [md-ripple-disabled]=\"_disableScrollBefore\" [class.md-tab-header-pagination-disabled]=\"_disableScrollBefore\" (click)=\"_scrollHeader('before')\"> <div class=\"md-tab-header-pagination-chevron\"></div> </div> <div class=\"md-tab-label-container\" #tabListContainer (keydown)=\"_handleKeydown($event)\"> <div class=\"md-tab-list\" #tabList role=\"tablist\"> <div class=\"mat-tab-labels\" [style.height.px]=\"39\" [style.margin]=\"(centerLabels)?'0px auto':''\" [style.width]=\"(!centerLabels)?'100%':''\"> <ng-content></ng-content> <md-ink-bar></md-ink-bar> </div> </div> </div> <div class=\"md-tab-header-pagination md-tab-header-pagination-after md-elevation-z4\" aria-hidden=\"true\" md-ripple [md-ripple-disabled]=\"_disableScrollAfter\" [class.md-tab-header-pagination-disabled]=\"_disableScrollAfter\" (click)=\"_scrollHeader('after')\"> <div class=\"md-tab-header-pagination-chevron\"></div> </div> ",
-        styles: [".md-tab-header { overflow: hidden; position: relative; display: flex; flex-direction: row; flex-shrink: 0; } .md-tab-label { line-height: 48px; height: 48px; padding: 0 12px; font-size: 14px; font-family: Roboto, \"Helvetica Neue\", sans-serif; font-weight: 500; cursor: pointer; box-sizing: border-box; color: currentColor; opacity: 0.6; min-width: 160px; text-align: center; display: inline-block; position: relative; } .md-tab-label:focus { outline: none; opacity: 1; } @media (max-width: 600px) { .md-tab-label { min-width: 72px; } } md-ink-bar { position: absolute; bottom: 0; height: 2px; transition: 500ms cubic-bezier(0.35, 0, 0.25, 1); } .md-tab-header-pagination { position: relative; display: none; justify-content: center; align-items: center; min-width: 32px; cursor: pointer; z-index: 2; } .md-tab-header-pagination-controls-enabled .md-tab-header-pagination { display: flex; } .md-tab-header-pagination-before, .md-tab-header-rtl .md-tab-header-pagination-after { padding-left: 4px; } .md-tab-header-pagination-before .md-tab-header-pagination-chevron, .md-tab-header-rtl .md-tab-header-pagination-after .md-tab-header-pagination-chevron { transform: rotate(-135deg); } .md-tab-header-rtl .md-tab-header-pagination-before, .md-tab-header-pagination-after { padding-right: 4px; } .md-tab-header-rtl .md-tab-header-pagination-before .md-tab-header-pagination-chevron, .md-tab-header-pagination-after .md-tab-header-pagination-chevron { transform: rotate(45deg); } .md-tab-header-pagination-chevron { border-style: solid; border-width: 2px 2px 0 0; content: ''; height: 8px; width: 8px; } .md-tab-header-pagination-disabled { box-shadow: none; cursor: default; } .md-tab-header-pagination-disabled .md-tab-header-pagination-chevron { border-color: #ccc; } .md-tab-label-container { display: flex; flex-grow: 1; overflow: hidden; z-index: 1; } .md-tab-list { display: flex; flex-grow: 1; position: relative; transition: transform 500ms cubic-bezier(0.35, 0, 0.25, 1); } /*# sourceMappingURL=tab-header.css.map */ "],
+    _angular_core.Component({
+        selector: 'md-tab-header',
+        template: require('./tab-header.html').toString(),
+        styles: [require('./tab-header.css').toString()],
         encapsulation: _angular_core.ViewEncapsulation.None,
         host: {
             'class': 'md-tab-header',
@@ -10813,9 +10847,10 @@ __decorate$45([
     __metadata$34("design:paramtypes", [])
 ], exports.MdTabGroup.prototype, "selectChange", null);
 exports.MdTabGroup = __decorate$45([
-    _angular_core.Component({selector: 'md-tab-group',
-        template: "<md-tab-header [selectedIndex]=\"selectedIndex\" #tabHeader [centerLabels]=\"centerLabels\" (indexFocused)=\"_focusChanged($event)\" (selectFocusedIndex)=\"selectedIndex = $event\"> <div class=\"md-tab-label\" role=\"tab\" md-tab-label-wrapper md-ripple *ngFor=\"let tab of _tabs; let i = index\" [id]=\"_getTabLabelId(i)\" [tabIndex]=\"selectedIndex == i ? 0 : -1\" [attr.aria-controls]=\"_getTabContentId(i)\" [attr.aria-selected]=\"selectedIndex == i\" [class.md-tab-label-active]=\"selectedIndex == i\" [disabled]=\"tab.disabled\" (click)=\"tabHeader.focusIndex = selectedIndex = i\"> <!-- If there is a label template, use it. --> <template [ngIf]=\"tab.templateLabel\"> <template [portalHost]=\"tab.templateLabel\"></template> </template> <!-- If there is not a label template, fall back to the text label. --> <template [ngIf]=\"!tab.templateLabel\">{{tab.textLabel}}</template> </div> </md-tab-header> <div class=\"md-tab-body-wrapper\" #tabBodyWrapper> <md-tab-body role=\"tabpanel\" *ngFor=\"let tab of _tabs; let i = index\" [id]=\"_getTabContentId(i)\" [attr.aria-labelledby]=\"_getTabLabelId(i)\" [class.md-tab-body-active]=\"selectedIndex == i\" [content]=\"tab.content\" [position]=\"tab.position\" [origin]=\"tab.origin\" (onCentered)=\"_removeTabBodyWrapperHeight()\" (onCentering)=\"_setTabBodyWrapperHeight($event)\"> </md-tab-body> </div> ",
-        styles: [":host { display: flex; flex-direction: column; font-family: Roboto, \"Helvetica Neue\", sans-serif; } .md-tab-label { line-height: 48px; height: 48px; padding: 0 12px; font-size: 14px; font-family: Roboto, \"Helvetica Neue\", sans-serif; font-weight: 500; cursor: pointer; box-sizing: border-box; color: currentColor; opacity: 0.6; min-width: 160px; text-align: center; display: inline-block; position: relative; } .md-tab-label:focus { outline: none; opacity: 1; } @media (max-width: 600px) { .md-tab-label { min-width: 72px; } } :host[md-stretch-tabs] .md-tab-label { flex-basis: 0; flex-grow: 1; } .md-tab-body-wrapper { position: relative; overflow: hidden; display: flex; transition: height 500ms cubic-bezier(0.35, 0, 0.25, 1); } md-tab-body { position: absolute; top: 0; left: 0; right: 0; bottom: 0; display: block; overflow: hidden; } md-tab-body.md-tab-body-active { position: relative; overflow-x: hidden; overflow-y: auto; z-index: 1; flex-grow: 1; } :host[md-dynamic-height] md-tab-body.md-tab-body-active { overflow-y: hidden; } .md-tab-disabled { cursor: default; pointer-events: none; } /*# sourceMappingURL=tab-group.css.map */ "],
+    _angular_core.Component({
+        selector: 'md-tab-group',
+        template: require('./tab-group.html'),
+        styles: [require('./tab-group.css').toString()],
     }),
     __metadata$34("design:paramtypes", [_angular_core.Renderer])
 ], exports.MdTabGroup);
@@ -10893,9 +10928,10 @@ __decorate$53([
     __metadata$42("design:paramtypes", [String])
 ], exports.MdToolbar.prototype, "color", null);
 exports.MdToolbar = __decorate$53([
-    _angular_core.Component({selector: 'md-toolbar, mat-toolbar',
-        template: "<div class=\"md-toolbar-layout\"> <md-toolbar-row> <ng-content></ng-content> </md-toolbar-row> <ng-content select=\"md-toolbar-row, mat-toolbar-row\"></ng-content> </div> ",
-        styles: ["md-toolbar { display: flex; box-sizing: border-box; width: 100%; min-height: 64px; font-size: 20px; font-weight: 400; font-family: Roboto, \"Helvetica Neue\", sans-serif; padding: 0 16px; flex-direction: column; } md-toolbar md-toolbar-row { display: flex; box-sizing: border-box; width: 100%; height: 64px; flex-direction: row; align-items: center; } /*# sourceMappingURL=toolbar.css.map */ "],
+    _angular_core.Component({
+        selector: 'md-toolbar, mat-toolbar',
+        template: require('./toolbar.html').toString(),
+        styles: [require('./toolbar.css').toString()],
         changeDetection: _angular_core.ChangeDetectionStrategy.OnPush,
         encapsulation: _angular_core.ViewEncapsulation.None
     }),
@@ -11217,9 +11253,10 @@ exports.TooltipComponent = (function () {
     return TooltipComponent;
 }());
 exports.TooltipComponent = __decorate$54([
-    _angular_core.Component({selector: 'md-tooltip-component, mat-tooltip-component',
-        template: "<div class=\"md-tooltip\" [style.transform-origin]=\"_transformOrigin\" [@state]=\"_visibility\" (@state.done)=\"_afterVisibilityAnimation($event)\"> {{message}} </div>",
-        styles: ["/** * Applies styles for users in high contrast mode. Note that this only applies * to Microsoft browsers. Chrome can be included by checking for the `html[hc]` * attribute, however Chrome handles high contrast differently. */ :host { pointer-events: none; } .md-tooltip { color: white; padding: 0 8px; border-radius: 2px; font-family: Roboto, \"Helvetica Neue\", sans-serif; font-size: 10px; margin: 14px; height: 22px; line-height: 22px; } @media screen and (-ms-high-contrast: active) { .md-tooltip { outline: solid 1px; } } /*# sourceMappingURL=tooltip.css.map */ "],
+    _angular_core.Component({
+        selector: 'md-tooltip-component, mat-tooltip-component',
+        template: require('./tooltip.html'),
+        styles: [require('./tooltip.css').toString()],
         animations: [
             _angular_core.trigger('state', [
                 _angular_core.state('void', _angular_core.style({ transform: 'scale(0)' })),
@@ -11365,13 +11402,14 @@ __decorate$57([
     __metadata$45("design:paramtypes", [])
 ], exports.MdMenuItem.prototype, "isAriaDisabled", null);
 exports.MdMenuItem = __decorate$57([
-    _angular_core.Component({selector: '[md-menu-item], [mat-menu-item]',
+    _angular_core.Component({
+        selector: '[md-menu-item], [mat-menu-item]',
         host: {
             'role': 'menuitem',
             '(click)': '_checkDisabled($event)',
             '[attr.tabindex]': '_tabindex'
         },
-        template: "<ng-content></ng-content> <div class=\"md-menu-ripple\" *ngIf=\"!disabled\" md-ripple md-ripple-background-color=\"rgba(0,0,0,0)\" [md-ripple-trigger]=\"_getHostElement()\"> </div> ",
+        template: require('./menu-item.html'),
         exportAs: 'mdMenuItem'
     }),
     __metadata$45("design:paramtypes", [_angular_core.Renderer, _angular_core.ElementRef])
@@ -11533,10 +11571,11 @@ __decorate$56([
     __metadata$44("design:type", Object)
 ], exports.MdMenu.prototype, "close", void 0);
 exports.MdMenu = __decorate$56([
-    _angular_core.Component({selector: 'md-menu, mat-menu',
+    _angular_core.Component({
+        selector: 'md-menu, mat-menu',
         host: { 'role': 'menu' },
-        template: "<template> <div class=\"md-menu-panel\" [ngClass]=\"_classList\" (keydown)=\"_keyManager.onKeydown($event)\" (click)=\"_emitCloseEvent()\" [@transformMenu]=\"'showing'\"> <div class=\"md-menu-content\" [@fadeInItems]=\"'showing'\"> <ng-content></ng-content> </div> </div> </template> ",
-        styles: ["/** The mixins below are shared between md-menu and md-select */ /** * This mixin adds the correct panel transform styles based * on the direction that the menu panel opens. */ /** * Applies styles for users in high contrast mode. Note that this only applies * to Microsoft browsers. Chrome can be included by checking for the `html[hc]` * attribute, however Chrome handles high contrast differently. */ .md-menu-panel { box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12); min-width: 112px; max-width: 280px; overflow: auto; -webkit-overflow-scrolling: touch; max-height: calc(100vh + 48px); } .md-menu-panel.md-menu-after.md-menu-below { transform-origin: left top; } .md-menu-panel.md-menu-after.md-menu-above { transform-origin: left bottom; } .md-menu-panel.md-menu-before.md-menu-below { transform-origin: right top; } .md-menu-panel.md-menu-before.md-menu-above { transform-origin: right bottom; } [dir='rtl'] .md-menu-panel.md-menu-after.md-menu-below { transform-origin: right top; } [dir='rtl'] .md-menu-panel.md-menu-after.md-menu-above { transform-origin: right bottom; } [dir='rtl'] .md-menu-panel.md-menu-before.md-menu-below { transform-origin: left top; } [dir='rtl'] .md-menu-panel.md-menu-before.md-menu-above { transform-origin: left bottom; } @media screen and (-ms-high-contrast: active) { .md-menu-panel { outline: solid 1px; } } .md-menu-content { padding-top: 8px; padding-bottom: 8px; } [md-menu-item] { cursor: pointer; -webkit-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; outline: none; border: none; white-space: nowrap; overflow-x: hidden; text-overflow: ellipsis; display: flex; flex-direction: row; align-items: center; height: 48px; padding: 0 16px; font-size: 16px; font-family: Roboto, \"Helvetica Neue\", sans-serif; text-align: start; text-decoration: none; position: relative; } [md-menu-item][disabled] { cursor: default; } [md-menu-item] md-icon { margin-right: 16px; } [dir='rtl'] [md-menu-item] md-icon { margin-left: 16px; } button[md-menu-item] { width: 100%; } .md-menu-ripple { position: absolute; top: 0; left: 0; bottom: 0; right: 0; } /*# sourceMappingURL=menu.css.map */ "],
+        template: require('./menu.html'),
+        styles: [require('./menu.css').toString()],
         encapsulation: _angular_core.ViewEncapsulation.None,
         animations: [
             transformMenu,
@@ -11949,9 +11988,10 @@ __decorate$60([
     __metadata$48("design:type", exports.FocusTrap)
 ], exports.MdDialogContainer.prototype, "_focusTrap", void 0);
 exports.MdDialogContainer = __decorate$60([
-    _angular_core.Component({selector: 'md-dialog-container, mat-dialog-container',
-        template: "<focus-trap> <template portalHost></template> </focus-trap> ",
-        styles: ["/** * Applies styles for users in high contrast mode. Note that this only applies * to Microsoft browsers. Chrome can be included by checking for the `html[hc]` * attribute, however Chrome handles high contrast differently. */ md-dialog-container { box-shadow: 0px 11px 15px -7px rgba(0, 0, 0, 0.2), 0px 24px 38px 3px rgba(0, 0, 0, 0.14), 0px 9px 46px 8px rgba(0, 0, 0, 0.12); display: block; padding: 24px; border-radius: 2px; box-sizing: border-box; overflow: auto; width: 100%; height: 100%; } @media screen and (-ms-high-contrast: active) { md-dialog-container { outline: solid 1px; } } /*# sourceMappingURL=dialog-container.css.map */ "],
+    _angular_core.Component({
+        selector: 'md-dialog-container, mat-dialog-container',
+        template: require('./dialog-container.html'),
+        styles: [require('./dialog-container.css').toString()],
         host: {
             'class': 'md-dialog-container',
             '[attr.role]': 'dialogConfig?.role',
@@ -12136,9 +12176,10 @@ var MdAutocomplete = (function () {
     return MdAutocomplete;
 }());
 MdAutocomplete = __decorate$62([
-    _angular_core.Component({selector: 'md-autocomplete, mat-autocomplete',
-        template: "I'm an autocomplete!",
-        styles: [" /*# sourceMappingURL=autocomplete.css.map */ "],
+    _angular_core.Component({
+        selector: 'md-autocomplete, mat-autocomplete',
+        template: require('./autocomplete.html'),
+        styles: [require('./autocomplete.css').toString()],
         encapsulation: _angular_core.ViewEncapsulation.None,
     })
 ], MdAutocomplete);

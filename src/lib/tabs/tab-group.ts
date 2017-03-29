@@ -28,10 +28,9 @@ export class MdTabChangeEvent {
  * See: https://www.google.com/design/spec/components/tabs.html
  */
 @Component({
-  moduleId: module.id,
   selector: 'md-tab-group',
-  templateUrl: 'tab-group.html',
-  styleUrls: ['tab-group.css'],
+  template: require('./tab-group.html'),
+  styles: [require('./tab-group.css').toString()],
 })
 export class MdTabGroup {
   @ContentChildren(MdTab) _tabs: QueryList<MdTab>;

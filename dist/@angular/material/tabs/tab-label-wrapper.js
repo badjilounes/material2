@@ -52,4 +52,4 @@ MdTabLabelWrapper = __decorate([
     __metadata("design:paramtypes", [core_1.ElementRef, core_1.Renderer])
 ], MdTabLabelWrapper);
 exports.MdTabLabelWrapper = MdTabLabelWrapper;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/tabs/tab-label-wrapper.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/tabs/tab-label-wrapper.js.map

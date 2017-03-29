@@ -228,4 +228,4 @@ MdMenuTrigger = __decorate([
         core_2.Dir])
 ], MdMenuTrigger);
 exports.MdMenuTrigger = MdMenuTrigger;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/menu/menu-trigger.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/menu/menu-trigger.js.map

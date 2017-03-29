@@ -120,11 +120,10 @@ __decorate([
 ], MdMenu.prototype, "close", void 0);
 MdMenu = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: 'md-menu, mat-menu',
         host: { 'role': 'menu' },
-        templateUrl: 'menu.html',
-        styleUrls: ['menu.css'],
+        template: require('./menu.html'),
+        styles: [require('./menu.css').toString()],
         encapsulation: core_1.ViewEncapsulation.None,
         animations: [
             menu_animations_1.transformMenu,
@@ -137,4 +136,4 @@ MdMenu = __decorate([
     __metadata("design:paramtypes", [String, String])
 ], MdMenu);
 exports.MdMenu = MdMenu;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/menu/menu-directive.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/menu/menu-directive.js.map

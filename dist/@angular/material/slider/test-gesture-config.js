@@ -61,4 +61,4 @@ TestGestureConfig = __decorate([
     core_1.Injectable()
 ], TestGestureConfig);
 exports.TestGestureConfig = TestGestureConfig;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/slider/test-gesture-config.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/slider/test-gesture-config.js.map

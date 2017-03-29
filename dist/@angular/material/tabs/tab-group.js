@@ -221,10 +221,9 @@ __decorate([
 ], MdTabGroup.prototype, "selectChange", null);
 MdTabGroup = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: 'md-tab-group',
-        templateUrl: 'tab-group.html',
-        styleUrls: ['tab-group.css'],
+        template: require('./tab-group.html'),
+        styles: [require('./tab-group.css').toString()],
     }),
     __metadata("design:paramtypes", [core_1.Renderer])
 ], MdTabGroup);
@@ -251,4 +250,4 @@ MdTabsModule = MdTabsModule_1 = __decorate([
 ], MdTabsModule);
 exports.MdTabsModule = MdTabsModule;
 var MdTabsModule_1;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/tabs/tab-group.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/tabs/tab-group.js.map

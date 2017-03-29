@@ -5,4 +5,4 @@ function coerceBooleanProperty(value) {
     return value != null && "" + value !== 'false';
 }
 exports.coerceBooleanProperty = coerceBooleanProperty;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/core/coersion/boolean-property.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/core/coersion/boolean-property.js.map

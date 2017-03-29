@@ -23,11 +23,10 @@ import {Subscription} from 'rxjs/Subscription';
 import {transformMenu, fadeInItems} from './menu-animations';
 
 @Component({
-  moduleId: module.id,
   selector: 'md-menu, mat-menu',
   host: {'role': 'menu'},
-  templateUrl: 'menu.html',
-  styleUrls: ['menu.css'],
+  template: require('./menu.html'),
+  styles: [require('./menu.css').toString()],
   encapsulation: ViewEncapsulation.None,
   animations: [
     transformMenu,

@@ -60,4 +60,4 @@ MdLiveAnnouncer = __decorate([
     __metadata("design:paramtypes", [Object])
 ], MdLiveAnnouncer);
 exports.MdLiveAnnouncer = MdLiveAnnouncer;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/core/a11y/live-announcer.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/core/a11y/live-announcer.js.map

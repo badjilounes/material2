@@ -18,10 +18,9 @@ import 'rxjs/add/operator/first';
  * Internal component that wraps user-provided dialog content.
  */
 @Component({
-  moduleId: module.id,
   selector: 'md-dialog-container, mat-dialog-container',
-  templateUrl: 'dialog-container.html',
-  styleUrls: ['dialog-container.css'],
+  template: require('./dialog-container.html'),
+  styles: [require('./dialog-container.css').toString()],
   host: {
     'class': 'md-dialog-container',
     '[attr.role]': 'dialogConfig?.role',

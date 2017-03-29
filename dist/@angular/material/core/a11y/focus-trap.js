@@ -119,12 +119,11 @@ __decorate([
 ], FocusTrap.prototype, "disabled", null);
 FocusTrap = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: 'focus-trap',
-        templateUrl: 'focus-trap.html',
+        template: require('./focus-trap.html'),
         encapsulation: core_1.ViewEncapsulation.None,
     }),
     __metadata("design:paramtypes", [interactivity_checker_1.InteractivityChecker, core_1.NgZone])
 ], FocusTrap);
 exports.FocusTrap = FocusTrap;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/core/a11y/focus-trap.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/core/a11y/focus-trap.js.map

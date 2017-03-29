@@ -33,4 +33,4 @@ A11yModule = A11yModule_1 = __decorate([
 ], A11yModule);
 exports.A11yModule = A11yModule;
 var A11yModule_1;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/core/a11y/index.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/core/a11y/index.js.map

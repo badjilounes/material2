@@ -19,4 +19,4 @@ var MdDialogConfig = (function () {
     return MdDialogConfig;
 }());
 exports.MdDialogConfig = MdDialogConfig;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/dialog/dialog-config.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/dialog/dialog-config.js.map

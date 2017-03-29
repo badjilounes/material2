@@ -64,10 +64,9 @@ export class MdCheckboxChange {
  * See: https://www.google.com/design/spec/components/selection-controls.html
  */
 @Component({
-  moduleId: module.id,
   selector: 'md-checkbox, mat-checkbox',
-  templateUrl: 'checkbox.html',
-  styleUrls: ['checkbox.css'],
+  template: require('./checkbox.html'),
+  styles: [require('./checkbox.css').toString()],
   host: {
     '[class.md-checkbox-indeterminate]': 'indeterminate',
     '[class.md-checkbox-checked]': 'checked',

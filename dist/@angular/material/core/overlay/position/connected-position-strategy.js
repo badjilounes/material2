@@ -201,4 +201,4 @@ var ConnectedPositionStrategy = (function () {
     return ConnectedPositionStrategy;
 }());
 exports.ConnectedPositionStrategy = ConnectedPositionStrategy;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/core/overlay/position/connected-position-strategy.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/core/overlay/position/connected-position-strategy.js.map

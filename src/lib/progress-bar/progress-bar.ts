@@ -17,15 +17,14 @@ import {DefaultStyleCompatibilityModeModule} from '../core/compatibility/default
  * <md-progress-bar> component.
  */
 @Component({
-  moduleId: module.id,
   selector: 'md-progress-bar, mat-progress-bar',
   host: {
     'role': 'progressbar',
     'aria-valuemin': '0',
     'aria-valuemax': '100',
   },
-  templateUrl: 'progress-bar.html',
-  styleUrls: ['progress-bar.css'],
+  template: require('./progress-bar.html'),
+  styles: [require('./progress-bar.css').toString()],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MdProgressBar {

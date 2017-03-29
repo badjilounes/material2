@@ -18,10 +18,9 @@ import {DefaultStyleCompatibilityModeModule} from '../core';
 export class MdToolbarRow {}
 
 @Component({
-  moduleId: module.id,
   selector: 'md-toolbar, mat-toolbar',
-  templateUrl: 'toolbar.html',
-  styleUrls: ['toolbar.css'],
+  template: require('./toolbar.html').toString(),
+  styles: [require('./toolbar.css').toString()],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
 })

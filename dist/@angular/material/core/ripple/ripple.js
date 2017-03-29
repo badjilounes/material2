@@ -188,4 +188,4 @@ MdRippleModule = MdRippleModule_1 = __decorate([
 ], MdRippleModule);
 exports.MdRippleModule = MdRippleModule;
 var MdRippleModule_1;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/core/ripple/ripple.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/core/ripple/ripple.js.map

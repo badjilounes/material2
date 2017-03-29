@@ -29,11 +29,10 @@ var MdList = (function () {
 }());
 MdList = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: 'md-list, mat-list, md-nav-list, mat-nav-list',
         host: { 'role': 'list' },
         template: '<ng-content></ng-content>',
-        styleUrls: ['list.css'],
+        styles: [require('./list.css').toString()],
         encapsulation: core_1.ViewEncapsulation.None
     })
 ], MdList);
@@ -84,14 +83,13 @@ __decorate([
 ], MdListItem.prototype, "_hasAvatar", null);
 MdListItem = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: 'md-list-item, mat-list-item, a[md-list-item], a[mat-list-item]',
         host: {
             'role': 'listitem',
             '(focus)': '_handleFocus()',
             '(blur)': '_handleBlur()',
         },
-        templateUrl: 'list-item.html',
+        template: require('./list-item.html'),
         encapsulation: core_1.ViewEncapsulation.None
     }),
     __metadata("design:paramtypes", [core_1.Renderer, core_1.ElementRef])
@@ -124,4 +122,4 @@ MdListModule = MdListModule_1 = __decorate([
 ], MdListModule);
 exports.MdListModule = MdListModule;
 var MdListModule_1;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/list/list.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/list/list.js.map

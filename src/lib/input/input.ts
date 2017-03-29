@@ -94,10 +94,9 @@ export class MdHint {
  * improve on its behaviour, along with styling it according to the Material Design.
  */
 @Component({
-  moduleId: module.id,
   selector: 'md-input, md-textarea',
-  templateUrl: 'input.html',
-  styleUrls: ['input.css'],
+  template: require('./input.html'),
+  styles: [require('./input.css').toString()],
   providers: [MD_INPUT_CONTROL_VALUE_ACCESSOR],
   host: {'(click)' : 'focus()'},
   encapsulation: ViewEncapsulation.None,

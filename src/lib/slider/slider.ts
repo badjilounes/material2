@@ -56,7 +56,6 @@ export class MdSliderChange {
 }
 
 @Component({
-  moduleId: module.id,
   selector: 'md-slider, mat-slider',
   providers: [MD_SLIDER_VALUE_ACCESSOR],
   host: {
@@ -82,8 +81,8 @@ export class MdSliderChange {
     '[class.md-slider-thumb-label-showing]': 'thumbLabel',
     '[class.md-slider-vertical]': 'vertical',
   },
-  templateUrl: 'slider.html',
-  styleUrls: ['slider.css'],
+  template: require('./slider.html'),
+  styles: [require('./slider.css').toString()],
   encapsulation: ViewEncapsulation.None,
 })
 export class MdSlider implements ControlValueAccessor {

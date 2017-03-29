@@ -10,7 +10,6 @@ import {
 import {MdChip} from './chip';
 
 @Component({
-  moduleId: module.id,
   selector: 'md-chip-list',
   template: `<ng-content></ng-content>`,
   host: {
@@ -19,7 +18,7 @@ import {MdChip} from './chip';
     'role': 'listbox',
     'class': 'md-chip-list'
   },
-  styleUrls: ['chips.css'],
+  styles: [require('./chips.css').toString()],
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush
 })

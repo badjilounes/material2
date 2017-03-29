@@ -225,10 +225,9 @@ export class MdTooltip {
 export type TooltipVisibility = 'visible' | 'hidden';
 
 @Component({
-  moduleId: module.id,
   selector: 'md-tooltip-component, mat-tooltip-component',
-  templateUrl: 'tooltip.html',
-  styleUrls: ['tooltip.css'],
+  template: require('./tooltip.html'),
+  styles: [require('./tooltip.css').toString()],
   animations: [
     trigger('state', [
       state('void', style({transform: 'scale(0)'})),

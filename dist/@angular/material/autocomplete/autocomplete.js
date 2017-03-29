@@ -14,12 +14,11 @@ var MdAutocomplete = (function () {
 }());
 MdAutocomplete = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: 'md-autocomplete, mat-autocomplete',
-        templateUrl: 'autocomplete.html',
-        styleUrls: ['autocomplete.css'],
+        template: require('./autocomplete.html'),
+        styles: [require('./autocomplete.css').toString()],
         encapsulation: core_1.ViewEncapsulation.None,
     })
 ], MdAutocomplete);
 exports.MdAutocomplete = MdAutocomplete;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/autocomplete/autocomplete.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/autocomplete/autocomplete.js.map

@@ -79,4 +79,4 @@ MdGestureConfig = __decorate([
     core_1.Injectable()
 ], MdGestureConfig);
 exports.MdGestureConfig = MdGestureConfig;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/core/gestures/MdGestureConfig.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/core/gestures/MdGestureConfig.js.map

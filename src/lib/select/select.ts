@@ -65,10 +65,9 @@ export const SELECT_PANEL_PADDING_Y = 16;
 export const SELECT_PANEL_VIEWPORT_PADDING = 8;
 
 @Component({
-  moduleId: module.id,
   selector: 'md-select, mat-select',
-  templateUrl: 'select.html',
-  styleUrls: ['select.css'],
+  template: require('./select.html'),
+  styles: [require('./select.css').toString()],
   encapsulation: ViewEncapsulation.None,
   host: {
     'role': 'listbox',

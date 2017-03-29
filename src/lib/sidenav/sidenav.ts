@@ -35,7 +35,6 @@ export class MdSidenavToggleResult {
  * Please refer to README.md for examples on how to use it.
  */
 @Component({
-  moduleId: module.id,
   selector: 'md-sidenav, mat-sidenav',
   template: '<focus-trap [disabled]="isFocusTrapDisabled"><ng-content></ng-content></focus-trap>',
   host: {
@@ -264,15 +263,14 @@ export class MdSidenav implements AfterContentInit {
  * and coordinates the backdrop and content styling.
  */
 @Component({
-  moduleId: module.id,
   selector: 'md-sidenav-layout, mat-sidenav-layout',
   // Do not use ChangeDetectionStrategy.OnPush. It does not work for this component because
   // technically it is a sibling of MdSidenav (on the content tree) and isn't updated when MdSidenav
   // changes its state.
-  templateUrl: 'sidenav.html',
-  styleUrls: [
-    'sidenav.css',
-    'sidenav-transitions.css',
+  template: require('./sidenav.html'),
+  styles: [
+    require('./sidenav.css').toString(),
+    require('./sidenav-transitions.css').toString(),
   ],
   encapsulation: ViewEncapsulation.None,
 })

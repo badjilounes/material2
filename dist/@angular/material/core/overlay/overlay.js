@@ -100,4 +100,4 @@ exports.OVERLAY_PROVIDERS = [
     Overlay,
     overlay_container_1.OverlayContainer,
 ];
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/core/overlay/overlay.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/core/overlay/overlay.js.map

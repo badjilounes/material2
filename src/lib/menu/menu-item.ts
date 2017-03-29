@@ -6,14 +6,13 @@ import {MdFocusable} from '../core/a11y/list-key-manager';
  * It exists mostly to set the role attribute.
  */
 @Component({
-  moduleId: module.id,
   selector: '[md-menu-item], [mat-menu-item]',
   host: {
     'role': 'menuitem',
     '(click)': '_checkDisabled($event)',
     '[attr.tabindex]': '_tabindex'
   },
-  templateUrl: 'menu-item.html',
+  template: require('./menu-item.html'),
   exportAs: 'mdMenuItem'
 })
 export class MdMenuItem implements MdFocusable {

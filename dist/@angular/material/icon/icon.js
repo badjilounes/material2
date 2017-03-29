@@ -253,10 +253,9 @@ __decorate([
 ], MdIcon.prototype, "color", null);
 MdIcon = __decorate([
     core_1.Component({
-        moduleId: module.id,
         template: '<ng-content></ng-content>',
         selector: 'md-icon, mat-icon',
-        styleUrls: ['icon.css'],
+        styles: [require('./icon.css').toString()],
         host: {
             'role': 'img',
         },
@@ -288,4 +287,4 @@ MdIconModule = MdIconModule_1 = __decorate([
 ], MdIconModule);
 exports.MdIconModule = MdIconModule;
 var MdIconModule_1;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/icon/icon.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/icon/icon.js.map

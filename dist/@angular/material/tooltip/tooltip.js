@@ -290,10 +290,9 @@ var TooltipComponent = (function () {
 }());
 TooltipComponent = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: 'md-tooltip-component, mat-tooltip-component',
-        templateUrl: 'tooltip.html',
-        styleUrls: ['tooltip.css'],
+        template: require('./tooltip.html'),
+        styles: [require('./tooltip.css').toString()],
         animations: [
             core_1.trigger('state', [
                 core_1.state('void', core_1.style({ transform: 'scale(0)' })),
@@ -332,4 +331,4 @@ MdTooltipModule = MdTooltipModule_1 = __decorate([
 ], MdTooltipModule);
 exports.MdTooltipModule = MdTooltipModule;
 var MdTooltipModule_1;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/tooltip/tooltip.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/tooltip/tooltip.js.map

@@ -122,4 +122,4 @@ var GlobalPositionStrategy = (function () {
     return GlobalPositionStrategy;
 }());
 exports.GlobalPositionStrategy = GlobalPositionStrategy;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/core/overlay/position/global-position-strategy.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/core/overlay/position/global-position-strategy.js.map

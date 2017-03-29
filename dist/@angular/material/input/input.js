@@ -536,10 +536,9 @@ __decorate([
 ], MdInput.prototype, "_inputElement", void 0);
 MdInput = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: 'md-input, md-textarea',
-        templateUrl: 'input.html',
-        styleUrls: ['input.css'],
+        template: require('./input.html'),
+        styles: [require('./input.css').toString()],
         providers: [exports.MD_INPUT_CONTROL_VALUE_ACCESSOR],
         host: { '(click)': 'focus()' },
         encapsulation: core_1.ViewEncapsulation.None,
@@ -567,4 +566,4 @@ MdInputModule = MdInputModule_1 = __decorate([
 ], MdInputModule);
 exports.MdInputModule = MdInputModule;
 var MdInputModule_1;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/input/input.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/input/input.js.map

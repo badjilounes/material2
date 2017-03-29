@@ -42,10 +42,9 @@ __decorate([
 ], MdTabNavBar.prototype, "_inkBar", void 0);
 MdTabNavBar = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: '[md-tab-nav-bar], [mat-tab-nav-bar]',
-        templateUrl: 'tab-nav-bar.html',
-        styleUrls: ['tab-nav-bar.css'],
+        template: require('./tab-nav-bar.html'),
+        styles: [require('./tab-nav-bar.css').toString()],
         encapsulation: core_1.ViewEncapsulation.None,
     })
 ], MdTabNavBar);
@@ -109,4 +108,4 @@ MdTabLinkRipple = __decorate([
     __metadata("design:paramtypes", [core_1.ElementRef, core_1.NgZone, viewport_ruler_1.ViewportRuler])
 ], MdTabLinkRipple);
 exports.MdTabLinkRipple = MdTabLinkRipple;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/tabs/tab-nav-bar/tab-nav-bar.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/tabs/tab-nav-bar/tab-nav-bar.js.map

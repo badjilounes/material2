@@ -71,17 +71,16 @@ __decorate([
 ], MdMenuItem.prototype, "isAriaDisabled", null);
 MdMenuItem = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: '[md-menu-item], [mat-menu-item]',
         host: {
             'role': 'menuitem',
             '(click)': '_checkDisabled($event)',
             '[attr.tabindex]': '_tabindex'
         },
-        templateUrl: 'menu-item.html',
+        template: require('./menu-item.html'),
         exportAs: 'mdMenuItem'
     }),
     __metadata("design:paramtypes", [core_1.Renderer, core_1.ElementRef])
 ], MdMenuItem);
 exports.MdMenuItem = MdMenuItem;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/menu/menu-item.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/menu/menu-item.js.map

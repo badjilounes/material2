@@ -128,9 +128,8 @@ __decorate([
 ], MdTabBody.prototype, "origin", null);
 MdTabBody = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: 'md-tab-body',
-        templateUrl: 'tab-body.html',
+        template: require('./tab-body.html'),
         animations: [
             core_1.trigger('translateTab', [
                 core_1.state('left', core_1.style({ transform: 'translate3d(-100%, 0, 0)' })),
@@ -154,4 +153,4 @@ MdTabBody = __decorate([
     __metadata("design:paramtypes", [core_1.ElementRef, core_2.Dir])
 ], MdTabBody);
 exports.MdTabBody = MdTabBody;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/tabs/tab-body.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/tabs/tab-body.js.map

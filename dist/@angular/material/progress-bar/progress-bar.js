@@ -87,15 +87,14 @@ __decorate([
 ], MdProgressBar.prototype, "mode", void 0);
 MdProgressBar = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: 'md-progress-bar, mat-progress-bar',
         host: {
             'role': 'progressbar',
             'aria-valuemin': '0',
             'aria-valuemax': '100',
         },
-        templateUrl: 'progress-bar.html',
-        styleUrls: ['progress-bar.css'],
+        template: require('./progress-bar.html'),
+        styles: [require('./progress-bar.css').toString()],
         changeDetection: core_1.ChangeDetectionStrategy.OnPush,
     })
 ], MdProgressBar);
@@ -126,4 +125,4 @@ MdProgressBarModule = MdProgressBarModule_1 = __decorate([
 ], MdProgressBarModule);
 exports.MdProgressBarModule = MdProgressBarModule;
 var MdProgressBarModule_1;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/progress-bar/progress-bar.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/progress-bar/progress-bar.js.map

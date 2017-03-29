@@ -9,4 +9,4 @@ function coerceNumberProperty(value, fallbackValue) {
     return isNaN(parseFloat(value)) || isNaN(Number(value)) ? fallbackValue : Number(value);
 }
 exports.coerceNumberProperty = coerceNumberProperty;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/core/coersion/number-property.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/core/coersion/number-property.js.map

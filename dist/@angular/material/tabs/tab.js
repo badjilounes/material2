@@ -67,11 +67,10 @@ __decorate([
 ], MdTab.prototype, "disabled", null);
 MdTab = __decorate([
     core_1.Component({
-        moduleId: module.id,
         selector: 'md-tab',
-        templateUrl: 'tab.html',
+        template: require('./tab.html'),
     }),
     __metadata("design:paramtypes", [core_1.ViewContainerRef])
 ], MdTab);
 exports.MdTab = MdTab;
-//# sourceMappingURL=/Users/lounesbadji/workspace_perso/material2-2.0.0-alpha.11/src/lib/tabs/tab.js.map
+//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/tabs/tab.js.map
