@@ -1,9 +1,7 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Configuration used when opening a snack-bar.
  */
-var MdSnackBarConfig = (function () {
+export var MdSnackBarConfig = (function () {
     function MdSnackBarConfig() {
         /** The politeness level for the MdAriaLiveAnnouncer announcement. */
         this.politeness = 'assertive';
@@ -16,5 +14,5 @@ var MdSnackBarConfig = (function () {
     }
     return MdSnackBarConfig;
 }());
-exports.MdSnackBarConfig = MdSnackBarConfig;
-//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/snack-bar/snack-bar-config.js.map
+
+//# sourceMappingURL=snack-bar-config.js.map

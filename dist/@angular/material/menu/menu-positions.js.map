@@ -1,1 +1,1 @@
-{"version":3,"file":"menu-positions.js","sourceRoot":"","sources":["menu-positions.ts"],"names":[],"mappings":"","sourcesContent":["\nexport type MenuPositionX = 'before' | 'after';\n\nexport type MenuPositionY = 'above' | 'below';\n\ninterface DecoratorInvocation {\n  type: Function;\n  args?: any[];\n}\n"]}
+{"version":3,"sources":[],"names":[],"mappings":"","file":"menu-positions.js","sourcesContent":[]}

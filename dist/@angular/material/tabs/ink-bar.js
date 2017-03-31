@@ -1,4 +1,3 @@
-"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,10 +7,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
+import { Directive, Renderer, ElementRef } from '@angular/core';
 /** The ink-bar is used to display and animate the line underneath the current active tab label. */
-var MdInkBar = (function () {
+export var MdInkBar = (function () {
     function MdInkBar(_renderer, _elementRef) {
         this._renderer = _renderer;
         this._elementRef = _elementRef;
@@ -37,7 +35,6 @@ var MdInkBar = (function () {
     /**
      * Generates the pixel distance from the left based on the provided element in string format.
      * @param element
-     * @returns {string}
      */
     MdInkBar.prototype._getLeftPosition = function (element) {
         return element ? element.offsetLeft + 'px' : '0';
@@ -45,18 +42,17 @@ var MdInkBar = (function () {
     /**
      * Generates the pixel width from the provided element in string format.
      * @param element
-     * @returns {string}
      */
     MdInkBar.prototype._getElementWidth = function (element) {
         return element ? element.offsetWidth + 'px' : '0';
     };
+    MdInkBar = __decorate([
+        Directive({
+            selector: 'md-ink-bar, mat-ink-bar',
+        }), 
+        __metadata('design:paramtypes', [Renderer, ElementRef])
+    ], MdInkBar);
     return MdInkBar;
 }());
-MdInkBar = __decorate([
-    core_1.Directive({
-        selector: 'md-ink-bar, mat-ink-bar',
-    }),
-    __metadata("design:paramtypes", [core_1.Renderer, core_1.ElementRef])
-], MdInkBar);
-exports.MdInkBar = MdInkBar;
-//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/tabs/ink-bar.js.map
+
+//# sourceMappingURL=ink-bar.js.map

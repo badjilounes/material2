@@ -1,7 +1,3 @@
-"use strict";
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-}
-Object.defineProperty(exports, "__esModule", { value: true });
-__export(require("./toolbar"));
-//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/toolbar/index.js.map
+export * from './toolbar';
+
+//# sourceMappingURL=index.js.map

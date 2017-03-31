@@ -1,46 +1,53 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("../core");
-var Subject_1 = require("rxjs/Subject");
+import { UP_ARROW, DOWN_ARROW, TAB, HOME, END } from '../core';
+import { Subject } from 'rxjs/Subject';
 /**
  * This class manages keyboard events for selectable lists. If you pass it a query list
  * of focusable items, it will focus the correct item when arrow events occur.
  */
-var ListKeyManager = (function () {
+export var ListKeyManager = (function () {
     function ListKeyManager(_items) {
         this._items = _items;
-        this._tabOut = new Subject_1.Subject();
+        this._tabOut = new Subject();
         this._wrap = false;
     }
     /**
      * Turns on focus wrapping mode, which ensures that the focus will wrap to
      * the other end of list when there are no more items in the given direction.
+     *
+     * @returns The ListKeyManager that the method was called on.
      */
     ListKeyManager.prototype.withFocusWrap = function () {
         this._wrap = true;
         return this;
     };
-    /** Sets the focus of the list to the item at the index specified. */
+    /**
+     * Sets the focus of the list to the item at the index specified.
+     *
+     * @param index The index of the item to be focused.
+     */
     ListKeyManager.prototype.setFocus = function (index) {
         this._focusedItemIndex = index;
         this._items.toArray()[index].focus();
     };
-    /** Sets the focus properly depending on the key event passed in. */
+    /**
+     * Sets the focus depending on the key event passed in.
+     * @param event Keyboard event to be used for determining which element to focus.
+     */
     ListKeyManager.prototype.onKeydown = function (event) {
         switch (event.keyCode) {
-            case core_1.DOWN_ARROW:
+            case DOWN_ARROW:
                 this.focusNextItem();
                 break;
-            case core_1.UP_ARROW:
+            case UP_ARROW:
                 this.focusPreviousItem();
                 break;
-            case core_1.HOME:
+            case HOME:
                 this.focusFirstItem();
                 break;
-            case core_1.END:
+            case END:
                 this.focusLastItem();
                 break;
-            case core_1.TAB:
+            case TAB:
                 // Note that we shouldn't prevent the default action on tab.
                 this._tabOut.next(null);
                 return;
@@ -73,6 +80,13 @@ var ListKeyManager = (function () {
         enumerable: true,
         configurable: true
     });
+    /**
+     * Allows setting of the focusedItemIndex without focusing the item.
+     * @param index The new focusedItemIndex.
+     */
+    ListKeyManager.prototype.updateFocusedItemIndex = function (index) {
+        this._focusedItemIndex = index;
+    };
     Object.defineProperty(ListKeyManager.prototype, "tabOut", {
         /**
          * Observable that emits any time the TAB key is pressed, so components can react
@@ -139,5 +153,5 @@ var ListKeyManager = (function () {
     };
     return ListKeyManager;
 }());
-exports.ListKeyManager = ListKeyManager;
-//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/core/a11y/list-key-manager.js.map
+
+//# sourceMappingURL=list-key-manager.js.map

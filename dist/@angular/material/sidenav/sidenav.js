@@ -1,4 +1,8 @@
-"use strict";
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -11,21 +15,30 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var common_1 = require("@angular/common");
-var core_2 = require("../core");
-var index_1 = require("../core/a11y/index");
-var focus_trap_1 = require("../core/a11y/focus-trap");
+import { NgModule, Component, ContentChildren, ElementRef, Input, Optional, Output, QueryList, ChangeDetectionStrategy, EventEmitter, Renderer, ViewEncapsulation, ViewChild } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Dir, MdError, coerceBooleanProperty, DefaultStyleCompatibilityModeModule } from '../core';
+import { A11yModule } from '../core/a11y/index';
+import { FocusTrap } from '../core/a11y/focus-trap';
+import { ESCAPE } from '../core/keyboard/keycodes';
+import { OverlayModule } from '../core/overlay/overlay-directives';
+import { InteractivityChecker } from '../core/a11y/interactivity-checker';
+/** Exception thrown when two MdSidenav are matching the same side. */
+export var MdDuplicatedSidenavError = (function (_super) {
+    __extends(MdDuplicatedSidenavError, _super);
+    function MdDuplicatedSidenavError(align) {
+        _super.call(this, "A sidenav was already declared for 'align=\"" + align + "\"'");
+    }
+    return MdDuplicatedSidenavError;
+}(MdError));
 /** Sidenav toggle promise result. */
-var MdSidenavToggleResult = (function () {
+export var MdSidenavToggleResult = (function () {
     function MdSidenavToggleResult(type, animationFinished) {
         this.type = type;
         this.animationFinished = animationFinished;
     }
     return MdSidenavToggleResult;
 }());
-exports.MdSidenavToggleResult = MdSidenavToggleResult;
 /**
  * <md-sidenav> component.
  *
@@ -33,13 +46,15 @@ exports.MdSidenavToggleResult = MdSidenavToggleResult;
  *
  * Please refer to README.md for examples on how to use it.
  */
-var MdSidenav = (function () {
+export var MdSidenav = (function () {
     /**
      * @param _elementRef The DOM element reference. Used for transition and width calculation.
      *     If not available we do not hook on transitions.
      */
-    function MdSidenav(_elementRef) {
+    function MdSidenav(_elementRef, _renderer) {
+        var _this = this;
         this._elementRef = _elementRef;
+        this._renderer = _renderer;
         /** Alignment of the sidenav (direction neutral); whether 'start' or 'end'. */
         this._align = 'start';
         this._valid = true;
@@ -48,15 +63,15 @@ var MdSidenav = (function () {
         /** Whether the sidenav is opened. */
         this._opened = false;
         /** Event emitted when the sidenav is being opened. Use this to synchronize animations. */
-        this.onOpenStart = new core_1.EventEmitter();
+        this.onOpenStart = new EventEmitter();
         /** Event emitted when the sidenav is fully opened. */
-        this.onOpen = new core_1.EventEmitter();
+        this.onOpen = new EventEmitter();
         /** Event emitted when the sidenav is being closed. Use this to synchronize animations. */
-        this.onCloseStart = new core_1.EventEmitter();
+        this.onCloseStart = new EventEmitter();
         /** Event emitted when the sidenav is fully closed. */
-        this.onClose = new core_1.EventEmitter();
+        this.onClose = new EventEmitter();
         /** Event emitted when the sidenav alignment changes. */
-        this.onAlignChanged = new core_1.EventEmitter();
+        this.onAlignChanged = new EventEmitter();
         /** The current toggle animation promise. `null` if no animation is in progress. */
         this._toggleAnimationPromise = null;
         /**
@@ -64,14 +79,28 @@ var MdSidenav = (function () {
          * `null` if no animation is in progress.
          */
         this._resolveToggleAnimationPromise = null;
+        this._elementFocusedBeforeSidenavWasOpened = null;
+        this.onOpen.subscribe(function () {
+            _this._elementFocusedBeforeSidenavWasOpened = document.activeElement;
+            if (!_this.isFocusTrapDisabled) {
+                _this._focusTrap.focusFirstTabbableElementWhenReady();
+            }
+        });
+        this.onClose.subscribe(function () {
+            if (_this._elementFocusedBeforeSidenavWasOpened instanceof HTMLElement) {
+                _this._renderer.invokeElementMethod(_this._elementFocusedBeforeSidenavWasOpened, 'focus');
+            }
+            else {
+                _this._renderer.invokeElementMethod(_this._elementRef.nativeElement, 'blur');
+            }
+            _this._elementFocusedBeforeSidenavWasOpened = null;
+        });
     }
     Object.defineProperty(MdSidenav.prototype, "valid", {
-        /** Whether this md-sidenav is part of a valid md-sidenav-layout configuration. */
-        get: function () {
-            return this._valid;
-        },
+        /** Whether this md-sidenav is part of a valid md-sidenav-container configuration. */
+        get: function () { return this._valid; },
         set: function (value) {
-            value = core_2.coerceBooleanProperty(value);
+            value = coerceBooleanProperty(value);
             // When the drawers are not in a valid configuration we close them all until they are in a valid
             // configuration again.
             if (!value) {
@@ -83,9 +112,8 @@ var MdSidenav = (function () {
         configurable: true
     });
     Object.defineProperty(MdSidenav.prototype, "align", {
-        get: function () {
-            return this._align;
-        },
+        /** Direction which the sidenav is aligned in. */
+        get: function () { return this._align; },
         set: function (value) {
             // Make sure we have a valid value.
             value = (value == 'end') ? 'end' : 'start';
@@ -120,7 +148,7 @@ var MdSidenav = (function () {
          */
         get: function () { return this._opened; },
         set: function (v) {
-            this.toggle(core_2.coerceBooleanProperty(v));
+            this.toggle(coerceBooleanProperty(v));
         },
         enumerable: true,
         configurable: true
@@ -140,7 +168,8 @@ var MdSidenav = (function () {
     /**
      * Toggle this sidenav. This is equivalent to calling open() when it's already opened, or
      * close() when it's closed.
-     * @param isOpen
+     * @param isOpen Whether the sidenav should be open.
+     * @returns Resolves with the result of whether the sidenav was opened or closed.
      */
     MdSidenav.prototype.toggle = function (isOpen) {
         var _this = this;
@@ -160,9 +189,6 @@ var MdSidenav = (function () {
         else {
             this.onCloseStart.emit();
         }
-        if (!this.isFocusTrapDisabled) {
-            this._focusTrap.focusFirstTabbableElementWhenReady();
-        }
         if (this._toggleAnimationPromise) {
             this._resolveToggleAnimationPromise(false);
         }
@@ -172,6 +198,16 @@ var MdSidenav = (function () {
             };
         });
         return this._toggleAnimationPromise;
+    };
+    /**
+     * Handles the keyboard events.
+     * @docs-private
+     */
+    MdSidenav.prototype.handleKeydown = function (event) {
+        if (event.keyCode === ESCAPE) {
+            this.close();
+            event.stopPropagation();
+        }
     };
     /**
      * When transition has finished, set the internal state for classes and emit the proper event.
@@ -259,101 +295,102 @@ var MdSidenav = (function () {
         enumerable: true,
         configurable: true
     });
+    __decorate([
+        ViewChild(FocusTrap), 
+        __metadata('design:type', FocusTrap)
+    ], MdSidenav.prototype, "_focusTrap", void 0);
+    __decorate([
+        Input(), 
+        __metadata('design:type', Object)
+    ], MdSidenav.prototype, "align", null);
+    __decorate([
+        Input(), 
+        __metadata('design:type', Object)
+    ], MdSidenav.prototype, "mode", void 0);
+    __decorate([
+        Output('open-start'), 
+        __metadata('design:type', Object)
+    ], MdSidenav.prototype, "onOpenStart", void 0);
+    __decorate([
+        Output('open'), 
+        __metadata('design:type', Object)
+    ], MdSidenav.prototype, "onOpen", void 0);
+    __decorate([
+        Output('close-start'), 
+        __metadata('design:type', Object)
+    ], MdSidenav.prototype, "onCloseStart", void 0);
+    __decorate([
+        Output('close'), 
+        __metadata('design:type', Object)
+    ], MdSidenav.prototype, "onClose", void 0);
+    __decorate([
+        Output('align-changed'), 
+        __metadata('design:type', Object)
+    ], MdSidenav.prototype, "onAlignChanged", void 0);
+    __decorate([
+        Input(), 
+        __metadata('design:type', Boolean)
+    ], MdSidenav.prototype, "opened", null);
+    MdSidenav = __decorate([
+        Component({selector: 'md-sidenav, mat-sidenav',
+            // TODO(mmalerba): move template to separate file.
+            template: "<cdk-focus-trap class=\"md-sidenav-focus-trap\" [disabled]=\"isFocusTrapDisabled\"><ng-content></ng-content></cdk-focus-trap>",
+            host: {
+                '(transitionend)': '_onTransitionEnd($event)',
+                '(keydown)': 'handleKeydown($event)',
+                // must prevent the browser from aligning text based on value
+                '[attr.align]': 'null',
+                '[class.md-sidenav-closed]': '_isClosed',
+                '[class.md-sidenav-closing]': '_isClosing',
+                '[class.md-sidenav-end]': '_isEnd',
+                '[class.md-sidenav-opened]': '_isOpened',
+                '[class.md-sidenav-opening]': '_isOpening',
+                '[class.md-sidenav-over]': '_modeOver',
+                '[class.md-sidenav-push]': '_modePush',
+                '[class.md-sidenav-side]': '_modeSide',
+                '[class.md-sidenav-invalid]': '!valid',
+                'tabIndex': '-1'
+            },
+            changeDetection: ChangeDetectionStrategy.OnPush,
+            encapsulation: ViewEncapsulation.None,
+        }), 
+        __metadata('design:paramtypes', [ElementRef, Renderer])
+    ], MdSidenav);
     return MdSidenav;
 }());
-__decorate([
-    core_1.ViewChild(focus_trap_1.FocusTrap),
-    __metadata("design:type", focus_trap_1.FocusTrap)
-], MdSidenav.prototype, "_focusTrap", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Object),
-    __metadata("design:paramtypes", [Object])
-], MdSidenav.prototype, "align", null);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], MdSidenav.prototype, "mode", void 0);
-__decorate([
-    core_1.Output('open-start'),
-    __metadata("design:type", Object)
-], MdSidenav.prototype, "onOpenStart", void 0);
-__decorate([
-    core_1.Output('open'),
-    __metadata("design:type", Object)
-], MdSidenav.prototype, "onOpen", void 0);
-__decorate([
-    core_1.Output('close-start'),
-    __metadata("design:type", Object)
-], MdSidenav.prototype, "onCloseStart", void 0);
-__decorate([
-    core_1.Output('close'),
-    __metadata("design:type", Object)
-], MdSidenav.prototype, "onClose", void 0);
-__decorate([
-    core_1.Output('align-changed'),
-    __metadata("design:type", Object)
-], MdSidenav.prototype, "onAlignChanged", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Boolean),
-    __metadata("design:paramtypes", [Boolean])
-], MdSidenav.prototype, "opened", null);
-MdSidenav = __decorate([
-    core_1.Component({
-        selector: 'md-sidenav, mat-sidenav',
-        template: '<focus-trap [disabled]="isFocusTrapDisabled"><ng-content></ng-content></focus-trap>',
-        host: {
-            '(transitionend)': '_onTransitionEnd($event)',
-            // must prevent the browser from aligning text based on value
-            '[attr.align]': 'null',
-            '[class.md-sidenav-closed]': '_isClosed',
-            '[class.md-sidenav-closing]': '_isClosing',
-            '[class.md-sidenav-end]': '_isEnd',
-            '[class.md-sidenav-opened]': '_isOpened',
-            '[class.md-sidenav-opening]': '_isOpening',
-            '[class.md-sidenav-over]': '_modeOver',
-            '[class.md-sidenav-push]': '_modePush',
-            '[class.md-sidenav-side]': '_modeSide',
-            '[class.md-sidenav-invalid]': '!valid',
-        },
-        changeDetection: core_1.ChangeDetectionStrategy.OnPush,
-        encapsulation: core_1.ViewEncapsulation.None,
-    }),
-    __metadata("design:paramtypes", [core_1.ElementRef])
-], MdSidenav);
-exports.MdSidenav = MdSidenav;
 /**
- * <md-sidenav-layout> component.
+ * <md-sidenav-container> component.
  *
  * This is the parent component to one or two <md-sidenav>s that validates the state internally
  * and coordinates the backdrop and content styling.
  */
-var MdSidenavLayout = (function () {
-    function MdSidenavLayout(_dir, _element, _renderer) {
+export var MdSidenavContainer = (function () {
+    function MdSidenavContainer(_dir, _element, _renderer) {
         var _this = this;
         this._dir = _dir;
         this._element = _element;
         this._renderer = _renderer;
         /** Event emitted when the sidenav backdrop is clicked. */
-        this.onBackdropClicked = new core_1.EventEmitter();
+        this.onBackdropClicked = new EventEmitter();
         // If a `Dir` directive exists up the tree, listen direction changes and update the left/right
         // properties to point to the proper start/end.
         if (_dir != null) {
             _dir.dirChange.subscribe(function () { return _this._validateDrawers(); });
         }
     }
-    Object.defineProperty(MdSidenavLayout.prototype, "start", {
+    Object.defineProperty(MdSidenavContainer.prototype, "start", {
+        /** The sidenav child with the `start` alignment. */
         get: function () { return this._start; },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(MdSidenavLayout.prototype, "end", {
+    Object.defineProperty(MdSidenavContainer.prototype, "end", {
+        /** The sidenav child with the `end` alignment. */
         get: function () { return this._end; },
         enumerable: true,
         configurable: true
     });
-    MdSidenavLayout.prototype.ngAfterContentInit = function () {
+    MdSidenavContainer.prototype.ngAfterContentInit = function () {
         var _this = this;
         // On changes, assert on consistency.
         this._sidenavs.changes.subscribe(function () { return _this._validateDrawers(); });
@@ -364,35 +401,35 @@ var MdSidenavLayout = (function () {
         this._validateDrawers();
     };
     /**
-     * Subscribes to sidenav events in order to set a class on the main layout element when the
-     * sidenav is open and the backdrop is visible. This ensures any overflow on the layout element is
-     * properly hidden.
+     * Subscribes to sidenav events in order to set a class on the main container element when the
+     * sidenav is open and the backdrop is visible. This ensures any overflow on the container element
+     * is properly hidden.
      */
-    MdSidenavLayout.prototype._watchSidenavToggle = function (sidenav) {
+    MdSidenavContainer.prototype._watchSidenavToggle = function (sidenav) {
         var _this = this;
         if (!sidenav || sidenav.mode === 'side') {
             return;
         }
-        sidenav.onOpen.subscribe(function () { return _this._setLayoutClass(sidenav, true); });
-        sidenav.onClose.subscribe(function () { return _this._setLayoutClass(sidenav, false); });
+        sidenav.onOpen.subscribe(function () { return _this._setContainerClass(sidenav, true); });
+        sidenav.onClose.subscribe(function () { return _this._setContainerClass(sidenav, false); });
     };
     /**
      * Subscribes to sidenav onAlignChanged event in order to re-validate drawers when the align
      * changes.
      */
-    MdSidenavLayout.prototype._watchSidenavAlign = function (sidenav) {
+    MdSidenavContainer.prototype._watchSidenavAlign = function (sidenav) {
         var _this = this;
         if (!sidenav) {
             return;
         }
         sidenav.onAlignChanged.subscribe(function () { return _this._validateDrawers(); });
     };
-    /** Toggles the 'md-sidenav-opened' class on the main 'md-sidenav-layout' element. */
-    MdSidenavLayout.prototype._setLayoutClass = function (sidenav, bool) {
+    /** Toggles the 'md-sidenav-opened' class on the main 'md-sidenav-container' element. */
+    MdSidenavContainer.prototype._setContainerClass = function (sidenav, bool) {
         this._renderer.setElementClass(this._element.nativeElement, 'md-sidenav-opened', bool);
     };
     /** Sets the valid state of the drawers. */
-    MdSidenavLayout.prototype._setDrawersValid = function (valid) {
+    MdSidenavContainer.prototype._setDrawersValid = function (valid) {
         this._sidenavs.forEach(function (sidenav) {
             sidenav.valid = valid;
         });
@@ -401,7 +438,7 @@ var MdSidenavLayout = (function () {
         }
     };
     /** Validate the state of the sidenav children components. */
-    MdSidenavLayout.prototype._validateDrawers = function () {
+    MdSidenavContainer.prototype._validateDrawers = function () {
         this._start = this._end = null;
         // Ensure that we have at most one start and one end sidenav.
         // NOTE: We must call toArray on _sidenavs even though it's iterable
@@ -435,11 +472,11 @@ var MdSidenavLayout = (function () {
         }
         this._setDrawersValid(true);
     };
-    MdSidenavLayout.prototype._onBackdropClicked = function () {
+    MdSidenavContainer.prototype._onBackdropClicked = function () {
         this.onBackdropClicked.emit();
         this._closeModalSidenav();
     };
-    MdSidenavLayout.prototype._closeModalSidenav = function () {
+    MdSidenavContainer.prototype._closeModalSidenav = function () {
         if (this._start != null && this._start.mode != 'side') {
             this._start.close();
         }
@@ -447,11 +484,11 @@ var MdSidenavLayout = (function () {
             this._end.close();
         }
     };
-    MdSidenavLayout.prototype._isShowingBackdrop = function () {
+    MdSidenavContainer.prototype._isShowingBackdrop = function () {
         return (this._isSidenavOpen(this._start) && this._start.mode != 'side')
             || (this._isSidenavOpen(this._end) && this._end.mode != 'side');
     };
-    MdSidenavLayout.prototype._isSidenavOpen = function (side) {
+    MdSidenavContainer.prototype._isSidenavOpen = function (side) {
         return side != null && side.opened;
     };
     /**
@@ -460,19 +497,19 @@ var MdSidenavLayout = (function () {
      * @param sidenav
      * @param mode
      */
-    MdSidenavLayout.prototype._getSidenavEffectiveWidth = function (sidenav, mode) {
+    MdSidenavContainer.prototype._getSidenavEffectiveWidth = function (sidenav, mode) {
         return (this._isSidenavOpen(sidenav) && sidenav.mode == mode) ? sidenav._width : 0;
     };
-    MdSidenavLayout.prototype._getMarginLeft = function () {
+    MdSidenavContainer.prototype._getMarginLeft = function () {
         return this._getSidenavEffectiveWidth(this._left, 'side');
     };
-    MdSidenavLayout.prototype._getMarginRight = function () {
+    MdSidenavContainer.prototype._getMarginRight = function () {
         return this._getSidenavEffectiveWidth(this._right, 'side');
     };
-    MdSidenavLayout.prototype._getPositionLeft = function () {
+    MdSidenavContainer.prototype._getPositionLeft = function () {
         return this._getSidenavEffectiveWidth(this._left, 'push');
     };
-    MdSidenavLayout.prototype._getPositionRight = function () {
+    MdSidenavContainer.prototype._getPositionRight = function () {
         return this._getSidenavEffectiveWidth(this._right, 'push');
     };
     /**
@@ -480,66 +517,64 @@ var MdSidenavLayout = (function () {
      * left and right, so by subtracting the right value from the left value, we should always get
      * the appropriate offset.
      */
-    MdSidenavLayout.prototype._getPositionOffset = function () {
+    MdSidenavContainer.prototype._getPositionOffset = function () {
         return this._getPositionLeft() - this._getPositionRight();
     };
     /**
      * This is using [ngStyle] rather than separate [style...] properties because [style.transform]
      * doesn't seem to work right now.
      */
-    MdSidenavLayout.prototype._getStyles = function () {
+    MdSidenavContainer.prototype._getStyles = function () {
         return {
             marginLeft: this._getMarginLeft() + "px",
             marginRight: this._getMarginRight() + "px",
             transform: "translate3d(" + this._getPositionOffset() + "px, 0, 0)"
         };
     };
-    return MdSidenavLayout;
+    __decorate([
+        ContentChildren(MdSidenav), 
+        __metadata('design:type', QueryList)
+    ], MdSidenavContainer.prototype, "_sidenavs", void 0);
+    __decorate([
+        Output('backdrop-clicked'), 
+        __metadata('design:type', Object)
+    ], MdSidenavContainer.prototype, "onBackdropClicked", void 0);
+    MdSidenavContainer = __decorate([
+        Component({selector: 'md-sidenav-container, mat-sidenav-container, md-sidenav-layout, mat-sidenav-layout',
+            // Do not use ChangeDetectionStrategy.OnPush. It does not work for this component because
+            // technically it is a sibling of MdSidenav (on the content tree) and isn't updated when MdSidenav
+            // changes its state.
+            template: "<div class=\"md-sidenav-backdrop\" (click)=\"_onBackdropClicked()\" [class.md-sidenav-shown]=\"_isShowingBackdrop()\"></div><ng-content select=\"md-sidenav, mat-sidenav\"></ng-content><div class=\"md-sidenav-content\" [ngStyle]=\"_getStyles()\"><ng-content></ng-content></div>",
+            styles: [".md-sidenav-container{position:relative;transform:translate3d(0,0,0);box-sizing:border-box;-webkit-overflow-scrolling:touch;display:block;overflow:hidden}.md-sidenav-container[fullscreen]{position:absolute;top:0;left:0;right:0;bottom:0}.md-sidenav-container[fullscreen].md-sidenav-opened{overflow:hidden}.md-sidenav-backdrop{position:absolute;top:0;left:0;right:0;bottom:0;display:block;z-index:2;visibility:hidden}.md-sidenav-backdrop.md-sidenav-shown{visibility:visible}@media screen and (-ms-high-contrast:active){.md-sidenav-backdrop{opacity:.5}}.md-sidenav-content{position:relative;transform:translate3d(0,0,0);display:block;height:100%;overflow:auto}md-sidenav{position:relative;transform:translate3d(0,0,0);display:block;position:absolute;top:0;bottom:0;z-index:3;min-width:5%;outline:0;transform:translate3d(-100%,0,0)}md-sidenav.md-sidenav-closed{visibility:hidden}md-sidenav.md-sidenav-closing{transform:translate3d(-100%,0,0)}md-sidenav.md-sidenav-opening{box-shadow:0 8px 10px -5px rgba(0,0,0,.2),0 16px 24px 2px rgba(0,0,0,.14),0 6px 30px 5px rgba(0,0,0,.12);visibility:visible;transform:translate3d(0,0,0)}md-sidenav.md-sidenav-opened{box-shadow:0 8px 10px -5px rgba(0,0,0,.2),0 16px 24px 2px rgba(0,0,0,.14),0 6px 30px 5px rgba(0,0,0,.12);transform:translate3d(0,0,0)}md-sidenav.md-sidenav-side{z-index:1}md-sidenav.md-sidenav-end{right:0;transform:translate3d(100%,0,0)}md-sidenav.md-sidenav-end.md-sidenav-closed{visibility:hidden}md-sidenav.md-sidenav-end.md-sidenav-closing{transform:translate3d(100%,0,0)}md-sidenav.md-sidenav-end.md-sidenav-opening{box-shadow:0 8px 10px -5px rgba(0,0,0,.2),0 16px 24px 2px rgba(0,0,0,.14),0 6px 30px 5px rgba(0,0,0,.12);visibility:visible;transform:translate3d(0,0,0)}md-sidenav.md-sidenav-end.md-sidenav-opened{box-shadow:0 8px 10px -5px rgba(0,0,0,.2),0 16px 24px 2px rgba(0,0,0,.14),0 6px 30px 5px rgba(0,0,0,.12);transform:translate3d(0,0,0)}[dir=rtl] md-sidenav{transform:translate3d(100%,0,0)}[dir=rtl] md-sidenav.md-sidenav-closed{visibility:hidden}[dir=rtl] md-sidenav.md-sidenav-closing{transform:translate3d(100%,0,0)}[dir=rtl] md-sidenav.md-sidenav-opening{box-shadow:0 8px 10px -5px rgba(0,0,0,.2),0 16px 24px 2px rgba(0,0,0,.14),0 6px 30px 5px rgba(0,0,0,.12);visibility:visible;transform:translate3d(0,0,0)}[dir=rtl] md-sidenav.md-sidenav-opened{box-shadow:0 8px 10px -5px rgba(0,0,0,.2),0 16px 24px 2px rgba(0,0,0,.14),0 6px 30px 5px rgba(0,0,0,.12);transform:translate3d(0,0,0)}[dir=rtl] md-sidenav.md-sidenav-end{left:0;right:auto;transform:translate3d(-100%,0,0)}[dir=rtl] md-sidenav.md-sidenav-end.md-sidenav-closed{visibility:hidden}[dir=rtl] md-sidenav.md-sidenav-end.md-sidenav-closing{transform:translate3d(-100%,0,0)}[dir=rtl] md-sidenav.md-sidenav-end.md-sidenav-opening{box-shadow:0 8px 10px -5px rgba(0,0,0,.2),0 16px 24px 2px rgba(0,0,0,.14),0 6px 30px 5px rgba(0,0,0,.12);visibility:visible;transform:translate3d(0,0,0)}[dir=rtl] md-sidenav.md-sidenav-end.md-sidenav-opened{box-shadow:0 8px 10px -5px rgba(0,0,0,.2),0 16px 24px 2px rgba(0,0,0,.14),0 6px 30px 5px rgba(0,0,0,.12);transform:translate3d(0,0,0)}.md-sidenav-focus-trap{height:100%}.md-sidenav-focus-trap>.cdk-focus-trap-content{box-sizing:border-box;height:100%;overflow-y:auto;transform:translateZ(0)}.md-sidenav-invalid{display:none}",
+"md-sidenav{transition:transform .4s cubic-bezier(.25,.8,.25,1)}.md-sidenav-content{transition:transform .4s cubic-bezier(.25,.8,.25,1)}.md-sidenav-backdrop.md-sidenav-shown{transition:background-color .4s cubic-bezier(.25,.8,.25,1)}"],
+            host: {
+                'class': 'md-sidenav-container',
+            },
+            encapsulation: ViewEncapsulation.None,
+        }),
+        __param(0, Optional()), 
+        __metadata('design:paramtypes', [Dir, ElementRef, Renderer])
+    ], MdSidenavContainer);
+    return MdSidenavContainer;
 }());
-__decorate([
-    core_1.ContentChildren(MdSidenav),
-    __metadata("design:type", core_1.QueryList)
-], MdSidenavLayout.prototype, "_sidenavs", void 0);
-__decorate([
-    core_1.Output('backdrop-clicked'),
-    __metadata("design:type", Object)
-], MdSidenavLayout.prototype, "onBackdropClicked", void 0);
-MdSidenavLayout = __decorate([
-    core_1.Component({
-        selector: 'md-sidenav-layout, mat-sidenav-layout',
-        // Do not use ChangeDetectionStrategy.OnPush. It does not work for this component because
-        // technically it is a sibling of MdSidenav (on the content tree) and isn't updated when MdSidenav
-        // changes its state.
-        template: require('./sidenav.html'),
-        styles: [
-            require('./sidenav.css').toString(),
-            require('./sidenav-transitions.css').toString(),
-        ],
-        encapsulation: core_1.ViewEncapsulation.None,
-    }),
-    __param(0, core_1.Optional()),
-    __metadata("design:paramtypes", [core_2.Dir, core_1.ElementRef,
-        core_1.Renderer])
-], MdSidenavLayout);
-exports.MdSidenavLayout = MdSidenavLayout;
-var MdSidenavModule = MdSidenavModule_1 = (function () {
+export var MdSidenavModule = (function () {
     function MdSidenavModule() {
     }
     MdSidenavModule.forRoot = function () {
         return {
-            ngModule: MdSidenavModule_1,
-            providers: [index_1.A11Y_PROVIDERS]
+            ngModule: MdSidenavModule,
+            providers: [InteractivityChecker]
         };
     };
+    MdSidenavModule = __decorate([
+        NgModule({
+            imports: [CommonModule, DefaultStyleCompatibilityModeModule, A11yModule, OverlayModule],
+            exports: [MdSidenavContainer, MdSidenav, DefaultStyleCompatibilityModeModule],
+            declarations: [MdSidenavContainer, MdSidenav],
+        }), 
+        __metadata('design:paramtypes', [])
+    ], MdSidenavModule);
     return MdSidenavModule;
 }());
-MdSidenavModule = MdSidenavModule_1 = __decorate([
-    core_1.NgModule({
-        imports: [common_1.CommonModule, core_2.DefaultStyleCompatibilityModeModule, index_1.A11yModule],
-        exports: [MdSidenavLayout, MdSidenav, core_2.DefaultStyleCompatibilityModeModule],
-        declarations: [MdSidenavLayout, MdSidenav],
-    })
-], MdSidenavModule);
-exports.MdSidenavModule = MdSidenavModule;
-var MdSidenavModule_1;
-//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/sidenav/sidenav.js.map
+
+//# sourceMappingURL=sidenav.js.map

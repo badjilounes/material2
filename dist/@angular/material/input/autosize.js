@@ -1,4 +1,3 @@
-"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,12 +7,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
+import { Directive, ElementRef, Input } from '@angular/core';
 /**
  * Directive to automatically resize a textarea to fit its content.
  */
-var MdTextareaAutosize = (function () {
+export var MdTextareaAutosize = (function () {
     function MdTextareaAutosize(_elementRef) {
         this._elementRef = _elementRef;
     }
@@ -38,7 +36,7 @@ var MdTextareaAutosize = (function () {
         this.resizeToFitContent();
     };
     /**
-     * Cache the hight of a single-row textarea.
+     * Cache the height of a single-row textarea.
      *
      * We need to know how large a single "row" of a textarea is in order to apply minRows and
      * maxRows. For the initial version, we will assume that the height of a single line in the
@@ -71,26 +69,26 @@ var MdTextareaAutosize = (function () {
         // Use the scrollHeight to know how large the textarea *would* be if fit its entire value.
         textarea.style.height = textarea.scrollHeight + "px";
     };
+    __decorate([
+        Input(), 
+        __metadata('design:type', Number)
+    ], MdTextareaAutosize.prototype, "minRows", void 0);
+    __decorate([
+        Input(), 
+        __metadata('design:type', Number)
+    ], MdTextareaAutosize.prototype, "maxRows", void 0);
+    MdTextareaAutosize = __decorate([
+        Directive({
+            selector: 'textarea[md-autosize], textarea[mat-autosize]',
+            host: {
+                '(input)': 'resizeToFitContent()',
+                '[style.min-height]': '_minHeight',
+                '[style.max-height]': '_maxHeight',
+            },
+        }), 
+        __metadata('design:paramtypes', [ElementRef])
+    ], MdTextareaAutosize);
     return MdTextareaAutosize;
 }());
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Number)
-], MdTextareaAutosize.prototype, "minRows", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Number)
-], MdTextareaAutosize.prototype, "maxRows", void 0);
-MdTextareaAutosize = __decorate([
-    core_1.Directive({
-        selector: 'textarea[md-autosize], textarea[mat-autosize]',
-        host: {
-            '(input)': 'resizeToFitContent()',
-            '[style.min-height]': '_minHeight',
-            '[style.max-height]': '_maxHeight',
-        },
-    }),
-    __metadata("design:paramtypes", [core_1.ElementRef])
-], MdTextareaAutosize);
-exports.MdTextareaAutosize = MdTextareaAutosize;
-//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/input/autosize.js.map
+
+//# sourceMappingURL=autosize.js.map

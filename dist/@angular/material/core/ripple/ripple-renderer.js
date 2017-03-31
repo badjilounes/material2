@@ -1,24 +1,21 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-/** TODO: internal */
-var ForegroundRippleState;
+/** @docs-private */
+export var ForegroundRippleState;
 (function (ForegroundRippleState) {
     ForegroundRippleState[ForegroundRippleState["NEW"] = 0] = "NEW";
     ForegroundRippleState[ForegroundRippleState["EXPANDING"] = 1] = "EXPANDING";
     ForegroundRippleState[ForegroundRippleState["FADING_OUT"] = 2] = "FADING_OUT";
-})(ForegroundRippleState = exports.ForegroundRippleState || (exports.ForegroundRippleState = {}));
+})(ForegroundRippleState || (ForegroundRippleState = {}));
 /**
  * Wrapper for a foreground ripple DOM element and its animation state.
- * TODO: internal
+ * @docs-private
  */
-var ForegroundRipple = (function () {
+export var ForegroundRipple = (function () {
     function ForegroundRipple(rippleElement) {
         this.rippleElement = rippleElement;
         this.state = ForegroundRippleState.NEW;
     }
     return ForegroundRipple;
 }());
-exports.ForegroundRipple = ForegroundRipple;
 var RIPPLE_SPEED_PX_PER_SECOND = 1000;
 var MIN_RIPPLE_FILL_TIME_SECONDS = 0.1;
 var MAX_RIPPLE_FILL_TIME_SECONDS = 0.3;
@@ -35,9 +32,9 @@ var distanceToFurthestCorner = function (x, y, rect) {
  * The constructor takes a reference to the ripple directive's host element and a map of DOM
  * event handlers to be installed on the element that triggers ripple animations.
  * This will eventually become a custom renderer once Angular support exists.
- * TODO: internal
+ * @docs-private
  */
-var RippleRenderer = (function () {
+export var RippleRenderer = (function () {
     function RippleRenderer(_elementRef, _eventHandlers, _ngZone) {
         this._eventHandlers = _eventHandlers;
         this._ngZone = _ngZone;
@@ -57,6 +54,8 @@ var RippleRenderer = (function () {
     /**
      * Installs event handlers on the given trigger element, and removes event handlers from the
      * previous trigger if needed.
+     *
+     * @param newTrigger New trigger to which to attach the ripple handlers.
      */
     RippleRenderer.prototype.setTriggerElement = function (newTrigger) {
         var _this = this;
@@ -86,6 +85,14 @@ var RippleRenderer = (function () {
      * Creates a foreground ripple and sets its animation to expand and fade in from the position
      * given by rippleOriginLeft and rippleOriginTop (or from the center of the <md-ripple>
      * bounding rect if centered is true).
+     *
+     * @param rippleOriginLeft Left origin of the ripple.
+     * @param rippleOriginTop Top origin of the ripple.
+     * @param color Ripple color.
+     * @param centered Whether the ripple should be centered.
+     * @param radius Radius of the ripple.
+     * @param speedFactor Speed at which the ripple expands towards the edges.
+     * @param transitionEndCallback Callback to be triggered when the ripple transition is done.
      */
     RippleRenderer.prototype.createForegroundRipple = function (rippleOriginLeft, rippleOriginTop, color, centered, radius, speedFactor, transitionEndCallback) {
         var _this = this;
@@ -102,8 +109,8 @@ var RippleRenderer = (function () {
         var rippleDiv = document.createElement('div');
         this._rippleElement.appendChild(rippleDiv);
         rippleDiv.classList.add('md-ripple-foreground');
-        rippleDiv.style.left = offsetX - maxRadius + "px";
-        rippleDiv.style.top = offsetY - maxRadius + "px";
+        rippleDiv.style.left = (offsetX - maxRadius) + "px";
+        rippleDiv.style.top = (offsetY - maxRadius) + "px";
         rippleDiv.style.width = 2 * maxRadius + "px";
         rippleDiv.style.height = rippleDiv.style.width;
         // If color input is not set, this will default to the background color defined in CSS.
@@ -132,18 +139,27 @@ var RippleRenderer = (function () {
             setTimeout(function () { return _this.removeRippleFromDom(ripple.rippleElement); }, rippleDuration);
         });
     };
-    /** Fades out a foreground ripple after it has fully expanded and faded in. */
+    /**
+     * Fades out a foreground ripple after it has fully expanded and faded in.
+     * @param ripple Ripple to be faded out.
+     */
     RippleRenderer.prototype.fadeOutForegroundRipple = function (ripple) {
         ripple.classList.remove('md-ripple-fade-in');
         ripple.classList.add('md-ripple-fade-out');
     };
-    /** Removes a foreground ripple from the DOM after it has faded out. */
+    /**
+     * Removes a foreground ripple from the DOM after it has faded out.
+     * @param ripple Ripple to be removed from the DOM.
+     */
     RippleRenderer.prototype.removeRippleFromDom = function (ripple) {
         if (ripple && ripple.parentElement) {
             ripple.parentElement.removeChild(ripple);
         }
     };
-    /** Fades in the ripple background. */
+    /**
+     * Fades in the ripple background.
+     * @param color New background color for the ripple.
+     */
     RippleRenderer.prototype.fadeInRippleBackground = function (color) {
         this._backgroundDiv.classList.add('md-ripple-active');
         // If color is not set, this will default to the background color defined in CSS.
@@ -157,5 +173,5 @@ var RippleRenderer = (function () {
     };
     return RippleRenderer;
 }());
-exports.RippleRenderer = RippleRenderer;
-//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/core/ripple/ripple-renderer.js.map
+
+//# sourceMappingURL=ripple-renderer.js.map

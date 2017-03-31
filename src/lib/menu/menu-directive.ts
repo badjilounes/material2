@@ -23,10 +23,11 @@ import {Subscription} from 'rxjs/Subscription';
 import {transformMenu, fadeInItems} from './menu-animations';
 
 @Component({
+  moduleId: module.id,
   selector: 'md-menu, mat-menu',
   host: {'role': 'menu'},
-  template: require('./menu.html'),
-  styles: [require('./menu.css').toString()],
+  templateUrl: 'menu.html',
+  styleUrls: ['menu.css'],
   encapsulation: ViewEncapsulation.None,
   animations: [
     transformMenu,
@@ -43,7 +44,10 @@ export class MdMenu implements AfterContentInit, MdMenuPanel, OnDestroy {
   /** Config object to be passed into the menu's ngClass */
   _classList: any = {};
 
+  /** Position of the menu in the X axis. */
   positionX: MenuPositionX = 'after';
+
+  /** Position of the menu in the Y axis. */
   positionY: MenuPositionY = 'below';
 
   @ViewChild(TemplateRef) templateRef: TemplateRef<any>;
@@ -56,7 +60,6 @@ export class MdMenu implements AfterContentInit, MdMenuPanel, OnDestroy {
     this.setPositionClasses(this.positionX, this.positionY);
   }
 
-  // TODO: internal
   ngAfterContentInit() {
     this._keyManager = new ListKeyManager(this.items).withFocusWrap();
     this._tabSubscription = this._keyManager.tabOut.subscribe(() => {
@@ -64,11 +67,9 @@ export class MdMenu implements AfterContentInit, MdMenuPanel, OnDestroy {
     });
   }
 
-  // TODO: internal
   ngOnDestroy() {
     this._tabSubscription.unsubscribe();
   }
-
 
   /**
    * This method takes classes set on the host md-menu element and applies them on the
@@ -85,12 +86,12 @@ export class MdMenu implements AfterContentInit, MdMenuPanel, OnDestroy {
     this.setPositionClasses(this.positionX, this.positionY);
   }
 
+  /** Event emitted when the menu is closed. */
   @Output() close = new EventEmitter<void>();
 
   /**
    * Focus the first item in the menu. This method is used by the menu trigger
    * to focus the first item when the menu is opened by the ENTER key.
-   * TODO: internal
    */
   focusFirstItem() {
     this._keyManager.focusFirstItem();

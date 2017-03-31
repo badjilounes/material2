@@ -1,4 +1,3 @@
-"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,10 +7,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var interactivity_checker_1 = require("./interactivity-checker");
-var boolean_property_1 = require("../coersion/boolean-property");
+import { Component, ViewEncapsulation, ViewChild, ElementRef, Input, NgZone } from '@angular/core';
+import { InteractivityChecker } from './interactivity-checker';
+import { coerceBooleanProperty } from '../coercion/boolean-property';
 /**
  * Directive for trapping focus within a region.
  *
@@ -20,7 +18,7 @@ var boolean_property_1 = require("../coersion/boolean-property");
  * Things like tabIndex > 0, flex `order`, and shadow roots can cause to two to misalign.
  * This will be replaced with a more intelligent solution before the library is considered stable.
  */
-var FocusTrap = (function () {
+export var FocusTrap = (function () {
     function FocusTrap(_checker, _ngZone) {
         this._checker = _checker;
         this._ngZone = _ngZone;
@@ -29,7 +27,7 @@ var FocusTrap = (function () {
     Object.defineProperty(FocusTrap.prototype, "disabled", {
         /** Whether the focus trap is active. */
         get: function () { return this._disabled; },
-        set: function (val) { this._disabled = boolean_property_1.coerceBooleanProperty(val); },
+        set: function (val) { this._disabled = coerceBooleanProperty(val); },
         enumerable: true,
         configurable: true
     });
@@ -53,19 +51,23 @@ var FocusTrap = (function () {
             _this.focusLastTabbableElement();
         });
     };
-    /** Focuses the first tabbable element within the focus trap region. */
+    /**
+     * Focuses the first tabbable element within the focus trap region.
+     */
     FocusTrap.prototype.focusFirstTabbableElement = function () {
         var rootElement = this.trappedContent.nativeElement;
-        var redirectToElement = rootElement.querySelector('[md-focus-start]') ||
+        var redirectToElement = rootElement.querySelector('[cdk-focus-start]') ||
             this._getFirstTabbableElement(rootElement);
         if (redirectToElement) {
             redirectToElement.focus();
         }
     };
-    /** Focuses the last tabbable element within the focus trap region. */
+    /**
+     * Focuses the last tabbable element within the focus trap region.
+     */
     FocusTrap.prototype.focusLastTabbableElement = function () {
         var rootElement = this.trappedContent.nativeElement;
-        var focusTargets = rootElement.querySelectorAll('[md-focus-end]');
+        var focusTargets = rootElement.querySelectorAll('[cdk-focus-end]');
         var redirectToElement = null;
         if (focusTargets.length) {
             redirectToElement = focusTargets[focusTargets.length - 1];
@@ -106,24 +108,22 @@ var FocusTrap = (function () {
         }
         return null;
     };
+    __decorate([
+        ViewChild('trappedContent'), 
+        __metadata('design:type', ElementRef)
+    ], FocusTrap.prototype, "trappedContent", void 0);
+    __decorate([
+        Input(), 
+        __metadata('design:type', Boolean)
+    ], FocusTrap.prototype, "disabled", null);
+    FocusTrap = __decorate([
+        Component({selector: 'cdk-focus-trap, focus-trap',
+            template: "<div *ngIf=\"!disabled\" tabindex=\"0\" (focus)=\"focusLastTabbableElement()\"></div><div #trappedContent class=\"cdk-focus-trap-content\"><ng-content></ng-content></div><div *ngIf=\"!disabled\" tabindex=\"0\" (focus)=\"focusFirstTabbableElement()\"></div>",
+            encapsulation: ViewEncapsulation.None,
+        }), 
+        __metadata('design:paramtypes', [InteractivityChecker, NgZone])
+    ], FocusTrap);
     return FocusTrap;
 }());
-__decorate([
-    core_1.ViewChild('trappedContent'),
-    __metadata("design:type", core_1.ElementRef)
-], FocusTrap.prototype, "trappedContent", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Boolean),
-    __metadata("design:paramtypes", [Boolean])
-], FocusTrap.prototype, "disabled", null);
-FocusTrap = __decorate([
-    core_1.Component({
-        selector: 'focus-trap',
-        template: require('./focus-trap.html'),
-        encapsulation: core_1.ViewEncapsulation.None,
-    }),
-    __metadata("design:paramtypes", [interactivity_checker_1.InteractivityChecker, core_1.NgZone])
-], FocusTrap);
-exports.FocusTrap = FocusTrap;
-//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/core/a11y/focus-trap.js.map
+
+//# sourceMappingURL=focus-trap.js.map

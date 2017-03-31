@@ -1,22 +1,15 @@
-"use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var grid_list_errors_1 = require("./grid-list-errors");
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+import { MdGridListBadRatioError } from './grid-list-errors';
 /**
  * Sets the style properties for an individual tile, given the position calculated by the
  * Tile Coordinator.
- * TODO: internal
+ * @docs-private
  */
-var TileStyler = (function () {
+export var TileStyler = (function () {
     function TileStyler() {
         this._rows = 0;
         this._rowspan = 0;
@@ -24,9 +17,14 @@ var TileStyler = (function () {
     /**
      * Adds grid-list layout info once it is available. Cannot be processed in the constructor
      * because these properties haven't been calculated by that point.
+     *
+     * @param gutterSize Size of the grid's gutter.
+     * @param tracker Instance of the TileCoordinator.
+     * @param cols Amount of columns in the grid.
+     * @param direction Layout direction of the grid.
      */
-    TileStyler.prototype.init = function (_gutterSize, tracker, cols, direction) {
-        this._gutterSize = normalizeUnits(_gutterSize);
+    TileStyler.prototype.init = function (gutterSize, tracker, cols, direction) {
+        this._gutterSize = normalizeUnits(gutterSize);
         this._rows = tracker.rowCount;
         this._rowspan = tracker.rowspan;
         this._cols = cols;
@@ -67,7 +65,12 @@ var TileStyler = (function () {
     TileStyler.prototype.getTileSize = function (baseSize, span) {
         return "(" + baseSize + " * " + span + ") + (" + (span - 1) + " * " + this._gutterSize + ")";
     };
-    /** Gets the style properties to be applied to a tile for the given row and column index. */
+    /**
+     * Sets the style properties to be applied to a tile for the given row and column index.
+     * @param tile Tile to which to apply the styling.
+     * @param rowIndex Index of the tile's row.
+     * @param colIndex Index of the tile's column.
+     */
     TileStyler.prototype.setStyle = function (tile, rowIndex, colIndex) {
         // Percent of the available horizontal space that one column takes up.
         var percentWidthPerTile = 100 / this._cols;
@@ -87,38 +90,43 @@ var TileStyler = (function () {
         tile._setStyle(side, this.getTilePosition(baseTileWidth, colIndex));
         tile._setStyle('width', calc(this.getTileSize(baseTileWidth, tile.colspan)));
     };
-    /** Calculates the total size taken up by gutters across one axis of a list. */
+    /**
+     * Calculates the total size taken up by gutters across one axis of a list.
+     */
     TileStyler.prototype.getGutterSpan = function () {
         return this._gutterSize + " * (" + this._rowspan + " - 1)";
     };
-    /** Calculates the total size taken up by tiles across one axis of a list. */
+    /**
+     * Calculates the total size taken up by tiles across one axis of a list.
+     * @param tileHeight Height of the tile.
+     */
     TileStyler.prototype.getTileSpan = function (tileHeight) {
         return this._rowspan + " * " + this.getTileSize(tileHeight, 1);
     };
     /**
      * Sets the vertical placement of the tile in the list.
      * This method will be implemented by each type of TileStyler.
+     * @docs-private
      */
     TileStyler.prototype.setRowStyles = function (tile, rowIndex, percentWidth, gutterWidth) { };
     /**
      * Calculates the computed height and returns the correct style property to set.
      * This method will be implemented by each type of TileStyler.
+     * @docs-private
      */
     TileStyler.prototype.getComputedHeight = function () { return null; };
     return TileStyler;
 }());
-exports.TileStyler = TileStyler;
 /**
  * This type of styler is instantiated when the user passes in a fixed row height.
  * Example <md-grid-list cols="3" rowHeight="100px">
- * TODO: internal
+ * @docs-private
  */
-var FixedTileStyler = (function (_super) {
+export var FixedTileStyler = (function (_super) {
     __extends(FixedTileStyler, _super);
     function FixedTileStyler(fixedRowHeight) {
-        var _this = _super.call(this) || this;
-        _this.fixedRowHeight = fixedRowHeight;
-        return _this;
+        _super.call(this);
+        this.fixedRowHeight = fixedRowHeight;
     }
     FixedTileStyler.prototype.init = function (gutterSize, tracker, cols, direction) {
         _super.prototype.init.call(this, gutterSize, tracker, cols, direction);
@@ -135,18 +143,16 @@ var FixedTileStyler = (function (_super) {
     };
     return FixedTileStyler;
 }(TileStyler));
-exports.FixedTileStyler = FixedTileStyler;
 /**
  * This type of styler is instantiated when the user passes in a width:height ratio
  * for the row height.  Example <md-grid-list cols="3" rowHeight="3:1">
- * TODO: internal
+ * @docs-private
  */
-var RatioTileStyler = (function (_super) {
+export var RatioTileStyler = (function (_super) {
     __extends(RatioTileStyler, _super);
     function RatioTileStyler(value) {
-        var _this = _super.call(this) || this;
-        _this._parseRatio(value);
-        return _this;
+        _super.call(this);
+        this._parseRatio(value);
     }
     RatioTileStyler.prototype.setRowStyles = function (tile, rowIndex, percentWidth, gutterWidth) {
         var percentHeightPerTile = percentWidth / this.rowHeightRatio;
@@ -165,20 +171,23 @@ var RatioTileStyler = (function (_super) {
     RatioTileStyler.prototype._parseRatio = function (value) {
         var ratioParts = value.split(':');
         if (ratioParts.length !== 2) {
-            throw new grid_list_errors_1.MdGridListBadRatioError(value);
+            throw new MdGridListBadRatioError(value);
         }
         this.rowHeightRatio = parseFloat(ratioParts[0]) / parseFloat(ratioParts[1]);
     };
     return RatioTileStyler;
 }(TileStyler));
-exports.RatioTileStyler = RatioTileStyler;
-/*  This type of styler is instantiated when the user selects a "fit" row height mode.
- *  In other words, the row height will reflect the total height of the container divided
- *  by the number of rows.  Example <md-grid-list cols="3" rowHeight="fit"> */
-var FitTileStyler = (function (_super) {
+/**
+ * This type of styler is instantiated when the user selects a "fit" row height mode.
+ * In other words, the row height will reflect the total height of the container divided
+ * by the number of rows.  Example <md-grid-list cols="3" rowHeight="fit">
+ *
+ * @docs-private
+ */
+export var FitTileStyler = (function (_super) {
     __extends(FitTileStyler, _super);
     function FitTileStyler() {
-        return _super !== null && _super.apply(this, arguments) || this;
+        _super.apply(this, arguments);
     }
     FitTileStyler.prototype.setRowStyles = function (tile, rowIndex, percentWidth, gutterWidth) {
         // Percent of the available vertical space that one row takes up.
@@ -192,11 +201,11 @@ var FitTileStyler = (function (_super) {
     };
     return FitTileStyler;
 }(TileStyler));
-exports.FitTileStyler = FitTileStyler;
 /** Wraps a CSS string in a calc function */
 function calc(exp) { return "calc(" + exp + ")"; }
 /** Appends pixels to a CSS string if no units are given. */
 function normalizeUnits(value) {
     return (value.match(/px|em|rem/)) ? value : value + 'px';
 }
-//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/grid-list/tile-styler.js.map
+
+//# sourceMappingURL=tile-styler.js.map

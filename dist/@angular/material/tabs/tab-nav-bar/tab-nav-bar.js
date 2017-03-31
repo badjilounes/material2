@@ -1,14 +1,8 @@
-"use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18,47 +12,47 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var ink_bar_1 = require("../ink-bar");
-var ripple_1 = require("../../core/ripple/ripple");
-var viewport_ruler_1 = require("../../core/overlay/position/viewport-ruler");
+import { Component, Input, ViewChild, ElementRef, ViewEncapsulation, Directive, NgZone } from '@angular/core';
+import { MdInkBar } from '../ink-bar';
+import { MdRipple } from '../../core/ripple/ripple';
+import { ViewportRuler } from '../../core/overlay/position/viewport-ruler';
 /**
  * Navigation component matching the styles of the tab group header.
  * Provides anchored navigation with animated ink bar.
  */
-var MdTabNavBar = (function () {
+export var MdTabNavBar = (function () {
     function MdTabNavBar() {
     }
     /** Animates the ink bar to the position of the active link element. */
     MdTabNavBar.prototype.updateActiveLink = function (element) {
         this._inkBar.alignToElement(element);
     };
+    __decorate([
+        ViewChild(MdInkBar), 
+        __metadata('design:type', MdInkBar)
+    ], MdTabNavBar.prototype, "_inkBar", void 0);
+    MdTabNavBar = __decorate([
+        Component({selector: '[md-tab-nav-bar], [mat-tab-nav-bar]',
+            template: "<ng-content></ng-content><md-ink-bar></md-ink-bar>",
+            styles: ["[md-tab-nav-bar]{overflow:hidden;position:relative;display:flex;flex-direction:row;flex-shrink:0}[md-tab-link]{line-height:48px;height:48px;padding:0 12px;font-size:14px;font-family:Roboto,\"Helvetica Neue\",sans-serif;font-weight:500;cursor:pointer;box-sizing:border-box;color:currentColor;opacity:.6;min-width:160px;text-align:center;text-decoration:none;position:relative;overflow:hidden}[md-tab-link]:focus{outline:0;opacity:1}@media (max-width:600px){[md-tab-link]{min-width:72px}}md-ink-bar{position:absolute;bottom:0;height:2px;transition:.5s cubic-bezier(.35,0,.25,1)}"],
+            encapsulation: ViewEncapsulation.None,
+        }), 
+        __metadata('design:paramtypes', [])
+    ], MdTabNavBar);
     return MdTabNavBar;
 }());
-__decorate([
-    core_1.ViewChild(ink_bar_1.MdInkBar),
-    __metadata("design:type", ink_bar_1.MdInkBar)
-], MdTabNavBar.prototype, "_inkBar", void 0);
-MdTabNavBar = __decorate([
-    core_1.Component({
-        selector: '[md-tab-nav-bar], [mat-tab-nav-bar]',
-        template: require('./tab-nav-bar.html'),
-        styles: [require('./tab-nav-bar.css').toString()],
-        encapsulation: core_1.ViewEncapsulation.None,
-    })
-], MdTabNavBar);
-exports.MdTabNavBar = MdTabNavBar;
-var MdTabLink = (function () {
+/**
+ * Link inside of a `md-tab-nav-bar`.
+ */
+export var MdTabLink = (function () {
     function MdTabLink(_mdTabNavBar, _element) {
         this._mdTabNavBar = _mdTabNavBar;
         this._element = _element;
         this._isActive = false;
     }
     Object.defineProperty(MdTabLink.prototype, "active", {
-        get: function () {
-            return this._isActive;
-        },
+        /** Whether the link is active. */
+        get: function () { return this._isActive; },
         set: function (value) {
             this._isActive = value;
             if (value) {
@@ -68,44 +62,42 @@ var MdTabLink = (function () {
         enumerable: true,
         configurable: true
     });
+    __decorate([
+        Input(), 
+        __metadata('design:type', Boolean)
+    ], MdTabLink.prototype, "active", null);
+    MdTabLink = __decorate([
+        Directive({
+            selector: '[md-tab-link], [mat-tab-link]',
+        }), 
+        __metadata('design:paramtypes', [MdTabNavBar, ElementRef])
+    ], MdTabLink);
     return MdTabLink;
 }());
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Boolean),
-    __metadata("design:paramtypes", [Boolean])
-], MdTabLink.prototype, "active", null);
-MdTabLink = __decorate([
-    core_1.Directive({
-        selector: '[md-tab-link], [mat-tab-link]',
-    }),
-    __metadata("design:paramtypes", [MdTabNavBar, core_1.ElementRef])
-], MdTabLink);
-exports.MdTabLink = MdTabLink;
 /**
  * Simple directive that extends the ripple and matches the selector of the MdTabLink. This
  * adds the ripple behavior to nav bar labels.
  */
-var MdTabLinkRipple = (function (_super) {
+export var MdTabLinkRipple = (function (_super) {
     __extends(MdTabLinkRipple, _super);
     function MdTabLinkRipple(_element, _ngZone, _ruler) {
-        var _this = _super.call(this, _element, _ngZone, _ruler) || this;
-        _this._element = _element;
-        _this._ngZone = _ngZone;
-        return _this;
+        _super.call(this, _element, _ngZone, _ruler);
+        this._element = _element;
+        this._ngZone = _ngZone;
     }
-    // In certain cases the parent destroy handler
-    // may not get called. See Angular issue #11606.
+    /**
+     * In certain cases the parent destroy handler may not get called. See Angular issue #11606.
+     */
     MdTabLinkRipple.prototype.ngOnDestroy = function () {
         _super.prototype.ngOnDestroy.call(this);
     };
+    MdTabLinkRipple = __decorate([
+        Directive({
+            selector: '[md-tab-link], [mat-tab-link]',
+        }), 
+        __metadata('design:paramtypes', [ElementRef, NgZone, ViewportRuler])
+    ], MdTabLinkRipple);
     return MdTabLinkRipple;
-}(ripple_1.MdRipple));
-MdTabLinkRipple = __decorate([
-    core_1.Directive({
-        selector: '[md-tab-link], [mat-tab-link]',
-    }),
-    __metadata("design:paramtypes", [core_1.ElementRef, core_1.NgZone, viewport_ruler_1.ViewportRuler])
-], MdTabLinkRipple);
-exports.MdTabLinkRipple = MdTabLinkRipple;
-//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/tabs/tab-nav-bar/tab-nav-bar.js.map
+}(MdRipple));
+
+//# sourceMappingURL=tab-nav-bar.js.map

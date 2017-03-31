@@ -1,121 +1,110 @@
-"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-}
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var line_1 = require("./line/line");
-var dir_1 = require("./rtl/dir");
-var ripple_1 = require("./ripple/ripple");
-var portal_directives_1 = require("./portal/portal-directives");
-var overlay_directives_1 = require("./overlay/overlay-directives");
-var index_1 = require("./a11y/index");
-var overlay_1 = require("./overlay/overlay");
+var __metadata = (this && this.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+import { NgModule } from '@angular/core';
+import { MdLineModule } from './line/line';
+import { RtlModule } from './rtl/dir';
+import { ObserveContentModule } from './observe-content/observe-content';
+import { MdRippleModule } from './ripple/ripple';
+import { PortalModule } from './portal/portal-directives';
+import { OverlayModule } from './overlay/overlay-directives';
+import { A11yModule, A11Y_PROVIDERS } from './a11y/index';
+import { OVERLAY_PROVIDERS } from './overlay/overlay';
 // RTL
-var dir_2 = require("./rtl/dir");
-exports.Dir = dir_2.Dir;
-exports.RtlModule = dir_2.RtlModule;
+export { Dir, RtlModule } from './rtl/dir';
+// Mutation Observer
+export { ObserveContentModule, ObserveContent } from './observe-content/observe-content';
 // Portals
-var portal_1 = require("./portal/portal");
-exports.Portal = portal_1.Portal;
-exports.BasePortalHost = portal_1.BasePortalHost;
-exports.ComponentPortal = portal_1.ComponentPortal;
-exports.TemplatePortal = portal_1.TemplatePortal;
-var portal_directives_2 = require("./portal/portal-directives");
-exports.PortalHostDirective = portal_directives_2.PortalHostDirective;
-exports.TemplatePortalDirective = portal_directives_2.TemplatePortalDirective;
-exports.PortalModule = portal_directives_2.PortalModule;
-var dom_portal_host_1 = require("./portal/dom-portal-host");
-exports.DomPortalHost = dom_portal_host_1.DomPortalHost;
+export { Portal, BasePortalHost, ComponentPortal, TemplatePortal } from './portal/portal';
+export { PortalHostDirective, TemplatePortalDirective, PortalModule } from './portal/portal-directives';
+export { DomPortalHost } from './portal/dom-portal-host';
 // Projection
-__export(require("./projection/projection"));
+export * from './projection/projection';
 // Platform
-__export(require("./platform/platform"));
+export * from './platform/index';
+/** @deprecated */
+export { Platform as MdPlatform } from './platform/platform';
 // Overlay
-var overlay_2 = require("./overlay/overlay");
-exports.Overlay = overlay_2.Overlay;
-exports.OVERLAY_PROVIDERS = overlay_2.OVERLAY_PROVIDERS;
-var overlay_container_1 = require("./overlay/overlay-container");
-exports.OverlayContainer = overlay_container_1.OverlayContainer;
-var overlay_ref_1 = require("./overlay/overlay-ref");
-exports.OverlayRef = overlay_ref_1.OverlayRef;
-var overlay_state_1 = require("./overlay/overlay-state");
-exports.OverlayState = overlay_state_1.OverlayState;
-var overlay_directives_2 = require("./overlay/overlay-directives");
-exports.ConnectedOverlayDirective = overlay_directives_2.ConnectedOverlayDirective;
-exports.OverlayOrigin = overlay_directives_2.OverlayOrigin;
-exports.OverlayModule = overlay_directives_2.OverlayModule;
-__export(require("./overlay/position/connected-position-strategy"));
-__export(require("./overlay/position/connected-position"));
+export { Overlay, OVERLAY_PROVIDERS } from './overlay/overlay';
+export { OverlayContainer } from './overlay/overlay-container';
+export { OverlayRef } from './overlay/overlay-ref';
+export { OverlayState } from './overlay/overlay-state';
+export { ConnectedOverlayDirective, OverlayOrigin, OverlayModule } from './overlay/overlay-directives';
+export * from './overlay/position/connected-position-strategy';
+export * from './overlay/position/connected-position';
+export { ScrollDispatcher } from './overlay/scroll/scroll-dispatcher';
 // Gestures
-var MdGestureConfig_1 = require("./gestures/MdGestureConfig");
-exports.MdGestureConfig = MdGestureConfig_1.MdGestureConfig;
+export { GestureConfig } from './gestures/gesture-config';
+export * from './gestures/gesture-annotations';
 // Ripple
-var ripple_2 = require("./ripple/ripple");
-exports.MdRipple = ripple_2.MdRipple;
-exports.MdRippleModule = ripple_2.MdRippleModule;
+export { MdRipple, MdRippleModule } from './ripple/ripple';
 // a11y
-var live_announcer_1 = require("./a11y/live-announcer");
-exports.MdLiveAnnouncer = live_announcer_1.MdLiveAnnouncer;
-exports.LIVE_ANNOUNCER_ELEMENT_TOKEN = live_announcer_1.LIVE_ANNOUNCER_ELEMENT_TOKEN;
-var focus_trap_1 = require("./a11y/focus-trap");
-exports.FocusTrap = focus_trap_1.FocusTrap;
-var interactivity_checker_1 = require("./a11y/interactivity-checker");
-exports.InteractivityChecker = interactivity_checker_1.InteractivityChecker;
-var fake_mousedown_1 = require("./a11y/fake-mousedown");
-exports.isFakeMousedownFromScreenReader = fake_mousedown_1.isFakeMousedownFromScreenReader;
-var index_2 = require("./a11y/index");
-exports.A11yModule = index_2.A11yModule;
-var unique_selection_dispatcher_1 = require("./coordination/unique-selection-dispatcher");
-exports.MdUniqueSelectionDispatcher = unique_selection_dispatcher_1.MdUniqueSelectionDispatcher;
-var line_2 = require("./line/line");
-exports.MdLineModule = line_2.MdLineModule;
-exports.MdLine = line_2.MdLine;
-exports.MdLineSetter = line_2.MdLineSetter;
+export { LiveAnnouncer, LIVE_ANNOUNCER_ELEMENT_TOKEN } from './a11y/live-announcer';
+/** @deprecated */
+export { LiveAnnouncer as MdLiveAnnouncer } from './a11y/live-announcer';
+export { FocusTrap } from './a11y/focus-trap';
+export { InteractivityChecker } from './a11y/interactivity-checker';
+export { isFakeMousedownFromScreenReader } from './a11y/fake-mousedown';
+export { A11yModule } from './a11y/index';
+export { UniqueSelectionDispatcher } from './coordination/unique-selection-dispatcher';
+/** @deprecated */
+export { UniqueSelectionDispatcher as MdUniqueSelectionDispatcher } from './coordination/unique-selection-dispatcher';
+export { MdLineModule, MdLine, MdLineSetter } from './line/line';
 // Style
-var apply_transform_1 = require("./style/apply-transform");
-exports.applyCssTransform = apply_transform_1.applyCssTransform;
+export { applyCssTransform } from './style/apply-transform';
 // Error
-var error_1 = require("./errors/error");
-exports.MdError = error_1.MdError;
+export { MdError } from './errors/error';
+// Misc
 // Keybindings
-__export(require("./keyboard/keycodes"));
-__export(require("./compatibility/default-mode"));
+export * from './keyboard/keycodes';
+export * from './compatibility/default-mode';
 // Animation
-__export(require("./animation/animation"));
+export * from './animation/animation';
 // Coersion
-var boolean_property_1 = require("./coersion/boolean-property");
-exports.coerceBooleanProperty = boolean_property_1.coerceBooleanProperty;
-var number_property_1 = require("./coersion/number-property");
-exports.coerceNumberProperty = number_property_1.coerceNumberProperty;
+export { coerceBooleanProperty } from './coercion/boolean-property';
+export { coerceNumberProperty } from './coercion/number-property';
 // Compatibility
-var default_mode_1 = require("./compatibility/default-mode");
-exports.DefaultStyleCompatibilityModeModule = default_mode_1.DefaultStyleCompatibilityModeModule;
-var no_conflict_mode_1 = require("./compatibility/no-conflict-mode");
-exports.NoConflictStyleCompatibilityMode = no_conflict_mode_1.NoConflictStyleCompatibilityMode;
-var MdCoreModule = MdCoreModule_1 = (function () {
+export { DefaultStyleCompatibilityModeModule } from './compatibility/default-mode';
+export { NoConflictStyleCompatibilityMode } from './compatibility/no-conflict-mode';
+export var MdCoreModule = (function () {
     function MdCoreModule() {
     }
     MdCoreModule.forRoot = function () {
         return {
-            ngModule: MdCoreModule_1,
-            providers: [index_1.A11Y_PROVIDERS, overlay_1.OVERLAY_PROVIDERS],
+            ngModule: MdCoreModule,
+            providers: [A11Y_PROVIDERS, OVERLAY_PROVIDERS],
         };
     };
+    MdCoreModule = __decorate([
+        NgModule({
+            imports: [
+                MdLineModule,
+                RtlModule,
+                MdRippleModule,
+                ObserveContentModule,
+                PortalModule,
+                OverlayModule,
+                A11yModule,
+            ],
+            exports: [
+                MdLineModule,
+                RtlModule,
+                MdRippleModule,
+                ObserveContentModule,
+                PortalModule,
+                OverlayModule,
+                A11yModule,
+            ],
+        }), 
+        __metadata('design:paramtypes', [])
+    ], MdCoreModule);
     return MdCoreModule;
 }());
-MdCoreModule = MdCoreModule_1 = __decorate([
-    core_1.NgModule({
-        imports: [line_1.MdLineModule, dir_1.RtlModule, ripple_1.MdRippleModule, portal_directives_1.PortalModule, overlay_directives_1.OverlayModule, index_1.A11yModule],
-        exports: [line_1.MdLineModule, dir_1.RtlModule, ripple_1.MdRippleModule, portal_directives_1.PortalModule, overlay_directives_1.OverlayModule, index_1.A11yModule],
-    })
-], MdCoreModule);
-exports.MdCoreModule = MdCoreModule;
-var MdCoreModule_1;
-//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/core/core.js.map
+
+//# sourceMappingURL=core.js.map

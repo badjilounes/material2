@@ -1,4 +1,3 @@
-"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,26 +7,26 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var core_2 = require("../core");
-var MdToolbarRow = (function () {
+import { NgModule, Component, ChangeDetectionStrategy, Input, ViewEncapsulation, Directive, ElementRef, Renderer } from '@angular/core';
+import { DefaultStyleCompatibilityModeModule } from '../core';
+export var MdToolbarRow = (function () {
     function MdToolbarRow() {
     }
+    MdToolbarRow = __decorate([
+        Directive({
+            selector: 'md-toolbar-row, mat-toolbar-row'
+        }), 
+        __metadata('design:paramtypes', [])
+    ], MdToolbarRow);
     return MdToolbarRow;
 }());
-MdToolbarRow = __decorate([
-    core_1.Directive({
-        selector: 'md-toolbar-row, mat-toolbar-row'
-    })
-], MdToolbarRow);
-exports.MdToolbarRow = MdToolbarRow;
-var MdToolbar = (function () {
+export var MdToolbar = (function () {
     function MdToolbar(elementRef, renderer) {
         this.elementRef = elementRef;
         this.renderer = renderer;
     }
     Object.defineProperty(MdToolbar.prototype, "color", {
+        /** The color of the toolbar. Can be primary, accent, or warn. */
         get: function () {
             return this._color;
         },
@@ -47,42 +46,39 @@ var MdToolbar = (function () {
             this.renderer.setElementClass(this.elementRef.nativeElement, "md-" + color, isAdd);
         }
     };
+    __decorate([
+        Input(), 
+        __metadata('design:type', String)
+    ], MdToolbar.prototype, "color", null);
+    MdToolbar = __decorate([
+        Component({selector: 'md-toolbar, mat-toolbar',
+            template: "<div class=\"md-toolbar-layout\"><md-toolbar-row><ng-content></ng-content></md-toolbar-row><ng-content select=\"md-toolbar-row, mat-toolbar-row\"></ng-content></div>",
+            styles: ["md-toolbar{display:flex;box-sizing:border-box;width:100%;font-size:20px;font-weight:400;font-family:Roboto,\"Helvetica Neue\",sans-serif;padding:0 16px;flex-direction:column}md-toolbar md-toolbar-row{display:flex;box-sizing:border-box;width:100%;flex-direction:row;align-items:center}md-toolbar{min-height:64px}md-toolbar-row{height:64px}@media (max-width:600px) and (orientation:portrait){md-toolbar{min-height:56px}md-toolbar-row{height:56px}}@media (max-width:960px) and (orientation:landscape){md-toolbar{min-height:48px}md-toolbar-row{height:48px}}"],
+            changeDetection: ChangeDetectionStrategy.OnPush,
+            encapsulation: ViewEncapsulation.None
+        }), 
+        __metadata('design:paramtypes', [ElementRef, Renderer])
+    ], MdToolbar);
     return MdToolbar;
 }());
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String),
-    __metadata("design:paramtypes", [String])
-], MdToolbar.prototype, "color", null);
-MdToolbar = __decorate([
-    core_1.Component({
-        selector: 'md-toolbar, mat-toolbar',
-        template: require('./toolbar.html').toString(),
-        styles: [require('./toolbar.css').toString()],
-        changeDetection: core_1.ChangeDetectionStrategy.OnPush,
-        encapsulation: core_1.ViewEncapsulation.None
-    }),
-    __metadata("design:paramtypes", [core_1.ElementRef, core_1.Renderer])
-], MdToolbar);
-exports.MdToolbar = MdToolbar;
-var MdToolbarModule = MdToolbarModule_1 = (function () {
+export var MdToolbarModule = (function () {
     function MdToolbarModule() {
     }
     MdToolbarModule.forRoot = function () {
         return {
-            ngModule: MdToolbarModule_1,
+            ngModule: MdToolbarModule,
             providers: []
         };
     };
+    MdToolbarModule = __decorate([
+        NgModule({
+            imports: [DefaultStyleCompatibilityModeModule],
+            exports: [MdToolbar, MdToolbarRow, DefaultStyleCompatibilityModeModule],
+            declarations: [MdToolbar, MdToolbarRow],
+        }), 
+        __metadata('design:paramtypes', [])
+    ], MdToolbarModule);
     return MdToolbarModule;
 }());
-MdToolbarModule = MdToolbarModule_1 = __decorate([
-    core_1.NgModule({
-        imports: [core_2.DefaultStyleCompatibilityModeModule],
-        exports: [MdToolbar, MdToolbarRow, core_2.DefaultStyleCompatibilityModeModule],
-        declarations: [MdToolbar, MdToolbarRow],
-    })
-], MdToolbarModule);
-exports.MdToolbarModule = MdToolbarModule;
-var MdToolbarModule_1;
-//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/toolbar/toolbar.js.map
+
+//# sourceMappingURL=toolbar.js.map

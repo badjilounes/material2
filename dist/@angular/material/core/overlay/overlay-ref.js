@@ -1,18 +1,16 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var Subject_1 = require("rxjs/Subject");
+import { Subject } from 'rxjs/Subject';
 /**
  * Reference to an overlay that has been created with the Overlay service.
  * Used to manipulate or dispose of said overlay.
  */
-var OverlayRef = (function () {
+export var OverlayRef = (function () {
     function OverlayRef(_portalHost, _pane, _state, _ngZone) {
         this._portalHost = _portalHost;
         this._pane = _pane;
         this._state = _state;
         this._ngZone = _ngZone;
         this._backdropElement = null;
-        this._backdropClick = new Subject_1.Subject();
+        this._backdropClick = new Subject();
     }
     Object.defineProperty(OverlayRef.prototype, "overlayElement", {
         /** The overlay's HTML element */
@@ -22,6 +20,11 @@ var OverlayRef = (function () {
         enumerable: true,
         configurable: true
     });
+    /**
+     * Attaches the overlay to a portal instance and adds the backdrop.
+     * @param portal Portal instance to which to attach the overlay.
+     * @returns The portal attachment result.
+     */
     OverlayRef.prototype.attach = function (portal) {
         if (this._state.hasBackdrop) {
             this._attachBackdrop();
@@ -32,10 +35,17 @@ var OverlayRef = (function () {
         this.updatePosition();
         return attachResult;
     };
+    /**
+     * Detaches an overlay from a portal.
+     * @returns Resolves when the overlay has been detached.
+     */
     OverlayRef.prototype.detach = function () {
         this._detachBackdrop();
         return this._portalHost.detach();
     };
+    /**
+     * Cleans up the overlay from the DOM.
+     */
     OverlayRef.prototype.dispose = function () {
         if (this._state.positionStrategy) {
             this._state.positionStrategy.dispose();
@@ -43,13 +53,21 @@ var OverlayRef = (function () {
         this._detachBackdrop();
         this._portalHost.dispose();
     };
+    /**
+     * Checks whether the overlay has been attached.
+     */
     OverlayRef.prototype.hasAttached = function () {
         return this._portalHost.hasAttached();
     };
+    /**
+     * Returns an observable that emits when the backdrop has been clicked.
+     */
     OverlayRef.prototype.backdropClick = function () {
         return this._backdropClick.asObservable();
     };
-    /** Gets the current state config of the overlay. */
+    /**
+     * Gets the current state config of the overlay.
+     */
     OverlayRef.prototype.getState = function () {
         return this._state;
     };
@@ -82,18 +100,18 @@ var OverlayRef = (function () {
     OverlayRef.prototype._attachBackdrop = function () {
         var _this = this;
         this._backdropElement = document.createElement('div');
-        this._backdropElement.classList.add('md-overlay-backdrop');
+        this._backdropElement.classList.add('cdk-overlay-backdrop');
         this._backdropElement.classList.add(this._state.backdropClass);
-        this._pane.parentElement.appendChild(this._backdropElement);
+        // Insert the backdrop before the pane in the DOM order,
+        // in order to handle stacked overlays properly.
+        this._pane.parentElement.insertBefore(this._backdropElement, this._pane);
         // Forward backdrop clicks such that the consumer of the overlay can perform whatever
         // action desired when such a click occurs (usually closing the overlay).
-        this._backdropElement.addEventListener('click', function () {
-            _this._backdropClick.next(null);
-        });
+        this._backdropElement.addEventListener('click', function () { return _this._backdropClick.next(null); });
         // Add class to fade-in the backdrop after one frame.
         requestAnimationFrame(function () {
             if (_this._backdropElement) {
-                _this._backdropElement.classList.add('md-overlay-backdrop-showing');
+                _this._backdropElement.classList.add('cdk-overlay-backdrop-showing');
             }
         });
     };
@@ -114,7 +132,7 @@ var OverlayRef = (function () {
                     _this._backdropElement = null;
                 }
             };
-            backdropToDetach.classList.remove('md-overlay-backdrop-showing');
+            backdropToDetach.classList.remove('cdk-overlay-backdrop-showing');
             backdropToDetach.classList.remove(this._state.backdropClass);
             backdropToDetach.addEventListener('transitionend', finishDetach_1);
             // If the backdrop doesn't have a transition, the `transitionend` event won't fire.
@@ -130,8 +148,8 @@ var OverlayRef = (function () {
     };
     return OverlayRef;
 }());
-exports.OverlayRef = OverlayRef;
 function formatCssUnit(value) {
     return typeof value === 'string' ? value : value + "px";
 }
-//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/core/overlay/overlay-ref.js.map
+
+//# sourceMappingURL=overlay-ref.js.map

@@ -15,7 +15,7 @@ import {CheckboxDemo} from '../checkbox/checkbox-demo';
 import {OverlayDemo} from '../overlay/overlay-demo';
 import {PortalDemo} from '../portal/portal-demo';
 import {ProgressBarDemo} from '../progress-bar/progress-bar-demo';
-import {ProgressCircleDemo} from '../progress-circle/progress-circle-demo';
+import {ProgressSpinnerDemo} from '../progress-spinner/progress-spinner-demo';
 import {SelectDemo} from '../select/select-demo';
 import {SidenavDemo} from '../sidenav/sidenav-demo';
 import {SlideToggleDemo} from '../slide-toggle/slide-toggle-demo';
@@ -32,6 +32,7 @@ import {ProjectionDemo} from '../projection/projection-demo';
 import {TABS_DEMO_ROUTES} from '../tabs/routes';
 import {PlatformDemo} from '../platform/platform-demo';
 import {AutocompleteDemo} from '../autocomplete/autocomplete-demo';
+import {InputContainerDemo} from '../input/input-container-demo';
 
 export const DEMO_APP_ROUTES: Routes = [
   {path: '', component: Home},
@@ -44,13 +45,14 @@ export const DEMO_APP_ROUTES: Routes = [
   {path: 'sidenav', component: SidenavDemo},
   {path: 'slide-toggle', component: SlideToggleDemo},
   {path: 'slider', component: SliderDemo},
-  {path: 'progress-circle', component: ProgressCircleDemo},
+  {path: 'progress-spinner', component: ProgressSpinnerDemo},
   {path: 'progress-bar', component: ProgressBarDemo},
   {path: 'portal', component: PortalDemo},
   {path: 'projection', component: ProjectionDemo},
   {path: 'overlay', component: OverlayDemo},
   {path: 'checkbox', component: CheckboxDemo},
   {path: 'input', component: InputDemo},
+  {path: 'input-container', component: InputContainerDemo},
   {path: 'toolbar', component: ToolbarDemo},
   {path: 'icon', component: IconDemo},
   {path: 'list', component: ListDemo},

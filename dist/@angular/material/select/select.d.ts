@@ -11,31 +11,31 @@ import { ViewportRuler } from '../core/overlay/position/viewport-ruler';
  * the trigger element.
  */
 /** The fixed height of every option element. */
-export declare const SELECT_OPTION_HEIGHT = 48;
+export declare const SELECT_OPTION_HEIGHT: number;
 /** The max height of the select's overlay panel */
-export declare const SELECT_PANEL_MAX_HEIGHT = 256;
+export declare const SELECT_PANEL_MAX_HEIGHT: number;
 /** The max number of options visible at once in the select panel. */
-export declare const SELECT_MAX_OPTIONS_DISPLAYED = 5;
+export declare const SELECT_MAX_OPTIONS_DISPLAYED: number;
 /** The fixed height of the select's trigger element. */
-export declare const SELECT_TRIGGER_HEIGHT = 30;
+export declare const SELECT_TRIGGER_HEIGHT: number;
 /**
  * Must adjust for the difference in height between the option and the trigger,
  * so the text will align on the y axis.
  * (SELECT_OPTION_HEIGHT (48) - SELECT_TRIGGER_HEIGHT (30)) / 2 = 9
  */
-export declare const SELECT_OPTION_HEIGHT_ADJUSTMENT = 9;
+export declare const SELECT_OPTION_HEIGHT_ADJUSTMENT: number;
 /** The panel's padding on the x-axis */
-export declare const SELECT_PANEL_PADDING_X = 16;
+export declare const SELECT_PANEL_PADDING_X: number;
 /**
  * The panel's padding on the y-axis. This padding indicates there are more
  * options available if you scroll.
  */
-export declare const SELECT_PANEL_PADDING_Y = 16;
+export declare const SELECT_PANEL_PADDING_Y: number;
 /**
  * The select panel will only "fit" inside the viewport if it is positioned at
  * this value or more away from the viewport boundary.
  */
-export declare const SELECT_PANEL_VIEWPORT_PADDING = 8;
+export declare const SELECT_PANEL_VIEWPORT_PADDING: number;
 export declare class MdSelect implements AfterContentInit, ControlValueAccessor, OnDestroy {
     private _element;
     private _renderer;
@@ -106,13 +106,21 @@ export declare class MdSelect implements AfterContentInit, ControlValueAccessor,
         overlayX: string;
         overlayY: string;
     }[];
+    /** Trigger that opens the select. */
     trigger: ElementRef;
+    /** Overlay pane containing the options. */
     overlayDir: ConnectedOverlayDirective;
+    /** All of the defined select options. */
     options: QueryList<MdOption>;
+    /** Placeholder to be shown if no value has been selected. */
     placeholder: string;
+    /** Whether the component is disabled. */
     disabled: any;
+    /** Whether the component is required. */
     required: any;
+    /** Event emitted when the select has been opened. */
     onOpen: EventEmitter<{}>;
+    /** Event emitted when the select has been closed. */
     onClose: EventEmitter<{}>;
     constructor(_element: ElementRef, _renderer: Renderer, _viewportRuler: ViewportRuler, _dir: Dir, _control: NgControl);
     ngAfterContentInit(): void;
@@ -126,23 +134,31 @@ export declare class MdSelect implements AfterContentInit, ControlValueAccessor,
     /**
      * Sets the select's value. Part of the ControlValueAccessor interface
      * required to integrate with Angular's core forms API.
+     *
+     * @param value New value to be written to the model.
      */
     writeValue(value: any): void;
     /**
      * Saves a callback function to be invoked when the select's value
      * changes from user input. Part of the ControlValueAccessor interface
      * required to integrate with Angular's core forms API.
+     *
+     * @param fn Callback to be triggered when the value changes.
      */
     registerOnChange(fn: (value: any) => void): void;
     /**
      * Saves a callback function to be invoked when the select is blurred
      * by the user. Part of the ControlValueAccessor interface required
      * to integrate with Angular's core forms API.
+     *
+     * @param fn Callback to be triggered when the component has been touched.
      */
     registerOnTouched(fn: () => {}): void;
     /**
      * Disables the select. Part of the ControlValueAccessor interface required
      * to integrate with Angular's core forms API.
+     *
+     * @param isDisabled Sets whether the component is disabled.
      */
     setDisabledState(isDisabled: boolean): void;
     /** Whether or not the overlay panel is open. */
@@ -167,13 +183,20 @@ export declare class MdSelect implements AfterContentInit, ControlValueAccessor,
      */
     _onBlur(): void;
     /** Returns the correct tabindex for the select depending on disabled state. */
-    _getTabIndex(): "-1" | "0";
+    _getTabIndex(): string;
     /**
      * Sets the scroll position of the scroll container. This must be called after
      * the overlay pane is attached or the scroll container element will not yet be
      * present in the DOM.
      */
     _setScrollTop(): void;
+    /**
+     * Sets the selected option based on a value. If no option can be
+     * found with the designated value, the select trigger is cleared.
+     */
+    private _setSelectionByValue(value);
+    /** Clears the select trigger and deselects every option in the list. */
+    private _clearSelection();
     private _getTriggerRect();
     /** Sets up a key manager to listen to keyboard events on the overlay panel. */
     private _initKeyManager();

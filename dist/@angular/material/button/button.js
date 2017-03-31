@@ -1,14 +1,8 @@
-"use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18,14 +12,16 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var common_1 = require("@angular/common");
-var core_2 = require("../core");
-var viewport_ruler_1 = require("../core/overlay/position/viewport-ruler");
+import { Component, ViewEncapsulation, Input, HostBinding, ChangeDetectionStrategy, ElementRef, Renderer, NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { MdRippleModule, coerceBooleanProperty, DefaultStyleCompatibilityModeModule } from '../core';
+import { ViewportRuler } from '../core/overlay/position/viewport-ruler';
 // TODO(jelbourn): Make the `isMouseDown` stuff done with one global listener.
 // TODO(kara): Convert attribute selectors to classes when attr maps become available
-var MdButton = (function () {
+/**
+ * Material design button.
+ */
+export var MdButton = (function () {
     function MdButton(_elementRef, _renderer) {
         this._elementRef = _elementRef;
         this._renderer = _renderer;
@@ -38,24 +34,23 @@ var MdButton = (function () {
         this._disabled = null;
     }
     Object.defineProperty(MdButton.prototype, "disableRipple", {
+        /** Whether the ripple effect for this button is disabled. */
         get: function () { return this._disableRipple; },
-        set: function (v) { this._disableRipple = core_2.coerceBooleanProperty(v); },
+        set: function (v) { this._disableRipple = coerceBooleanProperty(v); },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(MdButton.prototype, "disabled", {
+        /** Whether the button is disabled. */
         get: function () { return this._disabled; },
-        set: function (value) { this._disabled = core_2.coerceBooleanProperty(value) ? true : null; },
+        set: function (value) { this._disabled = coerceBooleanProperty(value) ? true : null; },
         enumerable: true,
         configurable: true
     });
     Object.defineProperty(MdButton.prototype, "color", {
-        get: function () {
-            return this._color;
-        },
-        set: function (value) {
-            this._updateColor(value);
-        },
+        /** The color of the button. Can be `primary`, `accent`, or `warn`. */
+        get: function () { return this._color; },
+        set: function (value) { this._updateColor(value); },
         enumerable: true,
         configurable: true
     });
@@ -84,14 +79,14 @@ var MdButton = (function () {
     MdButton.prototype._removeKeyboardFocus = function () {
         this._isKeyboardFocused = false;
     };
-    /** TODO(hansl): e2e test this function. */
+    /** Focuses the button. */
     MdButton.prototype.focus = function () {
         this._renderer.invokeElementMethod(this._elementRef.nativeElement, 'focus');
     };
-    MdButton.prototype.getHostElement = function () {
+    MdButton.prototype._getHostElement = function () {
         return this._elementRef.nativeElement;
     };
-    MdButton.prototype.isRoundButton = function () {
+    MdButton.prototype._isRoundButton = function () {
         var el = this._elementRef.nativeElement;
         return el.hasAttribute('md-icon-button') ||
             el.hasAttribute('md-fab') ||
@@ -100,56 +95,54 @@ var MdButton = (function () {
     MdButton.prototype._isRippleDisabled = function () {
         return this.disableRipple || this.disabled;
     };
+    __decorate([
+        Input(), 
+        __metadata('design:type', Object)
+    ], MdButton.prototype, "disableRipple", null);
+    __decorate([
+        Input(), 
+        __metadata('design:type', Object)
+    ], MdButton.prototype, "disabled", null);
+    __decorate([
+        Input(), 
+        __metadata('design:type', String)
+    ], MdButton.prototype, "color", null);
+    MdButton = __decorate([
+        Component({selector: 'button[md-button], button[md-raised-button], button[md-icon-button], ' +
+                'button[md-fab], button[md-mini-fab]',
+            host: {
+                '[disabled]': 'disabled',
+                '[class.md-button-focus]': '_isKeyboardFocused',
+                '(mousedown)': '_setMousedown()',
+                '(focus)': '_setKeyboardFocus()',
+                '(blur)': '_removeKeyboardFocus()',
+            },
+            template: "<span class=\"md-button-wrapper\"><ng-content></ng-content></span><div md-ripple *ngIf=\"!_isRippleDisabled()\" class=\"md-button-ripple\" [class.md-button-ripple-round]=\"_isRoundButton()\" [mdRippleTrigger]=\"_getHostElement()\" [mdRippleColor]=\"_isRoundButton() ? 'rgba(255, 255, 255, 0.2)' : ''\" mdRippleBackgroundColor=\"rgba(0, 0, 0, 0)\"></div><div class=\"md-button-focus-overlay\" (touchstart)=\"$event.preventDefault()\"></div>",
+            styles: ["[md-button],[md-fab],[md-icon-button],[md-mini-fab],[md-raised-button]{box-sizing:border-box;position:relative;cursor:pointer;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;outline:0;border:none;display:inline-block;white-space:nowrap;text-decoration:none;vertical-align:baseline;font-size:14px;font-family:Roboto,\"Helvetica Neue\",sans-serif;font-weight:500;color:currentColor;text-align:center;margin:0;min-width:88px;line-height:36px;padding:0 16px;border-radius:2px}[disabled][md-button],[disabled][md-fab],[disabled][md-icon-button],[disabled][md-mini-fab],[disabled][md-raised-button]{cursor:default}.md-button-focus[md-button] .md-button-focus-overlay,.md-button-focus[md-fab] .md-button-focus-overlay,.md-button-focus[md-icon-button] .md-button-focus-overlay,.md-button-focus[md-mini-fab] .md-button-focus-overlay,.md-button-focus[md-raised-button] .md-button-focus-overlay{opacity:1}[md-fab],[md-mini-fab],[md-raised-button]{box-shadow:0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12);transform:translate3d(0,0,0);transition:background .4s cubic-bezier(.25,.8,.25,1),box-shadow 280ms cubic-bezier(.4,0,.2,1)}[md-fab]:active,[md-mini-fab]:active,[md-raised-button]:active{box-shadow:0 5px 5px -3px rgba(0,0,0,.2),0 8px 10px 1px rgba(0,0,0,.14),0 3px 14px 2px rgba(0,0,0,.12)}[disabled][md-fab],[disabled][md-mini-fab],[disabled][md-raised-button]{box-shadow:none}[md-button]:hover .md-button-focus-overlay,[md-icon-button]:hover .md-button-focus-overlay{opacity:1}[md-button][disabled]:hover .md-button-focus-overlay,[md-button][disabled]:hover.md-accent,[md-button][disabled]:hover.md-primary,[md-button][disabled]:hover.md-warn,[md-icon-button][disabled]:hover .md-button-focus-overlay,[md-icon-button][disabled]:hover.md-accent,[md-icon-button][disabled]:hover.md-primary,[md-icon-button][disabled]:hover.md-warn{background-color:transparent}[md-fab]{box-shadow:0 3px 5px -1px rgba(0,0,0,.2),0 6px 10px 0 rgba(0,0,0,.14),0 1px 18px 0 rgba(0,0,0,.12);min-width:0;border-radius:50%;width:56px;height:56px;padding:0;flex-shrink:0}[md-fab]:active{box-shadow:0 7px 8px -4px rgba(0,0,0,.2),0 12px 17px 2px rgba(0,0,0,.14),0 5px 22px 4px rgba(0,0,0,.12)}[md-fab] i,[md-fab] md-icon{padding:16px 0;line-height:24px}[md-mini-fab]{box-shadow:0 3px 5px -1px rgba(0,0,0,.2),0 6px 10px 0 rgba(0,0,0,.14),0 1px 18px 0 rgba(0,0,0,.12);min-width:0;border-radius:50%;width:40px;height:40px;padding:0;flex-shrink:0}[md-mini-fab]:active{box-shadow:0 7px 8px -4px rgba(0,0,0,.2),0 12px 17px 2px rgba(0,0,0,.14),0 5px 22px 4px rgba(0,0,0,.12)}[md-mini-fab] i,[md-mini-fab] md-icon{padding:8px 0;line-height:24px}[md-icon-button]{padding:0;min-width:0;width:40px;height:40px;flex-shrink:0;line-height:40px;border-radius:50%}[md-icon-button] i,[md-icon-button] md-icon{line-height:24px}[md-button] .md-button-wrapper>*,[md-icon-button] .md-button-wrapper>*,[md-raised-button] .md-button-wrapper>*{vertical-align:middle}.md-button-focus-overlay,.md-button-ripple{position:absolute;top:0;left:0;bottom:0;right:0}.md-button-focus-overlay{background-color:rgba(0,0,0,.12);border-radius:inherit;pointer-events:none;opacity:0}@media screen and (-ms-high-contrast:active){.md-button-focus-overlay{background-color:rgba(255,255,255,.5)}}.md-button-ripple-round{border-radius:50%;z-index:1}@media screen and (-ms-high-contrast:active){[md-button],[md-fab],[md-icon-button],[md-mini-fab],[md-raised-button]{outline:solid 1px}}"],
+            encapsulation: ViewEncapsulation.None,
+            changeDetection: ChangeDetectionStrategy.OnPush,
+        }), 
+        __metadata('design:paramtypes', [ElementRef, Renderer])
+    ], MdButton);
     return MdButton;
 }());
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Object),
-    __metadata("design:paramtypes", [Object])
-], MdButton.prototype, "disableRipple", null);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", Object),
-    __metadata("design:paramtypes", [Boolean])
-], MdButton.prototype, "disabled", null);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String),
-    __metadata("design:paramtypes", [String])
-], MdButton.prototype, "color", null);
-MdButton = __decorate([
-    core_1.Component({
-        selector: 'button[md-button], button[md-raised-button], button[md-icon-button], ' +
-            'button[md-fab], button[md-mini-fab]',
-        host: {
-            '[disabled]': 'disabled',
-            '[class.md-button-focus]': '_isKeyboardFocused',
-            '(mousedown)': '_setMousedown()',
-            '(focus)': '_setKeyboardFocus()',
-            '(blur)': '_removeKeyboardFocus()',
-        },
-        template: require('./button.html'),
-        styles: [require('./button.css').toString()],
-        encapsulation: core_1.ViewEncapsulation.None,
-        changeDetection: core_1.ChangeDetectionStrategy.OnPush,
-    }),
-    __metadata("design:paramtypes", [core_1.ElementRef, core_1.Renderer])
-], MdButton);
-exports.MdButton = MdButton;
-var MdAnchor = (function (_super) {
+/**
+ * Raised Material design button.
+ */
+export var MdAnchor = (function (_super) {
     __extends(MdAnchor, _super);
     function MdAnchor(elementRef, renderer) {
-        return _super.call(this, elementRef, renderer) || this;
+        _super.call(this, elementRef, renderer);
     }
     Object.defineProperty(MdAnchor.prototype, "tabIndex", {
+        /** @docs-private */
         get: function () {
             return this.disabled ? -1 : 0;
         },
         enumerable: true,
         configurable: true
     });
-    Object.defineProperty(MdAnchor.prototype, "isAriaDisabled", {
-        /** Gets the aria-disabled value for the component, which must be a string for Dart. */
+    Object.defineProperty(MdAnchor.prototype, "_isAriaDisabled", {
         get: function () {
             return this.disabled ? 'true' : 'false';
         },
@@ -163,55 +156,48 @@ var MdAnchor = (function (_super) {
             event.stopImmediatePropagation();
         }
     };
+    __decorate([
+        HostBinding('tabIndex'), 
+        __metadata('design:type', Number)
+    ], MdAnchor.prototype, "tabIndex", null);
+    MdAnchor = __decorate([
+        Component({selector: 'a[md-button], a[md-raised-button], a[md-icon-button], a[md-fab], a[md-mini-fab]',
+            inputs: ['color', 'disabled', 'disableRipple'],
+            host: {
+                '[attr.disabled]': 'disabled',
+                '[attr.aria-disabled]': '_isAriaDisabled',
+                '[class.md-button-focus]': '_isKeyboardFocused',
+                '(mousedown)': '_setMousedown()',
+                '(focus)': '_setKeyboardFocus()',
+                '(blur)': '_removeKeyboardFocus()',
+                '(click)': '_haltDisabledEvents($event)',
+            },
+            template: "<span class=\"md-button-wrapper\"><ng-content></ng-content></span><div md-ripple *ngIf=\"!_isRippleDisabled()\" class=\"md-button-ripple\" [class.md-button-ripple-round]=\"_isRoundButton()\" [mdRippleTrigger]=\"_getHostElement()\" [mdRippleColor]=\"_isRoundButton() ? 'rgba(255, 255, 255, 0.2)' : ''\" mdRippleBackgroundColor=\"rgba(0, 0, 0, 0)\"></div><div class=\"md-button-focus-overlay\" (touchstart)=\"$event.preventDefault()\"></div>",
+            styles: ["[md-button],[md-fab],[md-icon-button],[md-mini-fab],[md-raised-button]{box-sizing:border-box;position:relative;cursor:pointer;-webkit-user-select:none;-moz-user-select:none;-ms-user-select:none;user-select:none;outline:0;border:none;display:inline-block;white-space:nowrap;text-decoration:none;vertical-align:baseline;font-size:14px;font-family:Roboto,\"Helvetica Neue\",sans-serif;font-weight:500;color:currentColor;text-align:center;margin:0;min-width:88px;line-height:36px;padding:0 16px;border-radius:2px}[disabled][md-button],[disabled][md-fab],[disabled][md-icon-button],[disabled][md-mini-fab],[disabled][md-raised-button]{cursor:default}.md-button-focus[md-button] .md-button-focus-overlay,.md-button-focus[md-fab] .md-button-focus-overlay,.md-button-focus[md-icon-button] .md-button-focus-overlay,.md-button-focus[md-mini-fab] .md-button-focus-overlay,.md-button-focus[md-raised-button] .md-button-focus-overlay{opacity:1}[md-fab],[md-mini-fab],[md-raised-button]{box-shadow:0 3px 1px -2px rgba(0,0,0,.2),0 2px 2px 0 rgba(0,0,0,.14),0 1px 5px 0 rgba(0,0,0,.12);transform:translate3d(0,0,0);transition:background .4s cubic-bezier(.25,.8,.25,1),box-shadow 280ms cubic-bezier(.4,0,.2,1)}[md-fab]:active,[md-mini-fab]:active,[md-raised-button]:active{box-shadow:0 5px 5px -3px rgba(0,0,0,.2),0 8px 10px 1px rgba(0,0,0,.14),0 3px 14px 2px rgba(0,0,0,.12)}[disabled][md-fab],[disabled][md-mini-fab],[disabled][md-raised-button]{box-shadow:none}[md-button]:hover .md-button-focus-overlay,[md-icon-button]:hover .md-button-focus-overlay{opacity:1}[md-button][disabled]:hover .md-button-focus-overlay,[md-button][disabled]:hover.md-accent,[md-button][disabled]:hover.md-primary,[md-button][disabled]:hover.md-warn,[md-icon-button][disabled]:hover .md-button-focus-overlay,[md-icon-button][disabled]:hover.md-accent,[md-icon-button][disabled]:hover.md-primary,[md-icon-button][disabled]:hover.md-warn{background-color:transparent}[md-fab]{box-shadow:0 3px 5px -1px rgba(0,0,0,.2),0 6px 10px 0 rgba(0,0,0,.14),0 1px 18px 0 rgba(0,0,0,.12);min-width:0;border-radius:50%;width:56px;height:56px;padding:0;flex-shrink:0}[md-fab]:active{box-shadow:0 7px 8px -4px rgba(0,0,0,.2),0 12px 17px 2px rgba(0,0,0,.14),0 5px 22px 4px rgba(0,0,0,.12)}[md-fab] i,[md-fab] md-icon{padding:16px 0;line-height:24px}[md-mini-fab]{box-shadow:0 3px 5px -1px rgba(0,0,0,.2),0 6px 10px 0 rgba(0,0,0,.14),0 1px 18px 0 rgba(0,0,0,.12);min-width:0;border-radius:50%;width:40px;height:40px;padding:0;flex-shrink:0}[md-mini-fab]:active{box-shadow:0 7px 8px -4px rgba(0,0,0,.2),0 12px 17px 2px rgba(0,0,0,.14),0 5px 22px 4px rgba(0,0,0,.12)}[md-mini-fab] i,[md-mini-fab] md-icon{padding:8px 0;line-height:24px}[md-icon-button]{padding:0;min-width:0;width:40px;height:40px;flex-shrink:0;line-height:40px;border-radius:50%}[md-icon-button] i,[md-icon-button] md-icon{line-height:24px}[md-button] .md-button-wrapper>*,[md-icon-button] .md-button-wrapper>*,[md-raised-button] .md-button-wrapper>*{vertical-align:middle}.md-button-focus-overlay,.md-button-ripple{position:absolute;top:0;left:0;bottom:0;right:0}.md-button-focus-overlay{background-color:rgba(0,0,0,.12);border-radius:inherit;pointer-events:none;opacity:0}@media screen and (-ms-high-contrast:active){.md-button-focus-overlay{background-color:rgba(255,255,255,.5)}}.md-button-ripple-round{border-radius:50%;z-index:1}@media screen and (-ms-high-contrast:active){[md-button],[md-fab],[md-icon-button],[md-mini-fab],[md-raised-button]{outline:solid 1px}}"],
+            encapsulation: ViewEncapsulation.None
+        }), 
+        __metadata('design:paramtypes', [ElementRef, Renderer])
+    ], MdAnchor);
     return MdAnchor;
 }(MdButton));
-__decorate([
-    core_1.HostBinding('tabIndex'),
-    __metadata("design:type", Number),
-    __metadata("design:paramtypes", [])
-], MdAnchor.prototype, "tabIndex", null);
-__decorate([
-    core_1.HostBinding('attr.aria-disabled'),
-    __metadata("design:type", String),
-    __metadata("design:paramtypes", [])
-], MdAnchor.prototype, "isAriaDisabled", null);
-MdAnchor = __decorate([
-    core_1.Component({
-        selector: 'a[md-button], a[md-raised-button], a[md-icon-button], a[md-fab], a[md-mini-fab]',
-        inputs: ['color', 'disabled', 'disableRipple'],
-        host: {
-            '[attr.disabled]': 'disabled',
-            '[class.md-button-focus]': '_isKeyboardFocused',
-            '(mousedown)': '_setMousedown()',
-            '(focus)': '_setKeyboardFocus()',
-            '(blur)': '_removeKeyboardFocus()',
-            '(click)': '_haltDisabledEvents($event)',
-        },
-        template: require('./button.html'),
-        styles: [require('./button.css').toString()],
-        encapsulation: core_1.ViewEncapsulation.None
-    }),
-    __metadata("design:paramtypes", [core_1.ElementRef, core_1.Renderer])
-], MdAnchor);
-exports.MdAnchor = MdAnchor;
-var MdButtonModule = MdButtonModule_1 = (function () {
+export var MdButtonModule = (function () {
     function MdButtonModule() {
     }
     MdButtonModule.forRoot = function () {
         return {
-            ngModule: MdButtonModule_1,
-            providers: [viewport_ruler_1.ViewportRuler]
+            ngModule: MdButtonModule,
+            providers: [ViewportRuler]
         };
     };
+    MdButtonModule = __decorate([
+        NgModule({
+            imports: [CommonModule, MdRippleModule, DefaultStyleCompatibilityModeModule],
+            exports: [MdButton, MdAnchor, DefaultStyleCompatibilityModeModule],
+            declarations: [MdButton, MdAnchor],
+        }), 
+        __metadata('design:paramtypes', [])
+    ], MdButtonModule);
     return MdButtonModule;
 }());
-MdButtonModule = MdButtonModule_1 = __decorate([
-    core_1.NgModule({
-        imports: [common_1.CommonModule, core_2.MdRippleModule, core_2.DefaultStyleCompatibilityModeModule],
-        exports: [MdButton, MdAnchor, core_2.DefaultStyleCompatibilityModeModule],
-        declarations: [MdButton, MdAnchor],
-    })
-], MdButtonModule);
-exports.MdButtonModule = MdButtonModule;
-var MdButtonModule_1;
-//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/button/button.js.map
+
+//# sourceMappingURL=button.js.map

@@ -1,1 +1,1 @@
-{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;;;AAAA,+BAA0B","sourcesContent":["export * from './sidenav';\n\ninterface DecoratorInvocation {\n  type: Function;\n  args?: any[];\n}\n"]}
+{"version":3,"sources":["sidenav/index.ts"],"names":[],"mappings":"AAAA,cAAc,WAAW,CAAC","file":"index.js","sourcesContent":["export * from './sidenav';\n"]}

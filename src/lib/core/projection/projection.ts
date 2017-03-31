@@ -7,15 +7,16 @@ function _replaceWith(toReplaceEl: HTMLElement, otherEl: HTMLElement) {
   toReplaceEl.parentElement.replaceChild(otherEl, toReplaceEl);
 }
 
-
+/** @docs-private */
 @Directive({
-  selector: 'dom-projection-host'
+  selector: 'cdk-dom-projection-host'
 })
 export class DomProjectionHost {
   constructor(public ref: ElementRef) {}
 }
 
 
+/** @docs-private */
 @Injectable()
 export class DomProjection {
   /**
@@ -28,10 +29,10 @@ export class DomProjection {
    * ```
    *   @Component({
    *     template: `<div>
-   *       <dom-projection-host>
+   *       <cdk-dom-projection-host>
    *         <div>other</div>
    *         <ng-content></ng-content>
-   *       </dom-projection-host>
+   *       </cdk-dom-projection-host>
    *     </div>`
    *   })
    *   class Cmpt {
@@ -45,6 +46,9 @@ export class DomProjection {
    * contain the `<div>other</div>` HTML as well as its own children.
    *
    * Note: without `<ng-content></ng-content>` the projection will project an empty element.
+   *
+   * @param ref ElementRef to be projected.
+   * @param host Projection host into which to project the `ElementRef`.
    */
   project(ref: ElementRef, host: DomProjectionHost): void {
     const projectedEl = ref.nativeElement;
@@ -73,6 +77,7 @@ export class DomProjection {
 }
 
 
+/** @docs-private */
 @NgModule({
   exports: [DomProjectionHost],
   declarations: [DomProjectionHost],

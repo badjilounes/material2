@@ -30,9 +30,13 @@ import {
 const MD_FIT_MODE = 'fit';
 
 @Component({
+  moduleId: module.id,
   selector: 'md-grid-list, mat-grid-list',
-  template: require('./grid-list.html'),
-  styles: [require('./grid-list.css').toString()],
+  templateUrl: 'grid-list.html',
+  styleUrls: ['grid-list.css'],
+  host: {
+    'role': 'list'
+  },
   encapsulation: ViewEncapsulation.None,
 })
 export class MdGridList implements OnInit, AfterContentChecked {
@@ -61,23 +65,15 @@ export class MdGridList implements OnInit, AfterContentChecked {
       private _element: ElementRef,
       @Optional() private _dir: Dir) {}
 
+  /** Amount of columns in the grid list. */
   @Input()
-  get cols() {
-    return this._cols;
-  }
+  get cols() { return this._cols; }
+  set cols(value: any) { this._cols = coerceToNumber(value); }
 
-  set cols(value: any) {
-    this._cols = coerceToNumber(value);
-  }
-
-  @Input('gutterSize')
-  get gutterSize() {
-    return this._gutter;
-  }
-
-  set gutterSize(value: any) {
-    this._gutter = coerceToString(value);
-  }
+  /** Size of the grid list's gutter in pixels. */
+  @Input()
+  get gutterSize() { return this._gutter; }
+  set gutterSize(value: any) { this._gutter = coerceToString(value); }
 
   /** Set internal representation of row height from the user-provided value. */
   @Input()
@@ -86,7 +82,6 @@ export class MdGridList implements OnInit, AfterContentChecked {
     this._setTileStyler();
   }
 
-  /** TODO: internal */
   ngOnInit() {
     this._checkCols();
     this._checkRowHeight();
@@ -95,7 +90,6 @@ export class MdGridList implements OnInit, AfterContentChecked {
   /**
    * The layout calculation is fairly cheap if nothing changes, so there's little cost
    * to run it frequently.
-   * TODO: internal
    */
   ngAfterContentChecked() {
     this._layoutTiles();

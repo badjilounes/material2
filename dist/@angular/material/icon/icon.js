@@ -1,14 +1,8 @@
-"use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18,22 +12,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var http_1 = require("@angular/http");
-var core_2 = require("../core");
-var icon_registry_1 = require("./icon-registry");
-var icon_registry_2 = require("./icon-registry");
-exports.MdIconRegistry = icon_registry_2.MdIconRegistry;
+import { NgModule, ChangeDetectionStrategy, Component, ElementRef, Input, Renderer, ViewEncapsulation } from '@angular/core';
+import { HttpModule } from '@angular/http';
+import { MdError, DefaultStyleCompatibilityModeModule } from '../core';
+import { MdIconRegistry } from './icon-registry';
+export { MdIconRegistry } from './icon-registry';
 /** Exception thrown when an invalid icon name is passed to an md-icon component. */
-var MdIconInvalidNameError = (function (_super) {
+export var MdIconInvalidNameError = (function (_super) {
     __extends(MdIconInvalidNameError, _super);
     function MdIconInvalidNameError(iconName) {
-        return _super.call(this, "Invalid icon name: \"" + iconName + "\"") || this;
+        _super.call(this, "Invalid icon name: \"" + iconName + "\"");
     }
     return MdIconInvalidNameError;
-}(core_2.MdError));
-exports.MdIconInvalidNameError = MdIconInvalidNameError;
+}(MdError));
 /**
  * Component to display an icon. It can be used in the following ways:
  * - Specify the svgSrc input to load an SVG icon from a URL. The SVG content is directly inlined
@@ -67,20 +58,18 @@ exports.MdIconInvalidNameError = MdIconInvalidNameError;
  *   Example:
  *     <md-icon fontSet="fa" fontIcon="alarm"></md-icon>
  */
-var MdIcon = (function () {
+export var MdIcon = (function () {
     function MdIcon(_elementRef, _renderer, _mdIconRegistry) {
         this._elementRef = _elementRef;
         this._renderer = _renderer;
         this._mdIconRegistry = _mdIconRegistry;
+        /** Screenreader label for the icon. */
         this.hostAriaLabel = '';
     }
     Object.defineProperty(MdIcon.prototype, "color", {
-        get: function () {
-            return this._color;
-        },
-        set: function (value) {
-            this._updateColor(value);
-        },
+        /** Color of the icon. */
+        get: function () { return this._color; },
+        set: function (value) { this._updateColor(value); },
         enumerable: true,
         configurable: true
     });
@@ -122,7 +111,6 @@ var MdIcon = (function () {
                 throw new MdIconInvalidNameError(iconName);
         }
     };
-    /** TODO: internal */
     MdIcon.prototype.ngOnChanges = function (changes) {
         var _this = this;
         var changedInputs = Object.keys(changes);
@@ -132,16 +120,12 @@ var MdIcon = (function () {
                 var _a = this._splitIconName(this.svgIcon), namespace = _a[0], iconName = _a[1];
                 this._mdIconRegistry.getNamedSvgIcon(iconName, namespace).first().subscribe(function (svg) { return _this._setSvgElement(svg); }, function (err) { return console.log("Error retrieving icon: " + err); });
             }
-            else if (this.svgSrc) {
-                this._mdIconRegistry.getSvgIconFromUrl(this.svgSrc).first().subscribe(function (svg) { return _this._setSvgElement(svg); }, function (err) { return console.log("Error retrieving icon: " + err); });
-            }
         }
         if (this._usingFontIcon()) {
             this._updateFontIconClasses();
         }
         this._updateAriaLabel();
     };
-    /** TODO: internal */
     MdIcon.prototype.ngOnInit = function () {
         // Update font classes because ngOnChanges won't be called if none of the inputs are present,
         // e.g. <md-icon>arrow</md-icon>. In this case we need to add a CSS class for the default font.
@@ -149,7 +133,6 @@ var MdIcon = (function () {
             this._updateFontIconClasses();
         }
     };
-    /** TODO: internal */
     MdIcon.prototype.ngAfterViewChecked = function () {
         // Update aria label here because it may depend on the projected text content.
         // (e.g. <md-icon>home</md-icon> should use 'home').
@@ -183,7 +166,7 @@ var MdIcon = (function () {
         return null;
     };
     MdIcon.prototype._usingFontIcon = function () {
-        return !(this.svgIcon || this.svgSrc);
+        return !this.svgIcon;
     };
     MdIcon.prototype._setSvgElement = function (svg) {
         var layoutElement = this._elementRef.nativeElement;
@@ -220,71 +203,62 @@ var MdIcon = (function () {
             this._previousFontIconClass = this.fontIcon;
         }
     };
+    __decorate([
+        Input(), 
+        __metadata('design:type', String)
+    ], MdIcon.prototype, "svgIcon", void 0);
+    __decorate([
+        Input(), 
+        __metadata('design:type', String)
+    ], MdIcon.prototype, "fontSet", void 0);
+    __decorate([
+        Input(), 
+        __metadata('design:type', String)
+    ], MdIcon.prototype, "fontIcon", void 0);
+    __decorate([
+        Input(), 
+        __metadata('design:type', String)
+    ], MdIcon.prototype, "alt", void 0);
+    __decorate([
+        Input('aria-label'), 
+        __metadata('design:type', String)
+    ], MdIcon.prototype, "hostAriaLabel", void 0);
+    __decorate([
+        Input(), 
+        __metadata('design:type', String)
+    ], MdIcon.prototype, "color", null);
+    MdIcon = __decorate([
+        Component({template: '<ng-content></ng-content>',
+            selector: 'md-icon, mat-icon',
+            styles: ["md-icon{background-repeat:no-repeat;display:inline-block;fill:currentColor;height:24px;width:24px}"],
+            host: {
+                'role': 'img',
+            },
+            encapsulation: ViewEncapsulation.None,
+            changeDetection: ChangeDetectionStrategy.OnPush,
+        }), 
+        __metadata('design:paramtypes', [ElementRef, Renderer, MdIconRegistry])
+    ], MdIcon);
     return MdIcon;
 }());
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], MdIcon.prototype, "svgSrc", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], MdIcon.prototype, "svgIcon", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], MdIcon.prototype, "fontSet", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], MdIcon.prototype, "fontIcon", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String)
-], MdIcon.prototype, "alt", void 0);
-__decorate([
-    core_1.Input('aria-label'),
-    __metadata("design:type", String)
-], MdIcon.prototype, "hostAriaLabel", void 0);
-__decorate([
-    core_1.Input(),
-    __metadata("design:type", String),
-    __metadata("design:paramtypes", [String])
-], MdIcon.prototype, "color", null);
-MdIcon = __decorate([
-    core_1.Component({
-        template: '<ng-content></ng-content>',
-        selector: 'md-icon, mat-icon',
-        styles: [require('./icon.css').toString()],
-        host: {
-            'role': 'img',
-        },
-        encapsulation: core_1.ViewEncapsulation.None,
-        changeDetection: core_1.ChangeDetectionStrategy.OnPush,
-    }),
-    __metadata("design:paramtypes", [core_1.ElementRef,
-        core_1.Renderer,
-        icon_registry_1.MdIconRegistry])
-], MdIcon);
-exports.MdIcon = MdIcon;
-var MdIconModule = MdIconModule_1 = (function () {
+export var MdIconModule = (function () {
     function MdIconModule() {
     }
     MdIconModule.forRoot = function () {
         return {
-            ngModule: MdIconModule_1,
-            providers: [icon_registry_1.MdIconRegistry],
+            ngModule: MdIconModule,
+            providers: [MdIconRegistry],
         };
     };
+    MdIconModule = __decorate([
+        NgModule({
+            imports: [HttpModule, DefaultStyleCompatibilityModeModule],
+            exports: [MdIcon, DefaultStyleCompatibilityModeModule],
+            declarations: [MdIcon],
+        }), 
+        __metadata('design:paramtypes', [])
+    ], MdIconModule);
     return MdIconModule;
 }());
-MdIconModule = MdIconModule_1 = __decorate([
-    core_1.NgModule({
-        imports: [http_1.HttpModule, core_2.DefaultStyleCompatibilityModeModule],
-        exports: [MdIcon, core_2.DefaultStyleCompatibilityModeModule],
-        declarations: [MdIcon],
-    })
-], MdIconModule);
-exports.MdIconModule = MdIconModule;
-var MdIconModule_1;
-//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/icon/icon.js.map
+
+//# sourceMappingURL=icon.js.map

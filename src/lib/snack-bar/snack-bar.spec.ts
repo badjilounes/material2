@@ -8,9 +8,10 @@ import {
   tick,
 } from '@angular/core/testing';
 import {NgModule, Component, Directive, ViewChild, ViewContainerRef} from '@angular/core';
+import {CommonModule} from '@angular/common';
 import {MdSnackBar, MdSnackBarModule} from './snack-bar';
 import {MdSnackBarConfig} from './snack-bar-config';
-import {OverlayContainer, MdLiveAnnouncer} from '../core';
+import {OverlayContainer, LiveAnnouncer} from '../core';
 import {SimpleSnackBar} from './simple-snack-bar';
 
 
@@ -18,7 +19,7 @@ import {SimpleSnackBar} from './simple-snack-bar';
 
 describe('MdSnackBar', () => {
   let snackBar: MdSnackBar;
-  let liveAnnouncer: MdLiveAnnouncer;
+  let liveAnnouncer: LiveAnnouncer;
   let overlayContainerElement: HTMLElement;
 
   let testViewContainerRef: ViewContainerRef;
@@ -40,7 +41,7 @@ describe('MdSnackBar', () => {
     TestBed.compileComponents();
   }));
 
-  beforeEach(inject([MdSnackBar, MdLiveAnnouncer], (sb: MdSnackBar, la: MdLiveAnnouncer) => {
+  beforeEach(inject([MdSnackBar, LiveAnnouncer], (sb: MdSnackBar, la: LiveAnnouncer) => {
     snackBar = sb;
     liveAnnouncer = la;
   }));
@@ -151,6 +152,20 @@ describe('MdSnackBar', () => {
     });
   }));
 
+  it('should clean itself up when the view container gets destroyed', async(() => {
+    snackBar.open(simpleMessage, null, { viewContainerRef: testViewContainerRef });
+    viewContainerFixture.detectChanges();
+    expect(overlayContainerElement.childElementCount).toBeGreaterThan(0);
+
+    viewContainerFixture.componentInstance.childComponentExists = false;
+    viewContainerFixture.detectChanges();
+
+    viewContainerFixture.whenStable().then(() => {
+      expect(overlayContainerElement.childElementCount)
+          .toBe(0, 'Expected snack bar to be removed after the view container was destroyed');
+    });
+  }));
+
   it('should open a custom component', () => {
     let config = {viewContainerRef: testViewContainerRef};
     let snackBarRef = snackBar.openFromComponent(BurritosNotification, config);
@@ -158,7 +173,7 @@ describe('MdSnackBar', () => {
     expect(snackBarRef.instance)
       .toEqual(jasmine.any(BurritosNotification),
                'Expected the snack bar content component to be BurritosNotification');
-    expect(overlayContainerElement.textContent)
+    expect(overlayContainerElement.textContent.trim())
         .toBe('Burritos are on the way.',
               `Expected the overlay text content to be 'Burritos are on the way'`);
   });
@@ -314,10 +329,12 @@ class DirectiveWithViewContainer {
 
 @Component({
   selector: 'arbitrary-component',
-  template: `<dir-with-view-container></dir-with-view-container>`,
+  template: `<dir-with-view-container *ngIf="childComponentExists"></dir-with-view-container>`,
 })
 class ComponentWithChildViewContainer {
   @ViewChild(DirectiveWithViewContainer) childWithViewContainer: DirectiveWithViewContainer;
+
+  childComponentExists: boolean = true;
 
   get childViewContainer() {
     return this.childWithViewContainer.viewContainerRef;
@@ -337,7 +354,7 @@ const TEST_DIRECTIVES = [ComponentWithChildViewContainer,
                          BurritosNotification,
                          DirectiveWithViewContainer];
 @NgModule({
-  imports: [MdSnackBarModule],
+  imports: [CommonModule, MdSnackBarModule],
   exports: TEST_DIRECTIVES,
   declarations: TEST_DIRECTIVES,
   entryComponents: [ComponentWithChildViewContainer, BurritosNotification],

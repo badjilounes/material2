@@ -18,9 +18,10 @@ import {DefaultStyleCompatibilityModeModule} from '../core';
 export class MdToolbarRow {}
 
 @Component({
+  moduleId: module.id,
   selector: 'md-toolbar, mat-toolbar',
-  template: require('./toolbar.html').toString(),
-  styles: [require('./toolbar.css').toString()],
+  templateUrl: 'toolbar.html',
+  styleUrls: ['toolbar.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
 })
@@ -30,6 +31,7 @@ export class MdToolbar {
 
   constructor(private elementRef: ElementRef, private renderer: Renderer) { }
 
+  /** The color of the toolbar. Can be primary, accent, or warn. */
   @Input()
   get color(): string {
     return this._color;

@@ -1,17 +1,15 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * The OverlayContainer is the container in which all overlays will load.
  * It should be provided in the root component to ensure it is properly shared.
  */
-var OverlayContainer = (function () {
+export var OverlayContainer = (function () {
     function OverlayContainer() {
     }
     /**
      * This method returns the overlay container element.  It will lazily
      * create the element the first time  it is called to facilitate using
      * the container in non-browser environments.
-     * @returns {HTMLElement} the container element
+     * @returns the container element
      */
     OverlayContainer.prototype.getContainerElement = function () {
         if (!this._containerElement) {
@@ -21,15 +19,15 @@ var OverlayContainer = (function () {
     };
     /**
      * Create the overlay container element, which is simply a div
-     * with the 'md-overlay-container' class on the document body.
+     * with the 'cdk-overlay-container' class on the document body.
      */
     OverlayContainer.prototype._createContainer = function () {
         var container = document.createElement('div');
-        container.classList.add('md-overlay-container');
+        container.classList.add('cdk-overlay-container');
         document.body.appendChild(container);
         this._containerElement = container;
     };
     return OverlayContainer;
 }());
-exports.OverlayContainer = OverlayContainer;
-//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/core/overlay/overlay-container.js.map
+
+//# sourceMappingURL=overlay-container.js.map

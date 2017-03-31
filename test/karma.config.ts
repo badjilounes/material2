@@ -16,7 +16,7 @@ export function config(config) {
       require('karma-browserstack-launcher'),
       require('karma-sauce-launcher'),
       require('karma-chrome-launcher'),
-      require('karma-firefox-launcher'),
+      require('karma-firefox-launcher')
     ],
     files: [
       {pattern: 'dist/vendor/core-js/client/core.js', included: true, watched: false},
@@ -29,11 +29,13 @@ export function config(config) {
       {pattern: 'dist/vendor/zone.js/dist/async-test.js', included: true, watched: false},
       {pattern: 'dist/vendor/zone.js/dist/fake-async-test.js', included: true, watched: false},
       {pattern: 'dist/vendor/hammerjs/hammer.min.js', included: true, watched: false},
-
       {pattern: 'test/karma-test-shim.js', included: true, watched: false},
 
       // paths loaded via module imports
       {pattern: 'dist/**/*.js', included: false, watched: true},
+
+      // include one of the themes
+      {pattern: 'dist/**/prebuilt/indigo-pink.css', included: true, watched: true},
 
       // paths loaded via Angular's component compiler
       // (these paths need to be rewritten, see proxies section)
@@ -58,7 +60,7 @@ export function config(config) {
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
-    autoWatch: true,
+    autoWatch: false,
 
     sauceLabs: {
       testName: 'material2',

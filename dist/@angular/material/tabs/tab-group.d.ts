@@ -25,8 +25,10 @@ export declare class MdTabGroup {
     /** Whether the tab group should grow to the size of the active tab */
     private _dynamicHeight;
     dynamicHeight: boolean;
-    /** The index of the active tab. */
+    /** @deprecated */
+    _dynamicHeightDeprecated: boolean;
     private _selectedIndex;
+    /** The index of the active tab. */
     selectedIndex: number;
     /** The center labels parameter. */
     private _centerLabels;
@@ -34,8 +36,10 @@ export declare class MdTabGroup {
     /** Output to enable support for two-way binding on `selectedIndex`. */
     readonly selectedIndexChange: Observable<number>;
     private _onFocusChange;
+    /** Event emitted when focus has changed within a tab group. */
     readonly focusChange: Observable<MdTabChangeEvent>;
     private _onSelectChange;
+    /** Event emitted when the tab selection has changed. */
     readonly selectChange: Observable<MdTabChangeEvent>;
     private _groupId;
     constructor(_renderer: Renderer);
@@ -48,8 +52,7 @@ export declare class MdTabGroup {
     ngAfterContentChecked(): void;
     /**
      * Waits one frame for the view to update, then updates the ink bar
-     * Note: This must be run outside of the zone or it will create an infinite change detection loop
-     * TODO: internal
+     * Note: This must be run outside of the zone or it will create an infinite change detection loop.
      */
     ngAfterViewChecked(): void;
     _focusChanged(index: number): void;

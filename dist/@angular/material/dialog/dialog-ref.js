@@ -1,16 +1,14 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var Subject_1 = require("rxjs/Subject");
+import { Subject } from 'rxjs/Subject';
 // TODO(jelbourn): resizing
 // TODO(jelbourn): afterOpen and beforeClose
 /**
  * Reference to a dialog opened via the MdDialog service.
  */
-var MdDialogRef = (function () {
+export var MdDialogRef = (function () {
     function MdDialogRef(_overlayRef) {
         this._overlayRef = _overlayRef;
         /** Subject for notifying the user that the dialog has finished closing. */
-        this._afterClosed = new Subject_1.Subject();
+        this._afterClosed = new Subject();
     }
     /**
      * Close the dialog.
@@ -21,11 +19,13 @@ var MdDialogRef = (function () {
         this._afterClosed.next(dialogResult);
         this._afterClosed.complete();
     };
-    /** Gets an observable that is notified when the dialog is finished closing. */
+    /**
+     * Gets an observable that is notified when the dialog is finished closing.
+     */
     MdDialogRef.prototype.afterClosed = function () {
         return this._afterClosed.asObservable();
     };
     return MdDialogRef;
 }());
-exports.MdDialogRef = MdDialogRef;
-//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/dialog/dialog-ref.js.map
+
+//# sourceMappingURL=dialog-ref.js.map

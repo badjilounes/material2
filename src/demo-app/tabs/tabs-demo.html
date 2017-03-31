@@ -42,10 +42,7 @@
     </md-card-content>
   </md-card>
 
-  <md-tab-group class="demo-tab-group"
-                md-dynamic-height
-                [(selectedIndex)]="activeTabIndex"
-                [centerLabels]="true">
+  <md-tab-group class="demo-tab-group" dynamicHeight [(selectedIndex)]="activeTabIndex" [centerLabels]="true">
     <md-tab *ngFor="let tab of dynamicTabs" [disabled]="tab.disabled">
       <template md-tab-label>{{tab.label}}</template>
       {{tab.content}}
@@ -93,7 +90,7 @@
 
 <h1>Tab Group Demo - Dynamic Height</h1>
 
-<md-tab-group class="demo-tab-group" md-dynamic-height>
+<md-tab-group class="demo-tab-group" dynamicHeight>
   <md-tab *ngFor="let tab of tabs" [disabled]="tab.disabled">
     <template md-tab-label>{{tab.label}}</template>
     {{tab.content}}
@@ -128,7 +125,9 @@
     </div>
     <br>
     <br>
-    <md-input placeholder="Tab Label" [(ngModel)]="tab.label"></md-input>
+    <md-input-container>
+      <input md-input placeholder="Tab Label" [(ngModel)]="tab.label">
+    </md-input-container>
   </md-tab>
 </md-tab-group>
 
@@ -170,7 +169,9 @@
     </div>
     <br>
     <br>
-    <md-input placeholder="Tab Label" [(ngModel)]="tab.label"></md-input>
+    <md-input-container>
+      <input md-input placeholder="Tab Label" [(ngModel)]="tab.label">
+    </md-input-container>
   </md-tab>
 </md-tab-group>
 
@@ -193,7 +194,9 @@
     <br>
     <br>
     <br>
-    <md-input placeholder="Tab Label" [(ngModel)]="tab.label"></md-input>
+    <md-input-container>
+      <input md-input placeholder="Tab Label" [(ngModel)]="tab.label">
+    </md-input-container>
   </md-tab>
 </md-tab-group>
 

@@ -1,14 +1,8 @@
-"use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -18,46 +12,40 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var core_2 = require("../core");
-var snack_bar_errors_1 = require("./snack-bar-errors");
-var Subject_1 = require("rxjs/Subject");
+import { Component, ViewChild, trigger, state, style, transition, animate, NgZone } from '@angular/core';
+import { BasePortalHost, PortalHostDirective } from '../core';
+import { MdSnackBarContentAlreadyAttached } from './snack-bar-errors';
+import { Subject } from 'rxjs/Subject';
 // TODO(jelbourn): we can't use constants from animation.ts here because you can't use
 // a text interpolation in anything that is analyzed statically with ngc (for AoT compile).
-exports.SHOW_ANIMATION = '225ms cubic-bezier(0.4,0.0,1,1)';
-exports.HIDE_ANIMATION = '195ms cubic-bezier(0.0,0.0,0.2,1)';
+export var SHOW_ANIMATION = '225ms cubic-bezier(0.4,0.0,1,1)';
+export var HIDE_ANIMATION = '195ms cubic-bezier(0.0,0.0,0.2,1)';
 /**
  * Internal component that wraps user-provided snack bar content.
+ * @docs-private
  */
-var MdSnackBarContainer = (function (_super) {
+export var MdSnackBarContainer = (function (_super) {
     __extends(MdSnackBarContainer, _super);
     function MdSnackBarContainer(_ngZone) {
-        var _this = _super.call(this) || this;
-        _this._ngZone = _ngZone;
+        _super.call(this);
+        this._ngZone = _ngZone;
         /** Subject for notifying that the snack bar has exited from view. */
-        _this.onExit = new Subject_1.Subject();
+        this.onExit = new Subject();
         /** Subject for notifying that the snack bar has finished entering the view. */
-        _this.onEnter = new Subject_1.Subject();
+        this.onEnter = new Subject();
         /** The state of the snack bar animations. */
-        _this.animationState = 'initial';
-        return _this;
+        this.animationState = 'initial';
     }
     /** Attach a component portal as content to this snack bar container. */
     MdSnackBarContainer.prototype.attachComponentPortal = function (portal) {
         if (this._portalHost.hasAttached()) {
-            throw new snack_bar_errors_1.MdSnackBarContentAlreadyAttached();
+            throw new MdSnackBarContentAlreadyAttached();
         }
         return this._portalHost.attachComponentPortal(portal);
     };
     /** Attach a template portal as content to this snack bar container. */
     MdSnackBarContainer.prototype.attachTemplatePortal = function (portal) {
         throw Error('Not yet implemented');
-    };
-    /** Begin animation of the snack bar exiting from view. */
-    MdSnackBarContainer.prototype.exit = function () {
-        this.animationState = 'complete';
-        return this.onExit.asObservable();
     };
     /** Handle end of animations, updating the state of the snackbar. */
     MdSnackBarContainer.prototype.onAnimationEnd = function (event) {
@@ -81,35 +69,56 @@ var MdSnackBarContainer = (function (_super) {
     };
     /** Returns an observable resolving when the enter animation completes.  */
     MdSnackBarContainer.prototype._onEnter = function () {
+        this.animationState = 'visible';
         return this.onEnter.asObservable();
     };
+    /** Begin animation of the snack bar exiting from view. */
+    MdSnackBarContainer.prototype.exit = function () {
+        this.animationState = 'complete';
+        return this._onExit();
+    };
+    /** Returns an observable that completes after the closing animation is done. */
+    MdSnackBarContainer.prototype._onExit = function () {
+        return this.onExit.asObservable();
+    };
+    /**
+     * Makes sure the exit callbacks have been invoked when the element is destroyed.
+     */
+    MdSnackBarContainer.prototype.ngOnDestroy = function () {
+        var _this = this;
+        // Wait for the zone to settle before removing the element. Helps prevent
+        // errors where we end up removing an element which is in the middle of an animation.
+        this._ngZone.onMicrotaskEmpty.first().subscribe(function () {
+            _this.onExit.next();
+            _this.onExit.complete();
+        });
+    };
+    __decorate([
+        ViewChild(PortalHostDirective), 
+        __metadata('design:type', PortalHostDirective)
+    ], MdSnackBarContainer.prototype, "_portalHost", void 0);
+    MdSnackBarContainer = __decorate([
+        Component({selector: 'snack-bar-container',
+            template: "<template cdkPortalHost></template>",
+            styles: [":host{box-shadow:0 3px 5px -1px rgba(0,0,0,.2),0 6px 10px 0 rgba(0,0,0,.14),0 1px 18px 0 rgba(0,0,0,.12);background:#323232;border-radius:2px;box-sizing:content-box;display:block;height:20px;max-width:568px;min-width:288px;overflow:hidden;padding:14px 24px;transform:translateY(100%)}@media screen and (-ms-high-contrast:active){:host{border:solid 1px}}"],
+            host: {
+                'role': 'alert',
+                '[@state]': 'animationState',
+                '(@state.done)': 'onAnimationEnd($event)'
+            },
+            animations: [
+                trigger('state', [
+                    state('initial', style({ transform: 'translateY(100%)' })),
+                    state('visible', style({ transform: 'translateY(0%)' })),
+                    state('complete', style({ transform: 'translateY(100%)' })),
+                    transition('visible => complete', animate(HIDE_ANIMATION)),
+                    transition('initial => visible, void => visible', animate(SHOW_ANIMATION)),
+                ])
+            ],
+        }), 
+        __metadata('design:paramtypes', [NgZone])
+    ], MdSnackBarContainer);
     return MdSnackBarContainer;
-}(core_2.BasePortalHost));
-__decorate([
-    core_1.ViewChild(core_2.PortalHostDirective),
-    __metadata("design:type", core_2.PortalHostDirective)
-], MdSnackBarContainer.prototype, "_portalHost", void 0);
-MdSnackBarContainer = __decorate([
-    core_1.Component({
-        selector: 'snack-bar-container',
-        template: require('./snack-bar-container.html'),
-        styles: [require('./snack-bar-container.css').toString()],
-        host: {
-            'role': 'alert',
-            '[@state]': 'animationState',
-            '(@state.done)': 'onAnimationEnd($event)'
-        },
-        animations: [
-            core_1.trigger('state', [
-                core_1.state('initial', core_1.style({ transform: 'translateY(100%)' })),
-                core_1.state('visible', core_1.style({ transform: 'translateY(0%)' })),
-                core_1.state('complete', core_1.style({ transform: 'translateY(100%)' })),
-                core_1.transition('visible => complete', core_1.animate(exports.HIDE_ANIMATION)),
-                core_1.transition('initial => visible, void => visible', core_1.animate(exports.SHOW_ANIMATION)),
-            ])
-        ],
-    }),
-    __metadata("design:paramtypes", [core_1.NgZone])
-], MdSnackBarContainer);
-exports.MdSnackBarContainer = MdSnackBarContainer;
-//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/snack-bar/snack-bar-container.js.map
+}(BasePortalHost));
+
+//# sourceMappingURL=snack-bar-container.js.map

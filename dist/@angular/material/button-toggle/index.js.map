@@ -1,1 +1,1 @@
-{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;;;AAAA,qCAAgC","sourcesContent":["export * from './button-toggle';\n\ninterface DecoratorInvocation {\n  type: Function;\n  args?: any[];\n}\n"]}
+{"version":3,"sources":["button-toggle/index.ts"],"names":[],"mappings":"AAAA,cAAc,iBAAiB,CAAC","file":"index.js","sourcesContent":["export * from './button-toggle';\n"]}

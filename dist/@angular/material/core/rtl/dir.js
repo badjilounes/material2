@@ -1,4 +1,3 @@
-"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -8,20 +7,22 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
+import { NgModule, Directive, HostBinding, Output, Input, EventEmitter } from '@angular/core';
 /**
- * Directive to listen to changes of direction of part of the DOM.
+ * Directive to listen for changes of direction of part of the DOM.
  *
  * Applications should use this directive instead of the native attribute so that Material
  * components can listen on changes of direction.
  */
-var Dir = (function () {
+export var Dir = (function () {
     function Dir() {
+        /** Layout direction of the element. */
         this._dir = 'ltr';
-        this.dirChange = new core_1.EventEmitter();
+        /** Event emitted when the direction changes. */
+        this.dirChange = new EventEmitter();
     }
     Object.defineProperty(Dir.prototype, "dir", {
+        /** @docs-private */
         get: function () {
             return this._dir;
         },
@@ -36,51 +37,51 @@ var Dir = (function () {
         configurable: true
     });
     Object.defineProperty(Dir.prototype, "value", {
+        /** Current layout direction of the element. */
         get: function () { return this.dir; },
         set: function (v) { this.dir = v; },
         enumerable: true,
         configurable: true
     });
+    __decorate([
+        Input('dir'), 
+        __metadata('design:type', String)
+    ], Dir.prototype, "_dir", void 0);
+    __decorate([
+        Output(), 
+        __metadata('design:type', Object)
+    ], Dir.prototype, "dirChange", void 0);
+    __decorate([
+        HostBinding('attr.dir'), 
+        __metadata('design:type', String)
+    ], Dir.prototype, "dir", null);
+    Dir = __decorate([
+        Directive({
+            selector: '[dir]',
+            // TODO(hansl): maybe `$implicit` isn't the best option here, but for now that's the best we got.
+            exportAs: '$implicit'
+        }), 
+        __metadata('design:paramtypes', [])
+    ], Dir);
     return Dir;
 }());
-__decorate([
-    core_1.Input('dir'),
-    __metadata("design:type", String)
-], Dir.prototype, "_dir", void 0);
-__decorate([
-    core_1.Output(),
-    __metadata("design:type", Object)
-], Dir.prototype, "dirChange", void 0);
-__decorate([
-    core_1.HostBinding('attr.dir'),
-    __metadata("design:type", String),
-    __metadata("design:paramtypes", [String])
-], Dir.prototype, "dir", null);
-Dir = __decorate([
-    core_1.Directive({
-        selector: '[dir]',
-        // TODO(hansl): maybe `$implicit` isn't the best option here, but for now that's the best we got.
-        exportAs: '$implicit'
-    })
-], Dir);
-exports.Dir = Dir;
-var RtlModule = RtlModule_1 = (function () {
+export var RtlModule = (function () {
     function RtlModule() {
     }
     RtlModule.forRoot = function () {
         return {
-            ngModule: RtlModule_1,
+            ngModule: RtlModule,
             providers: []
         };
     };
+    RtlModule = __decorate([
+        NgModule({
+            exports: [Dir],
+            declarations: [Dir]
+        }), 
+        __metadata('design:paramtypes', [])
+    ], RtlModule);
     return RtlModule;
 }());
-RtlModule = RtlModule_1 = __decorate([
-    core_1.NgModule({
-        exports: [Dir],
-        declarations: [Dir]
-    })
-], RtlModule);
-exports.RtlModule = RtlModule;
-var RtlModule_1;
-//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/core/rtl/dir.js.map
+
+//# sourceMappingURL=dir.js.map

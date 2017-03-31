@@ -1,5 +1,3 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
 /**
  * Extends an object with the *enumerable* and *own* properties of one or more source objects,
  * similar to Object.assign.
@@ -7,7 +5,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
  * @param dest The object which will have properties copied to it.
  * @param sources The source objects from which properties will be copied.
  */
-function extendObject(dest) {
+export function extendObject(dest) {
     var sources = [];
     for (var _i = 1; _i < arguments.length; _i++) {
         sources[_i - 1] = arguments[_i];
@@ -27,5 +25,5 @@ function extendObject(dest) {
     }
     return dest;
 }
-exports.extendObject = extendObject;
-//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/core/util/object-extend.js.map
+
+//# sourceMappingURL=object-extend.js.map

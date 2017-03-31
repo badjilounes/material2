@@ -1,6 +1,21 @@
-import {NgModule, ModuleWithProviders, ViewChild, Component, Input, Output, EventEmitter, QueryList, ContentChildren, ElementRef, Renderer} from '@angular/core';
+import {
+  NgModule,
+  ModuleWithProviders,
+  ViewChild,
+  Component,
+  Input,
+  Output,
+  EventEmitter,
+  QueryList,
+  ContentChildren,
+  ElementRef,
+  Renderer
+} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {PortalModule, coerceBooleanProperty} from '../core';
+import {
+  PortalModule,
+  coerceBooleanProperty
+} from '../core';
 import {MdTabLabel} from './tab-label';
 import {MdTabLabelWrapper} from './tab-label-wrapper';
 import {MdTabNavBar, MdTabLink, MdTabLinkRipple} from './tab-nav-bar/tab-nav-bar';
@@ -8,10 +23,12 @@ import {MdInkBar} from './ink-bar';
 import {Observable} from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 import {MdRippleModule} from '../core/ripple/ripple';
+import {ObserveContentModule} from '../core/observe-content/observe-content';
 import {MdTab} from './tab';
 import {MdTabBody} from './tab-body';
 import {ViewportRuler} from '../core/overlay/position/viewport-ruler';
 import {MdTabHeader} from './tab-header';
+
 
 /** Used to generate unique ID's for each tab component */
 let nextId = 0;
@@ -28,9 +45,11 @@ export class MdTabChangeEvent {
  * See: https://www.google.com/design/spec/components/tabs.html
  */
 @Component({
+  moduleId: module.id,
   selector: 'md-tab-group',
-  template: require('./tab-group.html'),
-  styles: [require('./tab-group.css').toString()],
+  templateUrl: 'tab-group.html',
+  styleUrls: ['tab-group.css'],
+  host: { '[class.md-tab-group-dynamic-height]': 'dynamicHeight' }
 })
 export class MdTabGroup {
   @ContentChildren(MdTab) _tabs: QueryList<MdTab>;
@@ -48,27 +67,26 @@ export class MdTabGroup {
 
   /** Whether the tab group should grow to the size of the active tab */
   private _dynamicHeight: boolean = false;
-  @Input('md-dynamic-height') set dynamicHeight(value: boolean) {
-    this._dynamicHeight = coerceBooleanProperty(value);
-  }
+  @Input()
+  get dynamicHeight(): boolean { return this._dynamicHeight; }
+  set dynamicHeight(value: boolean) { this._dynamicHeight = coerceBooleanProperty(value); }
+
+  /** @deprecated */
+  @Input('md-dynamic-height')
+  get _dynamicHeightDeprecated(): boolean { return this._dynamicHeight; }
+  set _dynamicHeightDeprecated(value: boolean) { this._dynamicHeight = value; }
+
+  private _selectedIndex: number = null;
 
   /** The index of the active tab. */
-  private _selectedIndex: number = null;
-  @Input() set selectedIndex(value: number) {
-    this._indexToSelect = value;
-  }
-  get selectedIndex(): number {
-    return this._selectedIndex;
-  }
+  @Input()
+  set selectedIndex(value: number) { this._indexToSelect = value; }
+  get selectedIndex(): number { return this._selectedIndex; }
 
   /** The center labels parameter. */
   private _centerLabels: boolean = false;
-  @Input() set centerLabels(value: boolean) {
-    this._centerLabels = value;
-  }
-  get centerLabels(): boolean {
-    return this._centerLabels;
-  }
+  @Input() set centerLabels(value: boolean) { this._centerLabels = value; }
+  get centerLabels(): boolean { return this._centerLabels; }
 
   /** Output to enable support for two-way binding on `selectedIndex`. */
   @Output() get selectedIndexChange(): Observable<number> {
@@ -76,12 +94,16 @@ export class MdTabGroup {
   }
 
   private _onFocusChange: EventEmitter<MdTabChangeEvent> = new EventEmitter<MdTabChangeEvent>();
+
+  /** Event emitted when focus has changed within a tab group. */
   @Output() get focusChange(): Observable<MdTabChangeEvent> {
     return this._onFocusChange.asObservable();
   }
 
   private _onSelectChange: EventEmitter<MdTabChangeEvent> =
       new EventEmitter<MdTabChangeEvent>(true);
+
+  /** Event emitted when the tab selection has changed. */
   @Output() get selectChange(): Observable<MdTabChangeEvent> {
     return this._onSelectChange.asObservable();
   }
@@ -125,8 +147,7 @@ export class MdTabGroup {
 
   /**
    * Waits one frame for the view to update, then updates the ink bar
-   * Note: This must be run outside of the zone or it will create an infinite change detection loop
-   * TODO: internal
+   * Note: This must be run outside of the zone or it will create an infinite change detection loop.
    */
   ngAfterViewChecked(): void {
     this._isInitialized = true;
@@ -181,7 +202,7 @@ export class MdTabGroup {
 }
 
 @NgModule({
-  imports: [CommonModule, PortalModule, MdRippleModule],
+  imports: [CommonModule, PortalModule, MdRippleModule, ObserveContentModule],
   // Don't export all components because some are only to be used internally.
   exports: [MdTabGroup, MdTabLabel, MdTab, MdTabNavBar, MdTabLink, MdTabLinkRipple],
   declarations: [MdTabGroup, MdTabLabel, MdTab, MdInkBar, MdTabLabelWrapper,

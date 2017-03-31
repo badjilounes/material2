@@ -8,7 +8,7 @@ import {
   ViewEncapsulation
 } from '@angular/core';
 import {ENTER, SPACE} from '../core/keyboard/keycodes';
-import {coerceBooleanProperty} from '../core/coersion/boolean-property';
+import {coerceBooleanProperty} from '../core/coercion/boolean-property';
 
 /**
  * Option IDs need to be unique across components, so this counter exists outside of
@@ -16,7 +16,11 @@ import {coerceBooleanProperty} from '../core/coersion/boolean-property';
  */
 let _uniqueIdCounter = 0;
 
+/**
+ * Single option inside of a `<md-select>` element.
+ */
 @Component({
+  moduleId: module.id,
   selector: 'md-option, mat-option',
   host: {
     'role': 'option',
@@ -29,8 +33,8 @@ let _uniqueIdCounter = 0;
     '(click)': '_selectViaInteraction()',
     '(keydown)': '_handleKeydown($event)'
   },
-  template: require('./option.html'),
-  styles: [require('./select.css').toString()],
+  templateUrl: 'option.html',
+  styleUrls: ['select.css'],
   encapsulation: ViewEncapsulation.None
 })
 export class MdOption {
@@ -47,14 +51,10 @@ export class MdOption {
   /** The form value of the option. */
   @Input() value: any;
 
+  /** Whether the option is disabled. */
   @Input()
-  get disabled() {
-    return this._disabled;
-  }
-
-  set disabled(value: any) {
-    this._disabled = coerceBooleanProperty(value);
-  }
+  get disabled() { return this._disabled; }
+  set disabled(value: any) { this._disabled = coerceBooleanProperty(value); }
 
   /** Event emitted when the option is selected. */
   @Output() onSelect = new EventEmitter();
@@ -69,9 +69,9 @@ export class MdOption {
   /**
    * The displayed value of the option. It is necessary to show the selected option in the
    * select's trigger.
-   * TODO(kara): Add input property alternative for node envs.
    */
   get viewValue(): string {
+    // TODO(kara): Add input property alternative for node envs.
     return this._getHostElement().textContent.trim();
   }
 

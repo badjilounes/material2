@@ -1,1 +1,1 @@
-{"version":3,"file":"index.js","sourceRoot":"","sources":["index.ts"],"names":[],"mappings":";;;;;AAAA,mCAA8B","sourcesContent":["export * from './tab-nav-bar';\n\ninterface DecoratorInvocation {\n  type: Function;\n  args?: any[];\n}\n"]}
+{"version":3,"sources":["tabs/tab-nav-bar/index.ts"],"names":[],"mappings":"AAAA,cAAc,eAAe,CAAC","file":"index.js","sourcesContent":["export * from './tab-nav-bar';\n"]}

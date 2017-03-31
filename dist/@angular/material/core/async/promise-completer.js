@@ -1,6 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var PromiseCompleter = (function () {
+/** @docs-private */
+export var PromiseCompleter = (function () {
     function PromiseCompleter() {
         var _this = this;
         this.promise = new Promise(function (res, rej) {
@@ -10,5 +9,5 @@ var PromiseCompleter = (function () {
     }
     return PromiseCompleter;
 }());
-exports.PromiseCompleter = PromiseCompleter;
-//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/core/async/promise-completer.js.map
+
+//# sourceMappingURL=promise-completer.js.map

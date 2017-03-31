@@ -1,6 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var FakeViewportRuler = (function () {
+/** @docs-private */
+export var FakeViewportRuler = (function () {
     function FakeViewportRuler() {
     }
     FakeViewportRuler.prototype.getViewportRect = function () {
@@ -13,5 +12,5 @@ var FakeViewportRuler = (function () {
     };
     return FakeViewportRuler;
 }());
-exports.FakeViewportRuler = FakeViewportRuler;
-//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/core/overlay/position/fake-viewport-ruler.js.map
+
+//# sourceMappingURL=fake-viewport-ruler.js.map

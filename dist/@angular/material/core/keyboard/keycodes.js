@@ -2,17 +2,19 @@
 // during E2E tests when using dot notation such as `(keydown.rightArrow)`. To get around this,
 // we are temporarily using a single (keydown) handler.
 // See: https://github.com/angular/angular/issues/9419
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.UP_ARROW = 38;
-exports.DOWN_ARROW = 40;
-exports.RIGHT_ARROW = 39;
-exports.LEFT_ARROW = 37;
-exports.PAGE_UP = 33;
-exports.PAGE_DOWN = 34;
-exports.HOME = 36;
-exports.END = 35;
-exports.ENTER = 13;
-exports.SPACE = 32;
-exports.TAB = 9;
-//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/core/keyboard/keycodes.js.map
+export var UP_ARROW = 38;
+export var DOWN_ARROW = 40;
+export var RIGHT_ARROW = 39;
+export var LEFT_ARROW = 37;
+export var PAGE_UP = 33;
+export var PAGE_DOWN = 34;
+export var HOME = 36;
+export var END = 35;
+export var ENTER = 13;
+export var SPACE = 32;
+export var TAB = 9;
+export var ESCAPE = 27;
+export var BACKSPACE = 8;
+export var DELETE = 46;
+
+//# sourceMappingURL=keycodes.js.map

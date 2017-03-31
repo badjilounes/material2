@@ -1,4 +1,3 @@
-"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -11,15 +10,14 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-var core_1 = require("@angular/core");
-var menu_errors_1 = require("./menu-errors");
-var core_2 = require("../core");
+import { Directive, ElementRef, EventEmitter, Input, Optional, Output, Renderer, ViewContainerRef } from '@angular/core';
+import { MdMenuMissingError } from './menu-errors';
+import { isFakeMousedownFromScreenReader, Dir, Overlay, OverlayState, TemplatePortal } from '../core';
 /**
  * This directive is intended to be used in conjunction with an md-menu tag.  It is
  * responsible for toggling the display of the provided menu instance.
  */
-var MdMenuTrigger = (function () {
+export var MdMenuTrigger = (function () {
     function MdMenuTrigger(_overlay, _element, _viewContainerRef, _renderer, _dir) {
         this._overlay = _overlay;
         this._element = _element;
@@ -30,9 +28,18 @@ var MdMenuTrigger = (function () {
         // tracking input type is necessary so it's possible to only auto-focus
         // the first item of the list when the menu is opened via the keyboard
         this._openedByMouse = false;
-        this.onMenuOpen = new core_1.EventEmitter();
-        this.onMenuClose = new core_1.EventEmitter();
+        /** Event emitted when the associated menu is opened. */
+        this.onMenuOpen = new EventEmitter();
+        /** Event emitted when the associated menu is closed. */
+        this.onMenuClose = new EventEmitter();
     }
+    Object.defineProperty(MdMenuTrigger.prototype, "_deprecatedMenuTriggerFor", {
+        /** @deprecated */
+        get: function () { return this.menu; },
+        set: function (v) { this.menu = v; },
+        enumerable: true,
+        configurable: true
+    });
     MdMenuTrigger.prototype.ngAfterViewInit = function () {
         var _this = this;
         this._checkMenu();
@@ -40,13 +47,16 @@ var MdMenuTrigger = (function () {
     };
     MdMenuTrigger.prototype.ngOnDestroy = function () { this.destroyMenu(); };
     Object.defineProperty(MdMenuTrigger.prototype, "menuOpen", {
+        /** Whether the menu is open. */
         get: function () { return this._menuOpen; },
         enumerable: true,
         configurable: true
     });
+    /** Toggles the menu between the open and closed states. */
     MdMenuTrigger.prototype.toggleMenu = function () {
         return this._menuOpen ? this.closeMenu() : this.openMenu();
     };
+    /** Opens the menu. */
     MdMenuTrigger.prototype.openMenu = function () {
         if (!this._menuOpen) {
             this._createOverlay();
@@ -55,6 +65,7 @@ var MdMenuTrigger = (function () {
             this._initMenu();
         }
     };
+    /** Closes the menu. */
     MdMenuTrigger.prototype.closeMenu = function () {
         if (this._overlayRef) {
             this._overlayRef.detach();
@@ -62,6 +73,7 @@ var MdMenuTrigger = (function () {
             this._resetMenu();
         }
     };
+    /** Removes the menu from the DOM. */
     MdMenuTrigger.prototype.destroyMenu = function () {
         if (this._overlayRef) {
             this._overlayRef.dispose();
@@ -69,6 +81,7 @@ var MdMenuTrigger = (function () {
             this._cleanUpSubscriptions();
         }
     };
+    /** Focuses the menu trigger. */
     MdMenuTrigger.prototype.focus = function () {
         this._renderer.invokeElementMethod(this._element.nativeElement, 'focus');
     };
@@ -126,11 +139,11 @@ var MdMenuTrigger = (function () {
     };
     /**
      *  This method checks that a valid instance of MdMenu has been passed into
-     *  md-menu-trigger-for.  If not, an exception is thrown.
+     *  mdMenuTriggerFor. If not, an exception is thrown.
      */
     MdMenuTrigger.prototype._checkMenu = function () {
         if (!this.menu) {
-            throw new menu_errors_1.MdMenuMissingError();
+            throw new MdMenuMissingError();
         }
     };
     /**
@@ -139,7 +152,7 @@ var MdMenuTrigger = (function () {
      */
     MdMenuTrigger.prototype._createOverlay = function () {
         if (!this._overlayRef) {
-            this._portal = new core_2.TemplatePortal(this.menu.templateRef, this._viewContainerRef);
+            this._portal = new TemplatePortal(this.menu.templateRef, this._viewContainerRef);
             var config = this._getOverlayConfig();
             this._subscribeToPositions(config.positionStrategy);
             this._overlayRef = this._overlay.create(config);
@@ -150,11 +163,11 @@ var MdMenuTrigger = (function () {
      * @returns OverlayState
      */
     MdMenuTrigger.prototype._getOverlayConfig = function () {
-        var overlayState = new core_2.OverlayState();
+        var overlayState = new OverlayState();
         overlayState.positionStrategy = this._getPosition()
             .withDirection(this.dir);
         overlayState.hasBackdrop = true;
-        overlayState.backdropClass = 'md-overlay-transparent-backdrop';
+        overlayState.backdropClass = 'cdk-overlay-transparent-backdrop';
         overlayState.direction = this.dir;
         return overlayState;
     };
@@ -194,38 +207,40 @@ var MdMenuTrigger = (function () {
         }
     };
     MdMenuTrigger.prototype._handleMousedown = function (event) {
-        if (!core_2.isFakeMousedownFromScreenReader(event)) {
+        if (!isFakeMousedownFromScreenReader(event)) {
             this._openedByMouse = true;
         }
     };
+    __decorate([
+        Input('md-menu-trigger-for'), 
+        __metadata('design:type', Object)
+    ], MdMenuTrigger.prototype, "_deprecatedMenuTriggerFor", null);
+    __decorate([
+        Input('mdMenuTriggerFor'), 
+        __metadata('design:type', Object)
+    ], MdMenuTrigger.prototype, "menu", void 0);
+    __decorate([
+        Output(), 
+        __metadata('design:type', Object)
+    ], MdMenuTrigger.prototype, "onMenuOpen", void 0);
+    __decorate([
+        Output(), 
+        __metadata('design:type', Object)
+    ], MdMenuTrigger.prototype, "onMenuClose", void 0);
+    MdMenuTrigger = __decorate([
+        Directive({
+            selector: '[md-menu-trigger-for], [mat-menu-trigger-for], [mdMenuTriggerFor]',
+            host: {
+                'aria-haspopup': 'true',
+                '(mousedown)': '_handleMousedown($event)',
+                '(click)': 'toggleMenu()',
+            },
+            exportAs: 'mdMenuTrigger'
+        }),
+        __param(4, Optional()), 
+        __metadata('design:paramtypes', [Overlay, ElementRef, ViewContainerRef, Renderer, Dir])
+    ], MdMenuTrigger);
     return MdMenuTrigger;
 }());
-__decorate([
-    core_1.Input('md-menu-trigger-for'),
-    __metadata("design:type", Object)
-], MdMenuTrigger.prototype, "menu", void 0);
-__decorate([
-    core_1.Output(),
-    __metadata("design:type", Object)
-], MdMenuTrigger.prototype, "onMenuOpen", void 0);
-__decorate([
-    core_1.Output(),
-    __metadata("design:type", Object)
-], MdMenuTrigger.prototype, "onMenuClose", void 0);
-MdMenuTrigger = __decorate([
-    core_1.Directive({
-        selector: '[md-menu-trigger-for], [mat-menu-trigger-for]',
-        host: {
-            'aria-haspopup': 'true',
-            '(mousedown)': '_handleMousedown($event)',
-            '(click)': 'toggleMenu()',
-        },
-        exportAs: 'mdMenuTrigger'
-    }),
-    __param(4, core_1.Optional()),
-    __metadata("design:paramtypes", [core_2.Overlay, core_1.ElementRef,
-        core_1.ViewContainerRef, core_1.Renderer,
-        core_2.Dir])
-], MdMenuTrigger);
-exports.MdMenuTrigger = MdMenuTrigger;
-//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/menu/menu-trigger.js.map
+
+//# sourceMappingURL=menu-trigger.js.map

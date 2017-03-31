@@ -19,10 +19,11 @@ import {MdLine, MdLineSetter, MdLineModule, DefaultStyleCompatibilityModeModule}
 export class MdListDivider {}
 
 @Component({
+  moduleId: module.id,
   selector: 'md-list, mat-list, md-nav-list, mat-nav-list',
   host: {'role': 'list'},
   template: '<ng-content></ng-content>',
-  styles: [require('./list.css').toString()],
+  styleUrls: ['list.css'],
   encapsulation: ViewEncapsulation.None
 })
 export class MdList {}
@@ -32,13 +33,14 @@ export class MdList {}
 export class MdListAvatar {}
 
 @Component({
+  moduleId: module.id,
   selector: 'md-list-item, mat-list-item, a[md-list-item], a[mat-list-item]',
   host: {
     'role': 'listitem',
     '(focus)': '_handleFocus()',
     '(blur)': '_handleBlur()',
   },
-  template: require('./list-item.html'),
+  templateUrl: 'list-item.html',
   encapsulation: ViewEncapsulation.None
 })
 export class MdListItem implements AfterContentInit {
@@ -55,7 +57,6 @@ export class MdListItem implements AfterContentInit {
 
   constructor(private _renderer: Renderer, private _element: ElementRef) {}
 
-  /** TODO: internal */
   ngAfterContentInit() {
     this._lineSetter = new MdLineSetter(this._lines, this._renderer, this._element);
   }

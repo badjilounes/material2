@@ -1,6 +1,5 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-var RelativePositionStrategy = (function () {
+/** @docs-private */
+export var RelativePositionStrategy = (function () {
     function RelativePositionStrategy(_relativeTo) {
         this._relativeTo = _relativeTo;
     }
@@ -13,5 +12,5 @@ var RelativePositionStrategy = (function () {
     };
     return RelativePositionStrategy;
 }());
-exports.RelativePositionStrategy = RelativePositionStrategy;
-//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/core/overlay/position/relative-position-strategy.js.map
+
+//# sourceMappingURL=relative-position-strategy.js.map

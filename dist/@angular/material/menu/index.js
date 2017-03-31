@@ -1,7 +1,7 @@
-"use strict";
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-}
-Object.defineProperty(exports, "__esModule", { value: true });
-__export(require("./menu"));
-//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/menu/index.js.map
+export * from './menu';
+export { MdMenuTrigger } from './menu-trigger';
+export { fadeInItems, transformMenu } from './menu-animations';
+export { MdMenu } from './menu-directive';
+export { MdMenuItem } from './menu-item';
+
+//# sourceMappingURL=index.js.map

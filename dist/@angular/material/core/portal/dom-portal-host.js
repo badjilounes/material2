@@ -1,33 +1,28 @@
-"use strict";
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-Object.defineProperty(exports, "__esModule", { value: true });
-var portal_1 = require("./portal");
+var __extends = (this && this.__extends) || function (d, b) {
+    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
+    function __() { this.constructor = d; }
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+};
+import { BasePortalHost } from './portal';
 /**
  * A PortalHost for attaching portals to an arbitrary DOM element outside of the Angular
  * application context.
  *
  * This is the only part of the portal core that directly touches the DOM.
  */
-var DomPortalHost = (function (_super) {
+export var DomPortalHost = (function (_super) {
     __extends(DomPortalHost, _super);
     function DomPortalHost(_hostDomElement, _componentFactoryResolver, _appRef, _defaultInjector) {
-        var _this = _super.call(this) || this;
-        _this._hostDomElement = _hostDomElement;
-        _this._componentFactoryResolver = _componentFactoryResolver;
-        _this._appRef = _appRef;
-        _this._defaultInjector = _defaultInjector;
-        return _this;
+        _super.call(this);
+        this._hostDomElement = _hostDomElement;
+        this._componentFactoryResolver = _componentFactoryResolver;
+        this._appRef = _appRef;
+        this._defaultInjector = _defaultInjector;
     }
-    /** Attach the given ComponentPortal to DOM element using the ComponentFactoryResolver. */
+    /**
+     * Attach the given ComponentPortal to DOM element using the ComponentFactoryResolver.
+     * @param portal Portal to be attached
+     */
     DomPortalHost.prototype.attachComponentPortal = function (portal) {
         var _this = this;
         var componentFactory = this._componentFactoryResolver.resolveComponentFactory(portal.component);
@@ -76,6 +71,10 @@ var DomPortalHost = (function (_super) {
         this._hostDomElement.appendChild(this._getComponentRootNode(componentRef));
         return componentRef;
     };
+    /**
+     * Attaches a template portal to the DOM as an embedded view.
+     * @param portal Portal to be attached.
+     */
     DomPortalHost.prototype.attachTemplatePortal = function (portal) {
         var _this = this;
         var viewContainer = portal.viewContainerRef;
@@ -90,6 +89,9 @@ var DomPortalHost = (function (_super) {
         // TODO(jelbourn): Return locals from view.
         return new Map();
     };
+    /**
+     * Clears out a portal from the DOM.
+     */
     DomPortalHost.prototype.dispose = function () {
         _super.prototype.dispose.call(this);
         if (this._hostDomElement.parentNode != null) {
@@ -101,6 +103,6 @@ var DomPortalHost = (function (_super) {
         return componentRef.hostView.rootNodes[0];
     };
     return DomPortalHost;
-}(portal_1.BasePortalHost));
-exports.DomPortalHost = DomPortalHost;
-//# sourceMappingURL=/Users/lounesbadji/workspace_ubilab/material2/src/lib/core/portal/dom-portal-host.js.map
+}(BasePortalHost));
+
+//# sourceMappingURL=dom-portal-host.js.map
